@@ -1,17 +1,21 @@
 # perfportsite
 Website for Office of Science Performance Portability Across ALCF, NERSC, OLCF Facilities
 
-## Setup for local development
+## How to contribute
 
-`pip install -r requirements.txt`
+### Setup 
 
-## Preview changes locally
+The site is built with the [mkdocs](http://www.mkdocs.org) static site generator, which is based on Markdown. 
 
-(live reloading as files are edited, created, etc)
+1. Setup up the local environment 
+
+`pip install --user -r requirements.txt`
+
+2. Run a local server for a live preview of changes
 
 `mkdocs serve`
 
-## Output a static site
-(This will be a post commit hook eventually)
+3. Output a static site
 
 `mkdocs build`
+
