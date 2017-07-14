@@ -1,0 +1,42 @@
+site_name: Performance Portability
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+markdown_extensions:
+  - admonition
+  - codehilite(guess_lang=false)
+  - toc(permalink=true)
+  - pymdownx.arithmatex
+  - pymdownx.betterem(smart_enable=all)
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist(custom_checkbox=true)
+  - pymdownx.tilde
+  - markdown_include.include:
+      base_path: docs
+theme: 'material'
+pages:
+- Demo: demo/demo.md
+- Introduction: index.md
+- DOE Office of Science Facilities:
+    - Overview: facilities/overview.md
+    - Tools: facilities/tools.md
+    - Comparison: facilities/comparison.md
+    - Resources: facilities/resources.md
+- Performance Portability:
+    - Definition: pp/definition.md
+    - Measurements: pp/measurements.md
+    - Approaches:
+        - Libraries: pp/lib/index.md
+        - Directives: pp/dir/index.md
+        - Frameworks: pp/frame/index.md
+        - DSL: pp/dsl/index.md
+        - Models: pp/models/index.md
+    - Case Studies:
+        - amr: case/amr/index.md
