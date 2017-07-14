@@ -23,20 +23,20 @@ markdown_extensions:
 theme: 'material'
 pages:
 - Introduction: index.md
-- DOE Office of Science Facilities:
+- Office of Science Facilities:
     - Overview: facilities/overview.md
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
     - Resources: facilities/resources.md
 - Performance Portability:
-    - Definition: pp/definition.md
-    - Measurements: pp/measurements.md
+    - Definition: perfport/definition.md
+    - Measurements: perfport/measurements.md
     - Approaches:
-        - Libraries: pp/lib/index.md
-        - Directives: pp/dir/index.md
-        - Frameworks: pp/frame/index.md
-        - DSL: pp/dsl/index.md
-        - Models: pp/models/index.md
+        - Libraries: perfport/libraries/index.md
+        - Directives: perfport/directives/index.md
+        - Frameworks: perfport/frameworks/index.md
+        - DSL: perfport/dsl/index.md
+        - Models: perfport/models/index.md
     - Case Studies:
-        - amr: case/amr/index.md
+        - amr: case_studies/amr/index.md
 - Demo: demo/demo.md
