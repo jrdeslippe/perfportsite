@@ -18,7 +18,7 @@ NERSC is a national center, organizationally part of Lawrence Berkeley National 
 
 ## Internal links
 
-1. [Portability definition](pp/definition.md)
+1. [Portability definition](/perfport/definition.md)
 
 
 Tables:
@@ -32,7 +32,7 @@ Tables:
 
 ## Include scripts/ source code
 
-This site supports an include extension to Markdown. 
+This site supports an include extension to Markdown.
 
 One way to run a pure MPI job on Cori is
 
