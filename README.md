@@ -19,3 +19,10 @@ The site is built with the [mkdocs](http://www.mkdocs.org) static site generator
 
 `mkdocs build`
 
+### Publishing
+
+The site is deployed with `mkdocs gh-deploy`. This command should **only** be run from the master branch after you have merged any changes.
+
+### Demo syntax
+
+Please see docs/demo/ for some basic examples of LaTeX, source inclusion, etc.
