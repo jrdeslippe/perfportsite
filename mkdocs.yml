@@ -39,4 +39,7 @@ pages:
         - Models: perfport/models/index.md
     - Case Studies:
         - amr: case_studies/amr/index.md
+        - GW Kenerels: case_studies/gw/index.md 
+        - NekBone: case_studies/nek/index.md
+        - MD: case_studies/md/index.md
 - Demo: demo/demo.md
