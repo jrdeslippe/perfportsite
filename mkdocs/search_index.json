@@ -37,12 +37,12 @@
         }, 
         {
             "location": "/perfport/measurements/", 
-            "text": "", 
+            "text": "Jack To Write", 
             "title": "Measurements"
         }, 
         {
             "location": "/perfport/libraries/", 
-            "text": "", 
+            "text": "Bronson / ORNL to Write", 
             "title": "Libraries"
         }, 
         {
@@ -67,7 +67,7 @@
         }, 
         {
             "location": "/case_studies/amr/", 
-            "text": "", 
+            "text": "Thorsten / Brian to Write", 
             "title": "amr"
         }, 
         {
