@@ -2,22 +2,22 @@
     "docs": [
         {
             "location": "/", 
-            "text": "some information\n\n\nWebsite for Office of Science Performance Portability Across ALCF, NERSC, OLCF Facilities\n\n\nThe need for applications to run effectively on multiple vendor advanced architecture solutions (as well as on standard \"cluster\" technology) is pervasive across application teams within DOE and is a specified goal of the DOE's exascale plans for risk mitigation.\n\n\nRecognizing the immense challenges of porting and optimizing large applications to the advanced architecture systems planned for deployment within the Nationa Nuclear Security Administration (NNSA) and Office of Science (SC) labs between 2016 and 2019, the DOE has established a COE at each laboratory siting one of these systems. These COEs provide direct vendor expertise to the application teams and in turn, give the vendors deeper insight into how applications are run on those systems. Each of the five current COEs has a mission to optimize a set of applications for their specific platform\u2014however the application teams are motivated to maintain a code base that will run effectively across diverse vendor offerings. Making use of open standards, libraries, and software abstractions that allow for minimal code disruption without negatively impacting performance potential is the preferred path to programming, but it constitutes a large, as-yet-unsolved challenge.\n(Text shamelessly copied from \nhere\n)", 
+            "text": "some information\n\n\nJack / Bronson / Tim / Scott to write\n\n\nWebsite for Office of Science Performance Portability Across ALCF, NERSC, OLCF Facilities\n\n\nThe need for applications to run effectively on multiple vendor advanced architecture solutions (as well as on standard \"cluster\" technology) is pervasive across application teams within DOE and is a specified goal of the DOE's exascale plans for risk mitigation.\n\n\nRecognizing the immense challenges of porting and optimizing large applications to the advanced architecture systems planned for deployment within the Nationa Nuclear Security Administration (NNSA) and Office of Science (SC) labs between 2016 and 2019, the DOE has established a COE at each laboratory siting one of these systems. These COEs provide direct vendor expertise to the application teams and in turn, give the vendors deeper insight into how applications are run on those systems. Each of the five current COEs has a mission to optimize a set of applications for their specific platform\u2014however the application teams are motivated to maintain a code base that will run effectively across diverse vendor offerings. Making use of open standards, libraries, and software abstractions that allow for minimal code disruption without negatively impacting performance potential is the preferred path to programming, but it constitutes a large, as-yet-unsolved challenge.\n(Text shamelessly copied from \nhere\n)", 
             "title": "Introduction"
         }, 
         {
             "location": "/#some-information", 
-            "text": "Website for Office of Science Performance Portability Across ALCF, NERSC, OLCF Facilities  The need for applications to run effectively on multiple vendor advanced architecture solutions (as well as on standard \"cluster\" technology) is pervasive across application teams within DOE and is a specified goal of the DOE's exascale plans for risk mitigation.  Recognizing the immense challenges of porting and optimizing large applications to the advanced architecture systems planned for deployment within the Nationa Nuclear Security Administration (NNSA) and Office of Science (SC) labs between 2016 and 2019, the DOE has established a COE at each laboratory siting one of these systems. These COEs provide direct vendor expertise to the application teams and in turn, give the vendors deeper insight into how applications are run on those systems. Each of the five current COEs has a mission to optimize a set of applications for their specific platform\u2014however the application teams are motivated to maintain a code base that will run effectively across diverse vendor offerings. Making use of open standards, libraries, and software abstractions that allow for minimal code disruption without negatively impacting performance potential is the preferred path to programming, but it constitutes a large, as-yet-unsolved challenge.\n(Text shamelessly copied from  here )", 
+            "text": "Jack / Bronson / Tim / Scott to write  Website for Office of Science Performance Portability Across ALCF, NERSC, OLCF Facilities  The need for applications to run effectively on multiple vendor advanced architecture solutions (as well as on standard \"cluster\" technology) is pervasive across application teams within DOE and is a specified goal of the DOE's exascale plans for risk mitigation.  Recognizing the immense challenges of porting and optimizing large applications to the advanced architecture systems planned for deployment within the Nationa Nuclear Security Administration (NNSA) and Office of Science (SC) labs between 2016 and 2019, the DOE has established a COE at each laboratory siting one of these systems. These COEs provide direct vendor expertise to the application teams and in turn, give the vendors deeper insight into how applications are run on those systems. Each of the five current COEs has a mission to optimize a set of applications for their specific platform\u2014however the application teams are motivated to maintain a code base that will run effectively across diverse vendor offerings. Making use of open standards, libraries, and software abstractions that allow for minimal code disruption without negatively impacting performance potential is the preferred path to programming, but it constitutes a large, as-yet-unsolved challenge.\n(Text shamelessly copied from  here )", 
             "title": "some information"
         }, 
         {
             "location": "/facilities/overview/", 
-            "text": "", 
+            "text": "Jack / Bronson / Tim to Write", 
             "title": "Overview"
         }, 
         {
             "location": "/facilities/tools/", 
-            "text": "", 
+            "text": "Brian / ? / ? to Write", 
             "title": "Tools"
         }, 
         {
@@ -27,7 +27,7 @@
         }, 
         {
             "location": "/facilities/resources/", 
-            "text": "", 
+            "text": "Jack / Bronson / Tim to Write", 
             "title": "Resources"
         }, 
         {
