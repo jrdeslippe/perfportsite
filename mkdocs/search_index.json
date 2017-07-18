@@ -71,6 +71,21 @@
             "title": "amr"
         }, 
         {
+            "location": "/case_studies/gw/", 
+            "text": "", 
+            "title": "GW Kenerels"
+        }, 
+        {
+            "location": "/case_studies/nek/", 
+            "text": "", 
+            "title": "NekBone"
+        }, 
+        {
+            "location": "/case_studies/md/", 
+            "text": "", 
+            "title": "MD"
+        }, 
+        {
             "location": "/demo/demo/", 
             "text": "Welcome to NERSC\n\n\nWelcome to the National Energy Research Scientific Computing Center, a high performance scientific computing center.\nThis document will guide you through the basics of using NERSC\u2019s supercomputers, storage systems, and services.\n\n\nWhat is NERSC?\n\n\nNERSC provides High Performance Computing and Storage facilities and support for research sponsored by, and of interest to, the U.S. Department of Energy Office of Science. NERSC has the unique programmatic role of supporting all six Office of Science program offices: Advanced Scientific Computing Research, Basic Energy Sciences, Biological and Environmental Research, Fusion Energy Sciences, High Energy Physics, and Nuclear Physics. Scientists who have been awarded research funding by any of the offices are eligible to apply for an allocation of NERSC time. Additional awards may be given to non-DOE funded project teams whose research is aligned with the Office of Science's mission. Allocations of time and storage are made by DOE.\n\n\nNERSC is a national center, organizationally part of Lawrence Berkeley National Laboratory in Berkeley, CA. NERSC staff and facilities are primarily located at Berkeley Lab's Shyh Wang Hall on the Berkeley Lab campus.\n\n\nExternal links\n\n\n\n\nOLCF\n\n\nALCF\n\n\nNERSC\n\n\n\n\nInternal links\n\n\n\n\nPortability definition\n\n\n\n\nTables:\n\n\n\n\n\n\n\n\nSystem Type\n\n\nCray XC40\n\n\n\n\n\n\n\n\n\n\nTheoretical Peak Performance (System)\n\n\n31.4 PFlops\n\n\n\n\n\n\nTheoretical Peak Performance (Haswell nodes)\n\n\n2.3 PFlops\n\n\n\n\n\n\nTheoretical Peak Performance (Xeon Phi nodes)\n\n\n29.1 PFlops\n\n\n\n\n\n\nCompute Nodes (Haswell)\n\n\n2,388\n\n\n\n\n\n\n\n\nInclude scripts/ source code\n\n\nThis site supports an include extension to Markdown.\n\n\nOne way to run a pure MPI job on Cori is\n\n\n#!/bin/bash -l\n\n\n#SBATCH -p debug\n\n\n#SBATCH -N 64\n\n\n#SBATCH -t 00:20:00\n\n\n#SBATCH -J my_job\n\n\n#SBATCH -L SCRATCH\n\n\n#SBATCH -C haswell\n\n\n\n# an extra -c 2 flag is optional for fully packed pure MPI\n\nsrun -n \n2048\n ./mycode.exe\n\n\n\n\n\n\nWarning\n\n\nThe \n-c\n and \n--cpu_bind=\n options for \nsrun\n are \nrequired\n for hybrid jobs or jobs which do not utilize all physical cores \n\n\n\n\nSome source code\n\n\nInstrumented C code to measure AI\n\n\n// Code must be built with appropriate paths for VTune include file (ittnotify.h) and library (-littnotify)\n\n\n#include\n \nittnotify.h\n\n\n\n__SSC_MARK\n(\n0x111\n);\n \n// start SDE tracing, note it uses 2 underscores\n\n\n__itt_resume\n();\n \n// start VTune, again use 2 underscores\n\n\n\nfor\n \n(\nk\n=\n0\n;\n \nk\nNTIMES\n;\n \nk\n++\n)\n \n{\n\n \n#pragma omp parallel for\n\n \nfor\n \n(\nj\n=\n0\n;\n \nj\nSTREAM_ARRAY_SIZE\n;\n \nj\n++\n)\n\n \na\n[\nj\n]\n \n=\n \nb\n[\nj\n]\n+\nscalar\n*\nc\n[\nj\n];\n\n\n}\n\n\n\n__itt_pause\n();\n \n// stop VTune\n\n\n__SSC_MARK\n(\n0x222\n);\n \n// stop SDE tracing\n\n\n\n\n\nAnd some totally unrelated python code\n\n\ndef\n \ncount_cross_connections\n(\ncounts\n):\n\n    \nCounts is a list of the number of nodes in each (non-zero) group\n\n    \nreturn\n \nsum\n(\n \nx\n[\n0\n]\n*\nx\n[\n1\n]\n \nfor\n \nx\n \nin\n \nitertools\n.\ncombinations\n(\ncounts\n,\n \n2\n)\n \n)\n\n\n\n\n\nLaTex support\n\n\n\\[\n\\frac{n!}{k!(n-k)!} = \\binom{n}{k}\n\\]\nfrom:\n\n\n$$\n\\frac{n!}{k!(n-k)!} = \\binom{n}{k}\n$$\n\n\n\n\nImages\n\n\n\n\nInline HTML\n\n\nThis is probably best avoided if possible, but it works.\n\n\n\n  \nDefinition list\n\n  \nIs something people use sometimes.\n\n\n  \nMarkdown in HTML\n\n  \nDoes *not* work **very** well. Use HTML \ntags\n.", 
             "title": "Demo"
