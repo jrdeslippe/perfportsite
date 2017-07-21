@@ -1,0 +1,10 @@
+- TikZ pictures for each MG kernel (BCF)
+- code snippets for one kernel (Fortran and C) to show the work required to
+  change languages (TK)
+- overview of BoxLib/AMReX (BCF)
+- status of "non-portable" implementation (OpenMP 2.x tiling) (BCF)
+  - show thread strong scaling
+
+- implementations:
+  - OpenMP 4.5 (TK)
+  - Kokkos (ZR)
