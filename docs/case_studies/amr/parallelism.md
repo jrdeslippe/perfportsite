@@ -1,9 +1,16 @@
-## Parallelization
+# Parallelization
 
-In BoxLib, parallelization is realized through a hybrid MPI+OpenMP approach. It
-decomposes the problem domain into rectangular boxes, and distributes these
-among MPI processes. Each process follows an "owner computes" model, wherein it
-loops over its own boxes, executing Fortran kernels on each box in series.
+BoxLib implements parallelization through a hybrid MPI+OpenMP approach.
+
+## MPI
+
+At the coarsest level, BoxLib decomposes the problem domain into rectangular
+boxes, and distributes these among MPI processes. Each process follows an
+"owner computes" model, wherein it loops over its own boxes, executing Fortran
+kernels on each box in series.
+
+## OpenMP
+
 BoxLib adds an additional layer of parallelism within each MPI process through
 OpenMP threading, specifically by decomposing its set of boxes into a set of
 smaller "tiles", which are then distributed among OpenMP threads. Although
