@@ -21,7 +21,55 @@ below as they pertain to computational algorithms.
 
 ## Relaxation
 
-(WIP)
+A relaxation consists of one or more iterations of an approximate solution to
+the system of linear equations. In geometric multigrid, common algorithms used
+here include Jacobi and Gauss-Seidel. By default, the BoxLib solver uses a
+variation on Gauss-Seidel called Gauss-Seidel red-black ("GSRB").
+
+```fortran
+do k = lo(3), hi(3)
+  do j = lo(2), hi(2)
+     ioff = MOD(lo(1) + j + k + redblack,2)
+     do i = lo(1) + ioff,hi(1),2
+        gamma = alpha*a(i,j,k) &
+              +   dhx*(bX(i,j,k)+bX(i+1,j,k)) &
+              +   dhy*(bY(i,j,k)+bY(i,j+1,k)) &
+              +   dhz*(bZ(i,j,k)+bZ(i,j,k+1))
+
+        g_m_d = gamma &
+              - (dhx*(bX(i,j,k)*cf0 + bX(i+1,j,k)*cf3) &
+              +  dhy*(bY(i,j,k)*cf1 + bY(i,j+1,k)*cf4) &
+              +  dhz*(bZ(i,j,k)*cf2 + bZ(i,j,k+1)*cf5)) &
+
+        rho = dhx*( bX(i  ,j,k)*phi(i-1,j,k) &
+            +       bX(i+1,j,k)*phi(i+1,j,k) ) &
+            + dhy*( bY(i,j  ,k)*phi(i,j-1,k) &
+            +       bY(i,j+1,k)*phi(i,j+1,k) ) &
+            + dhz*( bZ(i,j,k  )*phi(i,j,k-1) &
+            +       bZ(i,j,k+1)*phi(i,j,k+1) ) &
+
+        res =  rhs(i,j,k) - (gamma*phi(i,j,k) - rho)
+        phi(i,j,k) = phi(i,j,k) + omega/g_m_d * res
+     end do
+  end do
+end do
+```
+
+The algorithm above uses a 7-point cell-centered discretization of the 3-D
+variable-coefficient Helmholtz operator. The diffusion operator is one type of
+Helmholtz operator; the Laplace operator, which appears in the Poisson equation
+for self-gravity, is a simplified version, with constant coefficients.
+
+The GSRB method for a 7-point discretization of the Helmholtz operator exhibits
+a low arithmetic intensity, requiring several non-contiguous loads from memory
+to evaluate the operator.
+
+The relaxation step and the coarse grid solve (discussed belowed) often feature
+similar computational and data access patterns, because both are effectively
+doing the same thing - solving a linear system. The primary difference between
+them is that the relaxation method applies the iterative kernel only a handful
+of times, whereas the coarse grid solve often iterates all the way to
+convergence.
 
 ## Restriction
 
@@ -97,4 +145,8 @@ in the solver that the cells must be cubic.)
 The multigrid solver in BoxLib recursively coarsens grids until the grid
 reaches a sufficiently small size, often $2^3$ if the problem domain is cubic.
 On the coarsest grid, the solver then solves the linear system exactly, before
-propagating the solution back up to finer grids.
+propagating the solution back up to finer grids. The solution algorithm chosen
+for this step is rarely influential on the overall performance of the multigrid
+algorithm, because the problem size at the coarsest grid is so small. In
+BoxLib, the default coarse grid solver algorithm is BiCGSTAB, a variation on
+the conjugate-gradient iterative method.
