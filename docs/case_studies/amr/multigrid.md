@@ -1,11 +1,12 @@
 # Geometric Multigrid
 
 Many problems encountered in BoxLib applications require solutions to linear
-system, e.g., elliptic PDEs such as the Poisson equation for self-gravity, and
-the diffusion equation. BoxLib therefore includes geometric multigrid solvers
-for solving problems which use both cell-centered and nodal data. For this
-project, we have focused on the cell-centered solver due to its relative
-simplicity compared to the nodal solver.
+system, e.g., elliptic partial differential equations such as the Poisson
+equation for self-gravity, and the diffusion equation. BoxLib therefore
+includes geometric multigrid solvers for solving problems which use both
+cell-centered and nodal data. For this project, we have focused on the
+cell-centered solver due to its relative simplicity compared to the nodal
+solver.
 
 Geometric multigrid is an iterative method for solving linear problems which
 contains roughly 4 steps:
@@ -15,16 +16,20 @@ contains roughly 4 steps:
   * prolongation
   * coarse-grid linear solve (either approximate or exact)
 
-Although here we will not discuss the details of the geometric multigrid method
-(an entire literature exists on the topic), we summarize each of these steps
-below as they pertain to computational algorithms.
+Although here we will not discuss the details of the geometric multigrid
+method, we summarize each of these steps below as they pertain to computational
+algorithms.
 
 ## Relaxation
 
 A relaxation consists of one or more iterations of an approximate solution to
 the system of linear equations. In geometric multigrid, common algorithms used
 here include Jacobi and Gauss-Seidel. By default, the BoxLib solver uses a
-variation on Gauss-Seidel called Gauss-Seidel red-black ("GSRB").
+variation on Gauss-Seidel called Gauss-Seidel red-black ("GSRB"). GSRB deviates
+from the original Gauss-Seidel method by exploiting a symmetry in the data
+dependence among matrix elements, such that an update sweep of all matrix
+elements follows a stride-2 pattern rather than stride-1. (This property
+manifests in the innermost loop of the kernel shown below).
 
 ```fortran
 do k = lo(3), hi(3)
