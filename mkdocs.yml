@@ -38,7 +38,11 @@ pages:
         - DSL: perfport/dsl/index.md
         - Models: perfport/models/index.md
     - Case Studies:
-        - amr: case_studies/amr/index.md
+        - BoxLib:
+          - Overview: case_studies/amr/overview.md
+          - Parallelism: case_studies/amr/parallelism.md
+          - Code Layout: case_studies/amr/code_layout.md
+          - Geometric Multigrid: case_studies/amr/multigrid.md
         - GW Kenerels: case_studies/gw/index.md 
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
