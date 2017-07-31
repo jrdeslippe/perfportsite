@@ -10,20 +10,20 @@
       
       
       
-        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+        <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
       <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
     
     
       
-        <title>NekBone - Performance Portability</title>
+        <title>Parallelism - Performance Portability</title>
       
     
     
-      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
       
     
     
@@ -60,7 +60,7 @@
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <a href="../.." title="Performance Portability" class="md-icon md-icon--home md-header-nav__button">
+          <a href="../../.." title="Performance Portability" class="md-icon md-icon--home md-header-nav__button">
           </a>
         
       </div>
@@ -73,15 +73,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Performance Portability
-                </span>
-              
-                <span class="md-header-nav__parent">
                   Case Studies
                 </span>
               
+                <span class="md-header-nav__parent">
+                  BoxLib
+                </span>
+              
             
-            NekBone
+            Parallelism
           
         </span>
       </div>
@@ -142,7 +142,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../.." title="Introduction" class="md-nav__link">
+    <a href="../../.." title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -173,7 +173,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/overview/" title="Overview" class="md-nav__link">
+    <a href="../../../facilities/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -185,7 +185,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/tools/" title="Tools" class="md-nav__link">
+    <a href="../../../facilities/tools/" title="Tools" class="md-nav__link">
       Tools
     </a>
   </li>
@@ -197,7 +197,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/comparison/" title="Comparison" class="md-nav__link">
+    <a href="../../../facilities/comparison/" title="Comparison" class="md-nav__link">
       Comparison
     </a>
   </li>
@@ -209,7 +209,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/resources/" title="Resources" class="md-nav__link">
+    <a href="../../../facilities/resources/" title="Resources" class="md-nav__link">
       Resources
     </a>
   </li>
@@ -247,7 +247,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/definition/" title="Definition" class="md-nav__link">
+    <a href="../../../perfport/definition/" title="Definition" class="md-nav__link">
       Definition
     </a>
   </li>
@@ -259,7 +259,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/measurements/" title="Measurements" class="md-nav__link">
+    <a href="../../../perfport/measurements/" title="Measurements" class="md-nav__link">
       Measurements
     </a>
   </li>
@@ -290,7 +290,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/libraries/" title="Libraries" class="md-nav__link">
+    <a href="../../../perfport/libraries/" title="Libraries" class="md-nav__link">
       Libraries
     </a>
   </li>
@@ -302,7 +302,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/directives/" title="Directives" class="md-nav__link">
+    <a href="../../../perfport/directives/" title="Directives" class="md-nav__link">
       Directives
     </a>
   </li>
@@ -314,7 +314,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/frameworks/" title="Frameworks" class="md-nav__link">
+    <a href="../../../perfport/frameworks/" title="Frameworks" class="md-nav__link">
       Frameworks
     </a>
   </li>
@@ -326,7 +326,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/dsl/" title="DSL" class="md-nav__link">
+    <a href="../../../perfport/dsl/" title="DSL" class="md-nav__link">
       DSL
     </a>
   </li>
@@ -338,7 +338,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../perfport/models/" title="Models" class="md-nav__link">
+    <a href="../../../perfport/models/" title="Models" class="md-nav__link">
       Models
     </a>
   </li>
@@ -374,10 +374,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1" checked>
     
     <label class="md-nav__link" for="nav-3-4-1">
       BoxLib
@@ -395,7 +397,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../amr/overview/" title="Overview" class="md-nav__link">
+    <a href="../overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -405,11 +407,54 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../amr/parallelism/" title="Parallelism" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Parallelism
+      </label>
+    
+    <a href="./" title="Parallelism" class="md-nav__link md-nav__link--active">
       Parallelism
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mpi" title="MPI" class="md-nav__link">
+    MPI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openmp" title="OpenMP" class="md-nav__link">
+    OpenMP
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -419,7 +464,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../amr/code_layout/" title="Code Layout" class="md-nav__link">
+    <a href="../code_layout/" title="Code Layout" class="md-nav__link">
       Code Layout
     </a>
   </li>
@@ -431,7 +476,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
+    <a href="../multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
   </li>
@@ -448,7 +493,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../gw/" title="GW Kenerels" class="md-nav__link">
+    <a href="../../gw/" title="GW Kenerels" class="md-nav__link">
       GW Kenerels
     </a>
   </li>
@@ -458,18 +503,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-    
-    <a href="./" title="NekBone" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../nek/" title="NekBone" class="md-nav__link">
       NekBone
     </a>
-    
   </li>
 
         
@@ -479,7 +517,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../md/" title="MD" class="md-nav__link">
+    <a href="../../md/" title="MD" class="md-nav__link">
       MD
     </a>
   </li>
@@ -501,7 +539,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../demo/demo/" title="Demo" class="md-nav__link">
+    <a href="../../../demo/demo/" title="Demo" class="md-nav__link">
       Demo
     </a>
   </li>
@@ -521,6 +559,29 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mpi" title="MPI" class="md-nav__link">
+    MPI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openmp" title="OpenMP" class="md-nav__link">
+    OpenMP
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -533,9 +594,23 @@
               
                 
                 
-                  <h1>NekBone</h1>
-                
-                
+                <h1 id="parallelization">Parallelization<a class="headerlink" href="#parallelization" title="Permanent link">&para;</a></h1>
+<p>BoxLib implements parallelization through a hybrid MPI+OpenMP approach.</p>
+<h2 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permanent link">&para;</a></h2>
+<p>At the coarsest level, BoxLib decomposes the problem domain into rectangular
+boxes, and distributes these among MPI processes. Each process follows an
+"owner computes" model, wherein it loops over its own boxes, executing Fortran
+kernels on each box in series.</p>
+<h2 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h2>
+<p>BoxLib adds an additional layer of parallelism within each MPI process through
+OpenMP threading, specifically by decomposing its set of boxes into a set of
+smaller "tiles", which are then distributed among OpenMP threads. Although
+these tiles can be arbitrarily shaped, by default they are pencil-shaped, being
+long in the stride-1 memory access dimension (the x-dimension in Fortran
+kernels), and short in the other two dimensions, in order to attain high cache
+reuse and optimal hardware memory prefetching. As with the MPI parallelism, the
+OpenMP tile box parallelism also follows an "owner computes" model, but at the
+finer-grained thread level, rather than at the process level.</p>
                 
                   
                 
@@ -554,7 +629,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../gw/" title="GW Kenerels" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../overview/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -563,19 +638,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                GW Kenerels
+                Overview
               </span>
             </div>
           </a>
         
         
-          <a href="../md/" title="MD" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../code_layout/" title="Code Layout" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                MD
+                Code Layout
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -605,10 +680,10 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
       
       
-      <script>app.initialize({url:{base:"../.."}})</script>
+      <script>app.initialize({url:{base:"../../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
       
