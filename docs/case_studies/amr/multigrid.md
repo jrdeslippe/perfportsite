@@ -18,7 +18,9 @@ contains roughly 4 steps:
 
 Although here we will not discuss the details of the geometric multigrid
 method, we summarize each of these steps below as they pertain to computational
-algorithms.
+algorithms. Although these steps are algorithmically unique, we note that all
+of them feature low arithmetic intensity and are thus sensitive to cache and
+memory bandwidth.
 
 ## Relaxation
 
