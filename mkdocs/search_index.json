@@ -12,7 +12,7 @@
         }, 
         {
             "location": "/facilities/overview/", 
-            "text": "Jack / Bronson / Tim to Write\n\n\n\n\n\n\n\n\nSystem\n\n\nType\n\n\nProcessor\n\n\nAccelerator\n\n\nNodes\n\n\nPerf. Per Node\n\n\nPeak Perf.\n\n\n\n\n\n\n\n\n\n\nTitan\n\n\nCray XE6\n\n\nAMD\n\n\nGPU Titan\n\n\n100\n\n\n3 TF\n\n\n25 PF", 
+            "text": "Brian / Bronson / Tim to try to write\n\n\nThis should be high level overview of differences at centers - we can then cover more in comparison\n\n\n\n\n\n\n\n\nSystem\n\n\nType\n\n\nProcessor\n\n\nAccelerator\n\n\nNodes\n\n\nPerf. Per Node\n\n\nPeak Perf.\n\n\n\n\n\n\n\n\n\n\nTitan\n\n\nCray XE6\n\n\nAMD\n\n\nGPU Titan\n\n\n100\n\n\n3 TF\n\n\n25 PF", 
             "title": "Overview"
         }, 
         {
