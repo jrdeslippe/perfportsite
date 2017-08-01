@@ -261,9 +261,34 @@
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Measurements
+      </label>
+    
     <a href="./" title="Measurements" class="md-nav__link md-nav__link--active">
       Measurements
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#measuring-performance-portability" title="Measuring Performance Portability" class="md-nav__link">
+    Measuring Performance Portability
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -516,6 +541,20 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#measuring-performance-portability" title="Measuring Performance Portability" class="md-nav__link">
+    Measuring Performance Portability
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -529,7 +568,23 @@
                 
                   <h1>Measurements</h1>
                 
-                <p>Jack To Write</p>
+                <h2 id="measuring-performance-portability">Measuring Performance Portability<a class="headerlink" href="#measuring-performance-portability" title="Permanent link">&para;</a></h2>
+<p>As discussed in the previous section, performance portability can be an elusive topic to quantify 
+and different engineers often provide different definitions or measurement techniques.</p>
+<p>Measuring 'portability' itself is somewhat more well defined. One can, in principle, measure the 
+total lines of code used in common across different architectures vs. the amount of code intended 
+for a single architecture via <code>IFDEF</code> pre-processing statements and the like. A code with 0% 
+architecture specfic code being completely portable and a code with a 100% architecture specific 
+code being essentially made up of multiple applications. </p>
+<p>'Performance', even on a single architecture, is a bit less simple to define and measure. In 
+practice, scientists generally care about the quality and quantity of scientific output they 
+produce. This typically maps for them to relative performance concepts, such as how much faster 
+can a particular run or set of runs run today than yesterday or on this machine than that. The 
+drawback of trying to measure performance in this way is that the baseline is arbitrary - i.e. you 
+don't know how well your code is performing on any architecture compared to how it 'should' be 
+performing if it were well optimized.</p>
+<p>One may 
+in principle define absolute performance as a measure</p>
                 
                   
                 
