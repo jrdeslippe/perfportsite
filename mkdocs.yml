@@ -37,6 +37,7 @@ pages:
         - Frameworks: perfport/frameworks/index.md
         - DSL: perfport/dsl/index.md
         - Models: perfport/models/index.md
+        - Summary: perfport/summary/index.md
     - Case Studies:
         - BoxLib:
           - Overview: case_studies/amr/overview.md
