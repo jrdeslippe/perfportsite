@@ -1,4 +1,6 @@
-Jack / Bronson / Tim to Write
+Brian / Bronson / Tim to try to write
+
+This should be high level overview of differences at centers - we can then cover more in comparison
 
 
 | System   | Type     | Processor   | Accelerator   | Nodes  | Perf. Per Node  | Peak Perf. |
