@@ -344,6 +344,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../perfport/summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -493,8 +505,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../../gw/" title="GW Kenerels" class="md-nav__link">
-      GW Kenerels
+    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
+      GW Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../qcd/" title="QCD" class="md-nav__link">
+      QCD
     </a>
   </li>
 
@@ -600,7 +624,9 @@
 <p>At the coarsest level, BoxLib decomposes the problem domain into rectangular
 boxes, and distributes these among MPI processes. Each process follows an
 "owner computes" model, wherein it loops over its own boxes, executing Fortran
-kernels on each box in series.</p>
+kernels on each box in series. An example is shown in the figure below, where
+the red and green boxes are assigned to the same MPI process.</p>
+<p><img alt="&quot;BoxLib box distribution&quot;" src="../cc_validbox.png" title="BoxLib box distribution" /></p>
 <h2 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h2>
 <p>BoxLib adds an additional layer of parallelism within each MPI process through
 OpenMP threading, specifically by decomposing its set of boxes into a set of
@@ -611,6 +637,17 @@ kernels), and short in the other two dimensions, in order to attain high cache
 reuse and optimal hardware memory prefetching. As with the MPI parallelism, the
 OpenMP tile box parallelism also follows an "owner computes" model, but at the
 finer-grained thread level, rather than at the process level.</p>
+<p>This OpenMP parallelism is illustrated in the figure below. The box
+distribution is the same as in the figure above, except in this case each box
+is further decomposed into smaller tiles. BoxLib then builds a list of all
+tiles comprising all boxes owned by a given MPI process, and distributes the
+list among the OpenMP threads in the process. The figure below illustrates this
+process by color-coding each tile, with unique threads assigned to each color,
+such that the same thread may operate on tiles spanning different boxes. This
+approach avoids unnecessary thread synchronization which would occur if threads
+were distributed among tiles within each box.</p>
+<p><img alt="&quot;BoxLib OpenMP tiling&quot;" src="../cc_tilebox.png" title="BoxLib OpenMP tiling" /></p>
+<p>The figures on this page are taken from the AMReX User's Guide.</p>
                 
                   
                 
