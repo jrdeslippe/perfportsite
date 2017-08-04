@@ -38,15 +38,47 @@ This case is also relevant to many lattice QCD applications so that we have impl
 The arithmetic intensity for the Wilson operator can be computed as follows:
 
 $$
-\frac{\#FLOPS}{\#BYTES} = \frac{1320}{8G + (9-R+r)S},
+\frac{\#\mathrm{Flops}}{\#\mathrm{Bytes}} = \frac{1320}{8G + (9-R+r)S},
 $$
 
-where $G$ is the size of a gauge link, $S$ the size of a spinor, $R$ the nearest neighbor spinor reuse factor and $r=0$ if streaming stores are used and $r=1$ otherwise. The constant factors account for the fact that in 4 dimensions, each lattice site has 8 neighbors and thus 8 links and spinors needs to be read from memory and one spinor needs to be written. If no streaming stores are used, the output spinor needs to be read into cache first and thus the total number of spinors transferred per computed site will be 10 in this case. Whereas the spinor always consists of 12 complex numbers (3 color and 4 spin components), the gauge links G can be in theory compressed to 8 real numbers by using properties of [Lie algebras](https://en.wikipedia.org/wiki/Lie_algebra) along with the generators of $SU(3)$. However, this is very expensive so that usually a less aggressive form of compression is used by simply dropping one row or column of the gauge link and reconstruct it on the fly when needed. This format is called *12-compression* and widely used in modern Wilson operator implementations. In our simple test case however, we do not use this kind of compression and thus the expected arithmetic intensity is between $0.86$ $(R=0,\,r=1,\,G=18)$ and $1.72$ $(R=7,\,r=0,\,G=18)$ for single precision.
+where $G$ is the size of a gauge link, $S$ the size of a spinor, $R$ the nearest neighbor spinor reuse factor and $r=0$ if streaming stores are used and $r=1$ otherwise (read-for-write). The constant factors account for the fact that in 4 dimensions, each lattice site has 8 neighbors and thus 8 links and spinors needs to be read from memory and one spinor needs to be written. If no streaming stores are used, the output spinor needs to be read into cache first and thus the total number of spinors transferred per computed site will be 10 in this case. Whereas the spinor always consists of 12 complex numbers (3 color and 4 spin components), the gauge links G can be in theory compressed to 8 real numbers by using properties of [Lie algebras](https://en.wikipedia.org/wiki/Lie_algebra) along with the generators of $SU(3)$. However, this is very expensive so that usually a less aggressive form of compression is used by simply dropping one row or column of the gauge link and reconstruct it on the fly when needed. This format is called *12-compression* and widely used in modern Wilson operator implementations. In our simple test case however, we do not use this kind of compression and thus the expected arithmetic intensity is between $0.86$ $(R=0,\,r=1,\,G=18)$ and $1.72$ $(R=7,\,r=0,\,G=18)$ for single precision.
 
 We have applied two optimizations to our Wilson dslash test code
 
-* we replace the Wilson operator with it's Schur complement, i.e. we use $M_{oo} = m - /\!\!\!\!D_{oe} m^{-1} /\!\!\!\!D_{eo}$ instead of applying $/\!\!\!\!D$ directly. Here, the indices $e$ and $o$ indicate that the operator only couples odd-odd, odd-even or even-odd sites. With this optimization, the modified problem can essentially be solved on a volume half as big as the original problem and the solution easily be reconstructed for the other half. 
+* we replace the Wilson operator with it's [Schur complement](https://en.wikipedia.org/wiki/Schur_complement), i.e. we use $M_{oo} = m - /\!\!\!\!D_{oe} m^{-1} /\!\!\!\!D_{eo}$ instead of applying $/\!\!\!\!D$ directly. Here, the indices $oo$, $oe$ and $eo$ indicate that the respective operators only couple odd-odd, odd-even or even-odd sites respectively. With this optimization, the modified problem can essentially be solved on a volume half as big as the original problem and the solution easily be reconstructed for the other half.
+* we use properties of the Dirac matrices to project the 4-spinors to two pairs of linear dependent 2-spinors before applying the dslash, saving 50% of the required flops.
 * we solve for multiple right hand side vectors simultaneously to increase the arithmetic intensity. This optimizations amounts to multiplying the number of flops as well as the number of reads and stores by the number of right hand sides $N$. Since all these vectors should ideally be kept in cache, the effective reuse factor $R$ will drop with increasing $N$. In our testcase we vectorize using SIMD or SIMT over these right hand side vectors, so $N$ should ideally be an integer multiple of the vector/warp size. These two aspects have to be taken into account when optimizing the performance.
 
 ### Code Structure
-Our testcode is written in C++ and designed completely from scratch. 
+Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site we:
+
+* stream-in the relevant spinors (or block of spinors in case of multiple right hand sides) from memory
+* project 4-spinors to 2-spinors
+* read relevant gauge links and apply the dslash to those vectors
+* inject 2-spinors into 4-spinors
+* stream-out the solution vectors to memory
+
+In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.
+For facilitating this workflow, we define spinor and gauge link classes such as:
+
+```C++
+template<typename ST,int nspin> 
+class CBSpinor {
+public: 
+    ...
+private:
+    // dims are: site, color, spin
+    spin_container<ST[site,color,spin]> data;
+};
+
+template<typename GT> 
+class CBGaugeField {
+public:
+    ...
+private:
+    // dims are: site, direction, color, color
+    gauge_container<GT[site,4,3,3]> data;
+};
+```
+
+here, ST and GT refer to spinor-type and gauge-type respectively. Those types could be SIMD or scalar types and they do not neccesarily need to be the same. The data containers can be plain arrays, e.g. for (unportable) plain implementations, or arrays decorated with pragmas (e.g. for OpenMP 4.5 offloading) or more general data container classes such as Kokkos::Views, etc.. The member functions are adopted to the container classes used in the individual implementations. Note that this design allows us to test different performance portable frameworks/methods without having to restructure large parts of the code.
