@@ -17,15 +17,15 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 | System   | Titan    |
 |----------|----------|
 | Location | OLCF     |
-| Architecture | CPU + GPU |
-| Scale | 16,000 Nodes |
+| Architecture | CPU + NVIDIA GPU |
+| Scale | 18,688 Nodes |
 | Picture | <img src="titan.jpg" width=200> |
 
 
 | System   | Cori    |
 |----------|----------|
 | Location | NERSC     |
-| Architecture | Many Core |
+| Architecture | Xeon-Phi |
 | Scale | 9688 Nodes |
 | Notes | SSD Burst-Buffer IO layer |
 | Picture | <img src="cori.jpg" width=200> |
@@ -34,7 +34,7 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 |----------|----------|
 | Location | ALCF     |
 | Architecture | Xeon-Phi |
-| Scale | 2500 Nodes |
+| Scale | 3624 Nodes |
 | Picture | <img src="theta.jpg" width=200> |
 
 The two processor architectures deployed on these systems are the CPU+NVidia GPU hybrid architecture on Titan and the "self-hosted" Xeon-Phi processors 
