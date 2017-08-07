@@ -67,6 +67,7 @@ struct GPUSIMDComplex {
 
 The latter construct might look confusing first, because the access operator ignores the ```lane``` parameter. This is because the SIMT threading is implicit in Kokkos and each SIMT thread is holding it's own data ```_data```. Nevertheless, it is useful to implement the access operator that way to preserve a common, portable style throughout the rest of the code.
 
+### Specialization for CPU
 In theory, these two types are sufficient for ensuring proper vectorization on both CPU and GPU. In our experiments however, we found that neither Intel nor GNU compiler could vectorize the complex operations inside the spinors properly, leading to a very poor performance. This is not a problem of Kokkos itself, it is merely the inability of compilers to efficiently vectorized complex algebra. We therefore provided a template  specialization for the ```CPUSIMDComplex``` datatype which we implemented by explicitly using AVX512 intrinsics. For example, the datatype then becomes
 
 ```C++
@@ -82,5 +83,21 @@ struct CPUSIMDComplex<float,8> {
 };
 ```
 
-and the vectorized multiplication of two complex numbers
+and, for example, the vectorized multiplication of two complex numbers
 
+```C++
+template<> KOKKOS_FORCEINLINE_FUNCTION
+void ComplexCMadd<float,8,CPUSIMDComplex,CPUSIMDComplex>(CPUSIMDComplex<float,8>& res,
+                                                         const Kokkos::complex<float>& a,
+                                                         const CPUSIMDComplex<float,8>& b)
+{
+  __m512 avec_re = _mm512_set1_ps( a.real() );
+  __m512 avec_im = _mm512_set1_ps( a.imag() );
+
+  __m512 sgnvec = _mm512_set_ps( 1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1,1,-1);
+  __m512 perm_b = _mm512_mul_ps(sgnvec,_mm512_shuffle_ps(b._vdata,b._vdata,0xb1));
+
+  res._vdata = _mm512_fmadd_ps( avec_re, b._vdata, res._vdata);
+  res._vdata = _mm512_fmadd_ps( avec_im,perm_b, res._vdata);
+}
+```
