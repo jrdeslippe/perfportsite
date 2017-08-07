@@ -9,6 +9,8 @@ Our testcode is written in C++ and designed completely from scratch. We use type
 * stream-out the solution vectors to memory
 
 In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.
+
+## Data Primitives
 For facilitating this workflow, we define spinor and gauge link classes (in C++-like pseudocode):
 
 ```C++
@@ -34,7 +36,7 @@ private:
 here, ST and GT refer to spinor-type and gauge-type respectively. Those types could be SIMD or scalar types and they do not neccesarily need to be the same. The data containers can be plain arrays, e.g. for (unportable) plain implementations, or arrays decorated with pragmas (e.g. for OpenMP 4.5 offloading) or more general data container classes such as Kokkos::Views, etc.. The member functions are adopted to the container classes used in the individual implementations. Note that this design allows us to test different performance portable frameworks/methods without having to restructure large parts of the code. The additional template paramter ```nspin``` allows us to easily define 2- and 4-spinor objects. 
 
 
-## Parallelism
+## Wilson Operator
 
 At this point in time, the dslash testcode is not multi-node ready, so we will focus solely on on-node parallelism for the moment. Our goal is to achieve this by threading over lattice sites and applying SIMD/SIMT parallelism over multiple right hand sides. In theory, one could achieve vectorization for single right hand side vectors also by using an array or structure of array data layout but we will not consider this technique here. We will nevertheless compare our single right hand side performance we achieved with our performance portable implementations with those of optimized libraries which feature such improvements.
 
@@ -46,7 +48,7 @@ class Dslash {
     public:
     void operator(const CBSpinor<ST,4>& s_in,
                   const CBGaugeField<GT>& g_in,
-                  CPSpinor<ST,4>& s_out,
+                  CBSpinor<ST,4>& s_out,
                   int plus_minus) 
     {
         // Threaded loop over sites
@@ -69,4 +71,10 @@ class Dslash {
 };
 ```
 
-Here, the type ```TST``` denotes a thread-spinor-type which belongs to the ```CBThreadSpinor``` class. It is important to make the distinction between ```CBSpinor``` and ```CBThreadSpinor``` because, depending on the performance portability framework used, this type has to be different on CPU or GPU. We will discuss this issue in more detail when we look at the various frameworks later on. The important thing is that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. Additionally, if we need more architectural specialization than the various frameworks could offer, this can be implemented cleanly by operator overloading and template specializations.
+Here, the type ```TST``` denotes a thread-spinor-type which belongs to the ```CBThreadSpinor``` class. It is important to make the distinction between ```CBSpinor``` and ```CBThreadSpinor``` because, depending on the performance portability framework used, this type has to be different on CPU or GPU. What we would like to achieve ultimately is displayed in the picture below:
+
+![A demo image](images/gpu_vs_cpu_vec.png)
+
+In case of the GPU (left), individual threads are each working on a single/scalar entry of the global spinor, i.e. on a single right hand side component. In case of the CPU (right), each thread is working on a chunk of right hand sites, ideally using its vector units. In both cases, the input and output spinor datatype is the same and the work spinor type is optimized for the targeted architecture. 
+
+Note that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. Additionally, if we need more architectural specialization than the various frameworks could offer, this can be implemented cleanly by operator overloading and template specializations.
