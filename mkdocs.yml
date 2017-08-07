@@ -37,7 +37,9 @@ pages:
     - Measurements: perfport/measurements.md
     - Approaches:
         - Libraries: perfport/libraries/index.md
-        - Directives: perfport/directives/index.md
+        - Directives:
+            - OpenACC: perfport/directives/openacc.md
+            - OpenMP: perfport/directives/openmp.md
         - Frameworks:
             - perfport/frameworks/kokkos.md
         - DSL: perfport/dsl/index.md
