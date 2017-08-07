@@ -1,6 +1,6 @@
 # Code Structure
 
-Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site we:
+Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:
 
 * stream-in the relevant spinors (or block of spinors in case of multiple right hand sides) from memory
 * project 4-spinors to 2-spinors
@@ -69,4 +69,4 @@ class Dslash {
 };
 ```
 
-Here, the type ```TST``` denotes a thread-spinor-type. It is important to make that distinction because, depending on the performance portability framework, this type has to be different on CPU or GPU. We will discuss this issue in more detail when we look at the various frameworks later on. The important thing is that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. 
+Here, the type ```TST``` denotes a thread-spinor-type which belongs to the ```CBThreadSpinor``` class. It is important to make the distinction between ```CBSpinor``` and ```CBThreadSpinor``` because, depending on the performance portability framework used, this type has to be different on CPU or GPU. We will discuss this issue in more detail when we look at the various frameworks later on. The important thing is that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. Additionally, if we need more architectural specialization than the various frameworks could offer, this can be implemented cleanly by operator overloading and template specializations.
