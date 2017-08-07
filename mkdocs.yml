@@ -52,6 +52,7 @@ pages:
         - GW Kernels: case_studies/gw/index.md
         - QCD:
           - Overview: case_studies/qcd/overview.md
+          - Code Structure: case_studies/qcd/code_structure.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
 - Demo: demo/demo.md
