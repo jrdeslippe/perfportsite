@@ -53,6 +53,7 @@ pages:
         - QCD:
           - Overview: case_studies/qcd/overview.md
           - Code Structure: case_studies/qcd/code_structure.md
+          - Kokkos Implementation: case_studies/qcd/kokkos_implementation.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
 - Demo: demo/demo.md
