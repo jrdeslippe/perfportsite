@@ -53,7 +53,7 @@ Many performance tools exist at ALCF, NERSC and OLCF for the purposes profiling 
 when comparing different implementation of an algorithm or method. See the comprehensive list [here](/facilities/tools.md) with links to detailed 
 instructions and example use-cases at each site. 
 
-### 2. Use the roofline approachl to compare actual to expected performance
+### 2. Use the roofline approach to compare actual to expected performance
 
 As discussed above, the major limitation of defining performance relative to the peak FLOPS capability of the system is that applications in practice are 
 limited by many different aspects of an HPC system. 
@@ -64,4 +64,4 @@ its DRAM arithmetic-intensity - that is the ratio of the FLOPs performed vs the 
 execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
 model on KNL for applications as a function of the DRAM arithmetic-intensity:
 
-<img src="/images/KNLRoofline.png" width=400>
+<img src="KNLRoofline.png" width=400>
