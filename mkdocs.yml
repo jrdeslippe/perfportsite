@@ -39,9 +39,9 @@ pages:
     - Approaches:
         - Libraries: perfport/libraries/index.md
         - Directives: perfport/directives/index.md
-        - Frameworks: perfport/frameworks/index.md
+        - Frameworks:
+            - perfport/frameworks/kokkos.md
         - DSL: perfport/dsl/index.md
-        - Models: perfport/models/index.md
         - Summary: perfport/summary/index.md
     - Case Studies:
         - BoxLib:
