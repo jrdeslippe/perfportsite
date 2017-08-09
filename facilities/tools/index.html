@@ -479,10 +479,58 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../../case_studies/qcd/" title="QCD" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3">
       QCD
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-3">
+        QCD
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/qcd/overview/" title="Overview" class="md-nav__link">
+      Overview
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/qcd/code_structure/" title="Code Structure" class="md-nav__link">
+      Code Structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
+      Kokkos Implementation
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -600,7 +648,7 @@ from its official documentation.</p>
 <li><a href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html">nvprof</a>:
   nvprof enables the collection of a timeline of CUDA-related activities on both
   CPU and GPU, including kernel execution, memory transfers, memory set and CUDA
-  API calls and events or metrics for CUDA kernels</li>
+  API calls and events or metrics for CUDA kernels.</li>
 <li><a href="https://www.cs.uoregon.edu/research/tau/home.php">Tuning and Analysis Utilities (TAU)</a>:
   TAU Performance System is a portable profiling and tracing toolkit for
   performance analysis of parallel programs written in Fortran, C, C++, UPC,

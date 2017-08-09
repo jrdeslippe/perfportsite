@@ -16,7 +16,7 @@
     
     
       
-        <title>Parallelism - Performance Portability</title>
+        <title>Code Structure - Performance Portability</title>
       
     
     
@@ -80,11 +80,11 @@
                 </span>
               
                 <span class="md-header-nav__parent">
-                  BoxLib
+                  QCD
                 </span>
               
             
-            Parallelism
+            Code Structure
           
         </span>
       </div>
@@ -391,12 +391,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1">
     
     <label class="md-nav__link" for="nav-3-4-1">
       BoxLib
@@ -404,6 +402,92 @@
     <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
       <label class="md-nav__title" for="nav-3-4-1">
         BoxLib
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../amr/overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../amr/parallelism/" title="Parallelism" class="md-nav__link">
+      Parallelism
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../amr/code_layout/" title="Code Layout" class="md-nav__link">
+      Code Layout
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
+      Geometric Multigrid
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
+      GW Kernels
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-4-3">
+      QCD
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-3">
+        QCD
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -435,11 +519,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Parallelism
+        Code Structure
       </label>
     
-    <a href="./" title="Parallelism" class="md-nav__link md-nav__link--active">
-      Parallelism
+    <a href="./" title="Code Structure" class="md-nav__link md-nav__link--active">
+      Code Structure
     </a>
     
       
@@ -453,15 +537,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#mpi" title="MPI" class="md-nav__link">
-    MPI
+  <a href="#data-primitives" title="Data Primitives" class="md-nav__link">
+    Data Primitives
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#openmp" title="OpenMP" class="md-nav__link">
-    OpenMP
+  <a href="#wilson-operator" title="Wilson Operator" class="md-nav__link">
+    Wilson Operator
   </a>
   
 </li>
@@ -481,91 +565,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../code_layout/" title="Code Layout" class="md-nav__link">
-      Code Layout
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../multigrid/" title="Geometric Multigrid" class="md-nav__link">
-      Geometric Multigrid
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
-      GW Kernels
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3">
-    
-    <label class="md-nav__link" for="nav-3-4-3">
-      QCD
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
-      <label class="md-nav__title" for="nav-3-4-3">
-        QCD
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../qcd/overview/" title="Overview" class="md-nav__link">
-      Overview
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../qcd/code_structure/" title="Code Structure" class="md-nav__link">
-      Code Structure
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
+    <a href="../kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
       Kokkos Implementation
     </a>
   </li>
@@ -643,15 +643,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#mpi" title="MPI" class="md-nav__link">
-    MPI
+  <a href="#data-primitives" title="Data Primitives" class="md-nav__link">
+    Data Primitives
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#openmp" title="OpenMP" class="md-nav__link">
-    OpenMP
+  <a href="#wilson-operator" title="Wilson Operator" class="md-nav__link">
+    Wilson Operator
   </a>
   
 </li>
@@ -671,36 +671,73 @@
               
                 
                 
-                <h1 id="parallelization">Parallelization<a class="headerlink" href="#parallelization" title="Permanent link">&para;</a></h1>
-<p>BoxLib implements parallelization through a hybrid MPI+OpenMP approach.</p>
-<h2 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permanent link">&para;</a></h2>
-<p>At the coarsest level, BoxLib decomposes the problem domain into rectangular
-boxes, and distributes these among MPI processes. Each process follows an
-"owner computes" model, wherein it loops over its own boxes, executing Fortran
-kernels on each box in series. An example is shown in the figure below, where
-the red and green boxes are assigned to the same MPI process.</p>
-<p><img alt="&quot;BoxLib box distribution&quot;" src="../cc_validbox.png" title="BoxLib box distribution" /></p>
-<h2 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h2>
-<p>BoxLib adds an additional layer of parallelism within each MPI process through
-OpenMP threading, specifically by decomposing its set of boxes into a set of
-smaller "tiles", which are then distributed among OpenMP threads. Although
-these tiles can be arbitrarily shaped, by default they are pencil-shaped, being
-long in the stride-1 memory access dimension (the x-dimension in Fortran
-kernels), and short in the other two dimensions, in order to attain high cache
-reuse and optimal hardware memory prefetching. As with the MPI parallelism, the
-OpenMP tile box parallelism also follows an "owner computes" model, but at the
-finer-grained thread level, rather than at the process level.</p>
-<p>This OpenMP parallelism is illustrated in the figure below. The box
-distribution is the same as in the figure above, except in this case each box
-is further decomposed into smaller tiles. BoxLib then builds a list of all
-tiles comprising all boxes owned by a given MPI process, and distributes the
-list among the OpenMP threads in the process. The figure below illustrates this
-process by color-coding each tile, with unique threads assigned to each color,
-such that the same thread may operate on tiles spanning different boxes. This
-approach avoids unnecessary thread synchronization which would occur if threads
-were distributed among tiles within each box.</p>
-<p><img alt="&quot;BoxLib OpenMP tiling&quot;" src="../cc_tilebox.png" title="BoxLib OpenMP tiling" /></p>
-<p>The figures on this page are taken from the AMReX User's Guide.</p>
+                <h1 id="code-structure">Code Structure<a class="headerlink" href="#code-structure" title="Permanent link">&para;</a></h1>
+<p>Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:</p>
+<ul>
+<li>stream-in the relevant spinors (or block of spinors in case of multiple right hand sides) from memory</li>
+<li>project 4-spinors to 2-spinors</li>
+<li>read relevant gauge links and apply the dslash to those vectors</li>
+<li>inject 2-spinors into 4-spinors</li>
+<li>stream-out the solution vectors to memory</li>
+</ul>
+<p>In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.</p>
+<h2 id="data-primitives">Data Primitives<a class="headerlink" href="#data-primitives" title="Permanent link">&para;</a></h2>
+<p>For facilitating this workflow, we define spinor and gauge link classes (in C++-like pseudocode):</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
+<span class="k">class</span> <span class="nc">CBSpinor</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span> 
+    <span class="p">...</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="c1">// dims are: site, color, spin</span>
+    <span class="n">spin_container</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">[</span><span class="n">site</span><span class="p">,</span><span class="n">color</span><span class="p">,</span><span class="n">spin</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="o">&gt;</span> 
+<span class="k">class</span> <span class="nc">CBGaugeField</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="p">...</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="c1">// dims are: site, direction, color, color</span>
+    <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">[</span><span class="n">site</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>here, ST and GT refer to spinor-type and gauge-type respectively. Those types could be SIMD or scalar types and they do not neccesarily need to be the same. The data containers can be plain arrays, e.g. for (unportable) plain implementations, or arrays decorated with pragmas (e.g. for OpenMP 4.5 offloading) or more general data container classes such as Kokkos::Views, etc.. The member functions are adopted to the container classes used in the individual implementations. Note that this design allows us to test different performance portable frameworks/methods without having to restructure large parts of the code. The additional template paramter <code>nspin</code> allows us to easily define 2- and 4-spinor objects. </p>
+<h2 id="wilson-operator">Wilson Operator<a class="headerlink" href="#wilson-operator" title="Permanent link">&para;</a></h2>
+<p>At this point in time, the dslash testcode is not multi-node ready, so we will focus solely on on-node parallelism for the moment. Our goal is to achieve this by threading over lattice sites and applying SIMD/SIMT parallelism over multiple right hand sides. In theory, one could achieve vectorization for single right hand side vectors also by using an array or structure of array data layout but we will not consider this technique here. We will nevertheless compare our single right hand side performance we achieved with our performance portable implementations with those of optimized libraries which feature such improvements.</p>
+<p>Our dslash class is implemented as follow:</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
+                  <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
+                  <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">,</span>
+                  <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> 
+    <span class="p">{</span>
+        <span class="c1">// Threaded loop over sites</span>
+        <span class="n">parallel_for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">num_sites</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">res_sum_</span><span class="p">;</span>
+            <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">mult_proj_res</span><span class="p">;</span>
+
+            <span class="c1">//go for directions +T</span>
+            <span class="c1">//stream-in from +T direction and project to 2-spinor</span>
+            <span class="n">project_dir</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s_in</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">T_PLUS</span><span class="p">);</span>
+            <span class="c1">//multiply with gauge link</span>
+            <span class="n">mult_adj_u_halfspinor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_in</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">T_PLUS</span><span class="p">],</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">mult_proj_res</span><span class="p">);</span>
+            <span class="c1">//reconstruct and add to result</span>
+            <span class="n">reconstruct_dir</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="n">ST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mult_proj_res</span><span class="p">,</span> <span class="n">res_sum</span><span class="p">);</span>
+
+            <span class="c1">//go for direction -T</span>
+            <span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Here, the type <code>TST</code> denotes a thread-spinor-type which belongs to the <code>CBThreadSpinor</code> class. It is important to make the distinction between <code>CBSpinor</code> and <code>CBThreadSpinor</code> because, depending on the performance portability framework used, this type has to be different on CPU or GPU. What we would like to achieve ultimately is displayed in the picture below:</p>
+<p><img alt="A demo image" src="../images/gpu_vs_cpu_vec.png" /></p>
+<p>In case of the GPU (left), individual threads are each working on a single/scalar entry of the global spinor, i.e. on a single right hand side component. In case of the CPU (right), each thread is working on a chunk of right hand sites, ideally using its vector units. In both cases, the input and output spinor datatype is the same and the work spinor type is optimized for the targeted architecture. </p>
+<p>Note that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. Additionally, if we need more architectural specialization than the various frameworks could offer, this can be implemented cleanly by operator overloading and template specializations.</p>
                 
                   
                 
@@ -734,13 +771,13 @@ were distributed among tiles within each box.</p>
           </a>
         
         
-          <a href="../code_layout/" title="Code Layout" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../kokkos_implementation/" title="Kokkos Implementation" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Code Layout
+                Kokkos Implementation
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

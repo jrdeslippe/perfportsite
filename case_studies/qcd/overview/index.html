@@ -16,7 +16,7 @@
     
     
       
-        <title>Parallelism - Performance Portability</title>
+        <title>Overview - Performance Portability</title>
       
     
     
@@ -80,11 +80,11 @@
                 </span>
               
                 <span class="md-header-nav__parent">
-                  BoxLib
+                  QCD
                 </span>
               
             
-            Parallelism
+            Overview
           
         </span>
       </div>
@@ -391,12 +391,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1" type="checkbox" id="nav-3-4-1">
     
     <label class="md-nav__link" for="nav-3-4-1">
       BoxLib
@@ -414,7 +412,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../overview/" title="Overview" class="md-nav__link">
+    <a href="../../amr/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -424,54 +422,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Parallelism
-      </label>
-    
-    <a href="./" title="Parallelism" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../amr/parallelism/" title="Parallelism" class="md-nav__link">
       Parallelism
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mpi" title="MPI" class="md-nav__link">
-    MPI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#openmp" title="OpenMP" class="md-nav__link">
-    OpenMP
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -481,7 +436,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../code_layout/" title="Code Layout" class="md-nav__link">
+    <a href="../../amr/code_layout/" title="Code Layout" class="md-nav__link">
       Code Layout
     </a>
   </li>
@@ -493,7 +448,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../multigrid/" title="Geometric Multigrid" class="md-nav__link">
+    <a href="../../amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
   </li>
@@ -520,10 +475,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3" type="checkbox" id="nav-3-4-3" checked>
     
     <label class="md-nav__link" for="nav-3-4-3">
       QCD
@@ -539,11 +496,74 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../qcd/overview/" title="Overview" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Overview
+      </label>
+    
+    <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
       Overview
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#wilson-fermions" title="Wilson Fermions" class="md-nav__link">
+    Wilson Fermions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-right-hand-sides" title="Multiple Right Hand Sides" class="md-nav__link">
+    Multiple Right Hand Sides
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-intensity" title="Arithmetic Intensity" class="md-nav__link">
+    Arithmetic Intensity
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -553,7 +573,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../qcd/code_structure/" title="Code Structure" class="md-nav__link">
+    <a href="../code_structure/" title="Code Structure" class="md-nav__link">
       Code Structure
     </a>
   </li>
@@ -565,7 +585,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
+    <a href="../kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
       Kokkos Implementation
     </a>
   </li>
@@ -643,16 +663,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#mpi" title="MPI" class="md-nav__link">
-    MPI
+  <a href="#wilson-fermions" title="Wilson Fermions" class="md-nav__link">
+    Wilson Fermions
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#openmp" title="OpenMP" class="md-nav__link">
-    OpenMP
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-right-hand-sides" title="Multiple Right Hand Sides" class="md-nav__link">
+    Multiple Right Hand Sides
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arithmetic-intensity" title="Arithmetic Intensity" class="md-nav__link">
+    Arithmetic Intensity
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -671,36 +711,44 @@
               
                 
                 
-                <h1 id="parallelization">Parallelization<a class="headerlink" href="#parallelization" title="Permanent link">&para;</a></h1>
-<p>BoxLib implements parallelization through a hybrid MPI+OpenMP approach.</p>
-<h2 id="mpi">MPI<a class="headerlink" href="#mpi" title="Permanent link">&para;</a></h2>
-<p>At the coarsest level, BoxLib decomposes the problem domain into rectangular
-boxes, and distributes these among MPI processes. Each process follows an
-"owner computes" model, wherein it loops over its own boxes, executing Fortran
-kernels on each box in series. An example is shown in the figure below, where
-the red and green boxes are assigned to the same MPI process.</p>
-<p><img alt="&quot;BoxLib box distribution&quot;" src="../cc_validbox.png" title="BoxLib box distribution" /></p>
-<h2 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h2>
-<p>BoxLib adds an additional layer of parallelism within each MPI process through
-OpenMP threading, specifically by decomposing its set of boxes into a set of
-smaller "tiles", which are then distributed among OpenMP threads. Although
-these tiles can be arbitrarily shaped, by default they are pencil-shaped, being
-long in the stride-1 memory access dimension (the x-dimension in Fortran
-kernels), and short in the other two dimensions, in order to attain high cache
-reuse and optimal hardware memory prefetching. As with the MPI parallelism, the
-OpenMP tile box parallelism also follows an "owner computes" model, but at the
-finer-grained thread level, rather than at the process level.</p>
-<p>This OpenMP parallelism is illustrated in the figure below. The box
-distribution is the same as in the figure above, except in this case each box
-is further decomposed into smaller tiles. BoxLib then builds a list of all
-tiles comprising all boxes owned by a given MPI process, and distributes the
-list among the OpenMP threads in the process. The figure below illustrates this
-process by color-coding each tile, with unique threads assigned to each color,
-such that the same thread may operate on tiles spanning different boxes. This
-approach avoids unnecessary thread synchronization which would occur if threads
-were distributed among tiles within each box.</p>
-<p><img alt="&quot;BoxLib OpenMP tiling&quot;" src="../cc_tilebox.png" title="BoxLib OpenMP tiling" /></p>
-<p>The figures on this page are taken from the AMReX User's Guide.</p>
+                <h1 id="introduction-to-lattice-qcd">Introduction to Lattice QCD<a class="headerlink" href="#introduction-to-lattice-qcd" title="Permanent link">&para;</a></h1>
+<p><a href="https://en.wikipedia.org/wiki/Lattice_QCD">Lattice QCD</a> is a numerical method to evaluate <a href="https://en.wikipedia.org/wiki/Quantum_chromodynamics">Quantum Chromodynamics (QCD)</a>,
+the theory of the strong interaction which binds quarks into nucleons and nucleons into nuclei,
+in a straightforward way with quantifiable uncertainties. It is non-perturbative and thus has access
+to energy regimes where common analytical methods fail.
+In orer to transform continuum QCD to Lattice QCD, one first rotates the time axis to imaginary times which 
+transforms the 4-dimensional <a href="https://en.wikipedia.org/wiki/Minkowski_space">Minkowski space</a> into Eculidian <span>\(\mathbb{R}^4\)</span>. Then,
+euclidian space-time is discretized by introducing a lattice spacing <span>\(a\)</span> as well as finite volume with side extents <span>\(L\)</span>.</p>
+<h2 id="wilson-fermions">Wilson Fermions<a class="headerlink" href="#wilson-fermions" title="Permanent link">&para;</a></h2>
+<p>The most expensive part of Lattice QCD is the calculation of so-called quark propagators, i.e.
+computing the solution of the Dirac equation
+<span>\((m - /\!\!\!\!D)\psi = \eta\)</span>, where <span>\(m\)</span> is the mass of the particle, <span>\(\eta\)</span> is a given vector (we will refer to this object as <em>source</em> or <em>right-hand-side spinor</em>)
+and <span>\(/\!\!\!\!D\)</span> is a so-called gauge-covariant, Fermion derivative operator. There are many possibilities for discretizing the
+continuum version of the Fermion derivative operator and the most common one are the so-called <a href="">Wilson fermions</a>. In this discretizaton,
+the operator, also called Wilson operator, is given by</p>
+<span>\[
+/\!\!\!\!D(x,y) = \sum\limits_{\mu=0}^3 U_{\mu}(x)(1-\gamma_{\mu})\delta_{y,x+\hat{\mu}}+U^{\dagger}_{\mu}(x-\hat{\mu})(1+\gamma_{\mu})\delta_{y,x-\hat{\mu}}.
+\]</span><p>Here, <span>\(\hat{\mu}\)</span> denotes a displacement in <span>\(\mu\)</span>-direction by one lattice site. <span>\(U_{\mu}(x)\)</span> are the so-called links connecting the neighboring sites <span>\(x\)</span> and <span>\(x+\hat{\mu}\)</span> in a gauge-covariant way. They are elements of <span>\(SU(3)\)</span>, i.e. they can be described by 3x3 complex-valued, <a href="https://en.wikipedia.org/wiki/Unitary_matrix">unitary matrices</a> with unit <a href="https://en.wikipedia.org/wiki/Determinant">determinant</a>. The <span>\(\gamma_{\mu}\)</span> are sparse 4x4 matrices and are the generators of the so-called <a href="https://en.wikipedia.org/wiki/Dirac_algebra">Dirac algebra</a>, a 4-dimensional spin <a href="https://en.wikipedia.org/wiki/Clifford_algebra">Clifford algebra</a>. The indices of <span>\(U\)</span> and <span>\(\gamma\)</span> are called color and spin indices respectively. 
+Note that the Wilson operator couples only neighboring lattice sites and is thus ultra-local.</p>
+<p>In modern lattice calculations, the majority of CPU time is spent on solving the Dirac equation. Therefore,
+most optimization efforts focus on optimizing the Wilson operator as well as solvers which use this operator as their kernel.
+It is thus importanto to find out whether the Wilson operator can be implemented in a performance portable way.</p>
+<h2 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h2>
+<p>In this section we will briefly discuss architecture-independent implementation details of the Wilson operator. </p>
+<h3 id="multiple-right-hand-sides">Multiple Right Hand Sides<a class="headerlink" href="#multiple-right-hand-sides" title="Permanent link">&para;</a></h3>
+<p>An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side vectors simulatenously.
+This case is also relevant to many lattice QCD applications so that we have implemented this optimization in our small test case. </p>
+<h3 id="arithmetic-intensity">Arithmetic Intensity<a class="headerlink" href="#arithmetic-intensity" title="Permanent link">&para;</a></h3>
+<p>The arithmetic intensity for the Wilson operator can be computed as follows:</p>
+<span>\[
+\frac{\#\mathrm{Flops}}{\#\mathrm{Bytes}} = \frac{1320}{8G + (9-R+r)S},
+\]</span><p>where <span>\(G\)</span> is the size of a gauge link, <span>\(S\)</span> the size of a spinor, <span>\(R\)</span> the nearest neighbor spinor reuse factor and <span>\(r=0\)</span> if streaming stores are used and <span>\(r=1\)</span> otherwise (read-for-write). The constant factors account for the fact that in 4 dimensions, each lattice site has 8 neighbors and thus 8 links and spinors needs to be read from memory and one spinor needs to be written. If no streaming stores are used, the output spinor needs to be read into cache first and thus the total number of spinors transferred per computed site will be 10 in this case. Whereas the spinor always consists of 12 complex numbers (3 color and 4 spin components), the gauge links G can be in theory compressed to 8 real numbers by using properties of <a href="https://en.wikipedia.org/wiki/Lie_algebra">Lie algebras</a> along with the generators of <span>\(SU(3)\)</span>. However, this is very expensive so that usually a less aggressive form of compression is used by simply dropping one row or column of the gauge link and reconstruct it on the fly when needed. This format is called <em>12-compression</em> and widely used in modern Wilson operator implementations. In our simple test case however, we do not use this kind of compression and thus the expected arithmetic intensity is between <span>\(0.86\)</span> <span>\((R=0,\,r=1,\,G=18)\)</span> and <span>\(1.72\)</span> <span>\((R=7,\,r=0,\,G=18)\)</span> for single precision.</p>
+<p>We have applied two optimizations to our Wilson dslash test code</p>
+<ul>
+<li>we replace the Wilson operator with it's <a href="https://en.wikipedia.org/wiki/Schur_complement">Schur complement</a>, i.e. we use <span>\(M_{oo} = m - /\!\!\!\!D_{oe} m^{-1} /\!\!\!\!D_{eo}\)</span> instead of applying <span>\(/\!\!\!\!D\)</span> directly. Here, the indices <span>\(oo\)</span>, <span>\(oe\)</span> and <span>\(eo\)</span> indicate that the respective operators only couple odd-odd, odd-even or even-odd sites respectively. With this optimization, the modified problem can essentially be solved on a volume half as big as the original problem and the solution easily be reconstructed for the other half.</li>
+<li>we use properties of the Dirac matrices to project the 4-spinors to two pairs of linear dependent 2-spinors before applying the dslash, saving 50% of the required flops.</li>
+<li>we solve for multiple right hand side vectors simultaneously to increase the arithmetic intensity. This optimizations amounts to multiplying the number of flops as well as the number of reads and stores by the number of right hand sides <span>\(N\)</span>. Since all these vectors should ideally be kept in cache, the effective reuse factor <span>\(R\)</span> will drop with increasing <span>\(N\)</span>. In our testcase we vectorize using SIMD or SIMT over these right hand side vectors, so <span>\(N\)</span> should ideally be an integer multiple of the vector/warp size. These two aspects have to be taken into account when optimizing the performance.</li>
+</ul>
                 
                   
                 
@@ -719,7 +767,7 @@ were distributed among tiles within each box.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../overview/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../gw/" title="GW Kernels" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -728,19 +776,19 @@ were distributed among tiles within each box.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Overview
+                GW Kernels
               </span>
             </div>
           </a>
         
         
-          <a href="../code_layout/" title="Code Layout" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../code_structure/" title="Code Structure" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Code Layout
+                Code Structure
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
