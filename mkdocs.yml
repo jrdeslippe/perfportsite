@@ -35,7 +35,7 @@ pages:
 - Performance Portability:
     - Definition: perfport/definition.md
     - Measurements: 
-        - Measurement Techniques: perfport/measurements.md
+        - Measurement Techniques: perfport/measurements/index.md
         - Measuring Roofline Data on KNL: perfport/measurements/knl.md
         - Measuring Roofline Data on GPUs: perfport/measurements/gpu.md
     - Approaches:

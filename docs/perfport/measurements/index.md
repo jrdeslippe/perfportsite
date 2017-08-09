@@ -64,7 +64,7 @@ its DRAM arithmetic-intensity - that is the ratio of the FLOPs performed vs the 
 execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
 model on KNL for applications as a function of the DRAM arithmetic-intensity:
 
-<center><img src="KNLRoofline.png" width=400></center>
+<center><img src="KNLRoofline.png" width=500></center>
 
 Here the blue line represents the optimal performance on the system that can be achieved for an application running out of the KNL High-Bandwidth Memory 
 (HBM) with a given
@@ -84,7 +84,7 @@ For applications that limited by other system properties, it is possible to exte
 extend the roofline approach to use arithmetic-intensities based on data movement from different levels of cache (e.g. L1, L2 on the KNL), in order to 
 discover the relevant limiting cache level. The figure below shows an example of such a plot of an application limited by the L2 cache level.
 
-<center><img src="MultiRoofline.png" width=400></center>
+<center><img src="MultiRoofline.png" width=500></center>
 
 In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed 
 from benchmark values. For example, many codes use strided or indirect-addressed (scatter/gather) patterns. In some cases memory-latency is the limiting resources. 
