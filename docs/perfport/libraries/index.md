@@ -1,3 +1,5 @@
+Bronson to write
+
 Libraries e.g. BLAS/FFT, MAGMA, CULA, Trillinos, PETSc
 
 Pros

@@ -32,7 +32,6 @@ pages:
     - Overview: facilities/overview.md
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
-    - Resources: facilities/resources.md
 - Performance Portability:
     - Definition: perfport/definition.md
     - Measurements: perfport/measurements.md
@@ -56,4 +55,5 @@ pages:
           - Kokkos Implementation: case_studies/qcd/kokkos_implementation.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
+- Other Resources: resources.md
 - Demo: demo/demo.md
