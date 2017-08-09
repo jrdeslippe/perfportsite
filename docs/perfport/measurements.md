@@ -46,10 +46,10 @@ Instead we advocate for one of two approaches for defining performance against e
 ### 1. Compare against a known, well-recognized (potentially non-portable), implementation. 
 
 Some applications, algorithms or methods have well-recognized optimal (often hand-tuned) implementations on different architectures. These can be used as a 
-baseline for defining relative performance of portable versions. Our Chroma application case-study shows this approach. [See here](case_studies/qcd.md) 
+baseline for defining relative performance of portable versions. Our Chroma application case-study shows this approach. [See here](/case_studies/qcd.md) 
 
 Many performance tools exist at ALCF, NERSC and OLCF for the purposes profiling applications, regions of applications and determining performance limiters 
-when comparing different implementation of an algorithm or method. See the comprehensive list [here](facilities/tools.md) with links to detailed 
+when comparing different implementation of an algorithm or method. See the comprehensive list [here](/facilities/tools.md) with links to detailed 
 instructions and example use-cases at each site. 
 
 ### 2. Use the roofline model to compare actual to expected performance
