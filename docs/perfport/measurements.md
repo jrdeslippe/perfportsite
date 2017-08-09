@@ -18,5 +18,5 @@ don't know how well your code is performing on any architecture compared to how 
 performing if it were well optimized.
 
 One may 
-in principle define absolute performance as a measure
+in principle define absolute performance as a measure of
 
