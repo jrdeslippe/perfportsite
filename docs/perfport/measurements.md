@@ -64,4 +64,4 @@ its DRAM arithmetic-intensity - that is the ratio of the FLOPs performed vs the 
 execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
 model on KNL for applications as a function of the DRAM arithmetic-intensity:
 
-<img src="/images/KNLroofline.png" width=400>
+<img src="/images/KNLRoofline.png" width=400>
