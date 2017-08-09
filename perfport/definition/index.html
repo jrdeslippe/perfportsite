@@ -254,10 +254,58 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../measurements/" title="Measurements" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
       Measurements
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Measurements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/" title="Measurement Techniques" class="md-nav__link">
+      Measurement Techniques
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/knl/" title="Measuring Roofline Data on KNL" class="md-nav__link">
+      Measuring Roofline Data on KNL
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/gpu/" title="Measuring Roofline Data on GPUs" class="md-nav__link">
+      Measuring Roofline Data on GPUs
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -297,10 +345,46 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../directives/" title="Directives" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-2" type="checkbox" id="nav-3-3-2">
+    
+    <label class="md-nav__link" for="nav-3-3-2">
       Directives
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-2">
+        Directives
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../directives/openacc/" title="OpenACC" class="md-nav__link">
+      OpenACC
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../directives/openmp/" title="OpenMP" class="md-nav__link">
+      OpenMP
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -618,7 +702,35 @@
                 
                   <h1>Definition</h1>
                 
-                <p>Jack To Write</p>
+                <p>The 2016 DOE Center of Excellence (COE) meeting in Phoenix brought together engineers from the DOE's Office of Science and National Nuclear Security Agency 
+as well as vendor staff (from Intel, NVIDIA, IBM, Cray and others) to share portability lessons and best practicies from their respect app-readiness 
+programs. One of the high-level take-away messages from the meeting is that "there is not yet a universally accepted defition of 'performance portability'". 
+There is generally agreement on what performance-portability "basically means" but details differ in everyone's idea for the term. A number of attendees 
+gave the following definitions:</p>
+<ul>
+<li>
+<p>"For the purposes of this meeting, it is the ability to run an application with acceptable performance across KNL and GPU-based systems with a single 
+version of source code." (Rob Neely)</p>
+</li>
+<li>
+<p>"An application is performance portable if it achieves a consistent level of performance (e.g. defined by execution time or <br />
+other figure of merit (not percentage of peak flops across platforms)) relative to the best known implementation on each platform." (John Pennycook, Intel)</p>
+</li>
+<li>
+<p>"Hard portability = no code changes and no tuning. Software portability = simple code mods with no algorithmic changes. Non-portable = algorithmic changes" (Adrian Pope, Vitali Morozov)</p>
+</li>
+<li>
+<p>(Performance portability means) the same source code  will run productively on a variety of different architectures" (Larkin)</p>
+</li>
+<li>
+<p>"Code is performance portable when the application team says its performance  portable!" (Richards)</p>
+</li>
+</ul>
+<p>For our purposes, we combine a few the ideas above into the following definition:</p>
+<p><strong>An application is performance portable if it achieves a consistent ratio of the actual time to solution to either the best-known or the theoretical best 
+time to solution on each platform with minimal specialized source-code required for each.</strong></p>
+<p>We discuss the details on how to begin to quantify the level to which a code meets this definition on the following page: 
+<a href="../measurements/">Measurement</a></p>
                 
                   
                 
@@ -652,13 +764,13 @@
           </a>
         
         
-          <a href="../measurements/" title="Measurements" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../measurements/" title="Measurement Techniques" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Measurements
+                Measurement Techniques
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

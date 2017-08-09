@@ -10,22 +10,22 @@
       
       
       
-        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+        <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
       <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
     
     
       
-        <title>Directives - Performance Portability</title>
+        <title>Measuring Roofline Data on GPUs - Performance Portability</title>
       
     
     
-      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-02c2a4388f.palette.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-02c2a4388f.palette.css">
       
     
     
@@ -62,8 +62,8 @@
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <a href="../.." title="Performance Portability" class="md-logo md-header-nav__button">
-            <img src="../../images/oos.png" width="24" height="24">
+          <a href="../../.." title="Performance Portability" class="md-logo md-header-nav__button">
+            <img src="../../../images/oos.png" width="24" height="24">
           </a>
         
       </div>
@@ -80,11 +80,11 @@
                 </span>
               
                 <span class="md-header-nav__parent">
-                  Approaches
+                  Measurements
                 </span>
               
             
-            Directives
+            Measuring Roofline Data on GPUs
           
         </span>
       </div>
@@ -133,7 +133,7 @@
   <label class="md-nav__title md-nav__title--site" for="drawer">
     
       <i class="md-logo md-nav__button">
-        <img src="../../images/oos.png">
+        <img src="../../../images/oos.png">
       </i>
     
     Performance Portability
@@ -147,7 +147,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../.." title="Introduction" class="md-nav__link">
+    <a href="../../.." title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -178,7 +178,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/overview/" title="Overview" class="md-nav__link">
+    <a href="../../../facilities/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -190,7 +190,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/tools/" title="Tools" class="md-nav__link">
+    <a href="../../../facilities/tools/" title="Tools" class="md-nav__link">
       Tools
     </a>
   </li>
@@ -202,7 +202,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../facilities/comparison/" title="Comparison" class="md-nav__link">
+    <a href="../../../facilities/comparison/" title="Comparison" class="md-nav__link">
       Comparison
     </a>
   </li>
@@ -240,20 +240,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../definition/" title="Definition" class="md-nav__link">
+    <a href="../../definition/" title="Definition" class="md-nav__link">
       Definition
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../measurements/" title="Measurements" class="md-nav__link">
-      Measurements
     </a>
   </li>
 
@@ -267,7 +255,74 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" checked>
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Measurements
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        Measurements
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Measurement Techniques" class="md-nav__link">
+      Measurement Techniques
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../knl/" title="Measuring Roofline Data on KNL" class="md-nav__link">
+      Measuring Roofline Data on KNL
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+    <a href="./" title="Measuring Roofline Data on GPUs" class="md-nav__link md-nav__link--active">
+      Measuring Roofline Data on GPUs
+    </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
     
     <label class="md-nav__link" for="nav-3-3">
       Approaches
@@ -285,7 +340,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../libraries/" title="Libraries" class="md-nav__link">
+    <a href="../../libraries/" title="Libraries" class="md-nav__link">
       Libraries
     </a>
   </li>
@@ -295,20 +350,47 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
+  <li class="md-nav__item md-nav__item--nested">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3-2" type="checkbox" id="nav-3-3-2">
     
-      
-    
-    
-    <a href="./" title="Directives" class="md-nav__link md-nav__link--active">
+    <label class="md-nav__link" for="nav-3-3-2">
       Directives
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-3-2">
+        Directives
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../directives/openacc/" title="OpenACC" class="md-nav__link">
+      OpenACC
     </a>
-    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../directives/openmp/" title="OpenMP" class="md-nav__link">
+      OpenMP
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -337,7 +419,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../frameworks/kokkos/" title="Kokkos" class="md-nav__link">
+    <a href="../../frameworks/kokkos/" title="Kokkos" class="md-nav__link">
       Kokkos
     </a>
   </li>
@@ -354,7 +436,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../dsl/" title="DSL" class="md-nav__link">
+    <a href="../../dsl/" title="DSL" class="md-nav__link">
       DSL
     </a>
   </li>
@@ -366,7 +448,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../summary/" title="Summary" class="md-nav__link">
+    <a href="../../summary/" title="Summary" class="md-nav__link">
       Summary
     </a>
   </li>
@@ -421,7 +503,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/amr/overview/" title="Overview" class="md-nav__link">
+    <a href="../../../case_studies/amr/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -433,7 +515,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/amr/parallelism/" title="Parallelism" class="md-nav__link">
+    <a href="../../../case_studies/amr/parallelism/" title="Parallelism" class="md-nav__link">
       Parallelism
     </a>
   </li>
@@ -445,7 +527,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/amr/code_layout/" title="Code Layout" class="md-nav__link">
+    <a href="../../../case_studies/amr/code_layout/" title="Code Layout" class="md-nav__link">
       Code Layout
     </a>
   </li>
@@ -457,7 +539,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
+    <a href="../../../case_studies/amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
   </li>
@@ -474,7 +556,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/gw/" title="GW Kernels" class="md-nav__link">
+    <a href="../../../case_studies/gw/" title="GW Kernels" class="md-nav__link">
       GW Kernels
     </a>
   </li>
@@ -505,7 +587,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/qcd/overview/" title="Overview" class="md-nav__link">
+    <a href="../../../case_studies/qcd/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -517,7 +599,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/qcd/code_structure/" title="Code Structure" class="md-nav__link">
+    <a href="../../../case_studies/qcd/code_structure/" title="Code Structure" class="md-nav__link">
       Code Structure
     </a>
   </li>
@@ -529,7 +611,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
+    <a href="../../../case_studies/qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
       Kokkos Implementation
     </a>
   </li>
@@ -546,7 +628,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/nek/" title="NekBone" class="md-nav__link">
+    <a href="../../../case_studies/nek/" title="NekBone" class="md-nav__link">
       NekBone
     </a>
   </li>
@@ -558,7 +640,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/md/" title="MD" class="md-nav__link">
+    <a href="../../../case_studies/md/" title="MD" class="md-nav__link">
       MD
     </a>
   </li>
@@ -580,7 +662,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../resources/" title="Other Resources" class="md-nav__link">
+    <a href="../../../resources/" title="Other Resources" class="md-nav__link">
       Other Resources
     </a>
   </li>
@@ -592,7 +674,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../demo/demo/" title="Demo" class="md-nav__link">
+    <a href="../../../demo/demo/" title="Demo" class="md-nav__link">
       Demo
     </a>
   </li>
@@ -612,8 +694,6 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
-  
   
 </nav>
                   </div>
@@ -626,33 +706,50 @@
               
                 
                 
-                <h1 id="directives">Directives<a class="headerlink" href="#directives" title="Permanent link">&para;</a></h1>
-<p>Brian to write</p>
-<p>Bronson to supplement on OpenACC</p>
-<p>Pros </p>
-<ul>
+                  <h1>Measuring Roofline Data on GPUs</h1>
+                
+                <p>Measuring Rooflin Quantities on NVIDIA GPUs</p>
+<p>It is possible to measure roofline quantities for a kernel on a GPU using the NVProf tool as described <a href="../../../facilities/tools/">here</a>. </p>
+<p>In general, one wants to compute arithmetic intensity as well as FLOPS which involves three quantities:</p>
+<ol>
+<li>Number of floating point operations</li>
+<li>Data volume moved to and from DRAM</li>
+<li>The runtime in seconds</li>
+</ol>
+<p>Here are the steps to do this with NVProf:</p>
+<ol>
+<li>Use gpu-trace mode to collect the time spent in the kernel you are interested in</li>
+</ol>
+<div class="codehilite"><pre><span></span>command: nvprof --print-gpu-trace ./build/bin/hpgmg-fv <span class="m">6</span> <span class="m">8</span>
+output: 
+Time<span class="o">(</span>%<span class="o">)</span>      Time     Calls    Avg           Min                Max           Name
+ <span class="m">51</span>.96%  <span class="m">2</span>.52256s   <span class="m">1764</span>  <span class="m">1</span>.4300ms  <span class="m">1</span>.4099ms  <span class="m">1</span>.4479ms      void smooth_kernel&lt;<span class="nv">int</span><span class="o">=</span><span class="m">7</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>, <span class="nv">int</span><span class="o">=</span><span class="m">4</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>&gt;<span class="o">(</span>level_type, int, int, double, double, int, double*, double*<span class="o">)</span>
+</pre></div>
+
+<ol>
 <li>
-<p>Available for many different languages </p>
+<p>Use the metric summary mode (you can specify the target kernel) to collect information such as:</p>
 </li>
 <li>
-<p>Good control of execution </p>
+<p>Floating point ops</p>
 </li>
-<li>
-<p>Allow performance optimization</p>
-</li>
-<li>
-<p>Controlled by well-defined standards bodies</p>
-</li>
-</ul>
-<p>Cons </p>
-<ul>
-<li>
-<p>Require compiler support </p>
-</li>
-<li>
-<p>Evolving standards</p>
-</li>
-</ul>
+<li>DRAM R/W transactions</li>
+<li>DRAM R/W throughput</li>
+</ol>
+<p>nvprof command to watch:</p>
+<p>FP =double precision ops 
+DR/ DW = dram read/write transactions
+TR/TW = dram read/write throughput
+for the CUDA kernel -- smooth_kernel:</p>
+<div class="codehilite"><pre><span></span>nvprof  --kernels <span class="s2">&quot;smooth_kernel&quot;</span> --metrics flop_count_dp  --metrics dram_read_throughput  --metrics dram_write_throughput --metrics dram_read_transactions --metrics 
+dram_write_transactions ./build/bin/hpgmg-fv <span class="m">6</span> <span class="m">8</span> 
+</pre></div>
+
+<p>To compute Arithmetic Intensity you can use the following methods:</p>
+<p>Method I:  </p>
+<p>FP / ( DR + DW ) * (size of transaction = 32 Bytes)</p>
+<p>Method II:</p>
+<p>FP / (TR + TW) * time taken by kernel (computed by step 1)</p>
                 
                   
                 
@@ -671,7 +768,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../libraries/" title="Libraries" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../knl/" title="Measuring Roofline Data on KNL" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -680,19 +777,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Libraries
+                Measuring Roofline Data on KNL
               </span>
             </div>
           </a>
         
         
-          <a href="../frameworks/kokkos/" title="Kokkos" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../libraries/" title="Libraries" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Kokkos
+                Libraries
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -722,10 +819,10 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
       
       
-      <script>app.initialize({url:{base:"../.."}})</script>
+      <script>app.initialize({url:{base:"../../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
       
