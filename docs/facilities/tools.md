@@ -1,5 +1,7 @@
 # Performance Analysis Tools
 
+!Add HPC Toolkit and link to documentation on using these at centers
+
 Evaluating application performance portability across diverse computing
 architectures often requires the aid of performance analysis tools. Such tools
 provide detailed information and statistics characterizing an application's
