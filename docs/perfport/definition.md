@@ -16,10 +16,12 @@ other figure of merit (not percentage of peak flops across platforms)) relative 
 
 * "Code is performance portable when the application team says its performance	portable!" (Richards)
 
-For our purposes, we combine a few the ideas above into the following definition:
+For our purposes, we combine a few the ideas above into the following working definition:
 
-**An application is performance portable if it achieves a consistent ratio of the actual time to solution to either the best-known or the theoretical best 
-time to solution on each platform with minimal specialized source-code required for each.**
+<br>
+**An application is performance portable if it achieves a consistent ratio of the actual time to solution to either the best-known or the theoretical best time to 
+solution on each platform with minimal specialized source-code required for each.**
+<br><br>
 
-We discuss the details on how to begin to quantify the level to which a code meets this definition on the following page: 
-[Measurement](/perfport/measurements/index.md)
+We discuss the details on how to begin to quantify the level to which a code meets this definition on the 
+[Measurement Techniques](/perfport/measurements/index.md) page.
