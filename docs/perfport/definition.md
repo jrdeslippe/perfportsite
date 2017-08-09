@@ -22,4 +22,4 @@ For our purposes, we combine a few the ideas above into the following definition
 time to solution on each platform with minimal specialized source-code required for each.**
 
 We discuss the details on how to begin to quantify the level to which a code meets this definition on the following page: 
-[Measurement](/perfport/measurement.md)
+[Measurement](/perfport/measurements.md)
