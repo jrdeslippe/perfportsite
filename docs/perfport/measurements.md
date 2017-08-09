@@ -64,4 +64,40 @@ its DRAM arithmetic-intensity - that is the ratio of the FLOPs performed vs the 
 execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
 model on KNL for applications as a function of the DRAM arithmetic-intensity:
 
-<img src="KNLRoofline.png" width=400>
+<center><img src="KNLRoofline.png" width=400></center>
+
+Here the blue line represents the optimal performance on the system that can be achieved for an application running out of the KNL High-Bandwidth Memory 
+(HBM) with a given
+DRAM-AI (the x-axis value). For low
+values of DRAM-AI, the performance is limited by the diagonal ceiling, meaning that memory-bandwidth is the limiting factor. The location of the diagonal
+line are typically computed empiracally from the available bandwidth reported by stream triad. CITE stream.
+
+For high values of DRAM-AI,
+memory bandwidth no longer limits performance and one can, in principle, achieve the max compute performance on the system. However, for such cases we draw 
+other ceilings that represent common limitations in algorithms or implementations of algorithms. The dashed-dotted green line labeled "-ILP" is the
+performance ceiling for applications that: 1. do not provide a balance of multiply and add instructions, or simply don't use the Fused Multiply Add (FMA)
+instructions on the processor and 2. don't have enough instruction level parallelism to keep both VPUs on the KNL busy. The dashed purple line labeled 
+"-Vectorization" is performance ceiling of an algorithm or implementation that, in addition to the above two deficiencies, lacks vectorization (a 
+combined factor of 32 reduction in the ceiling).
+
+For applications that limited by other system properties, it is possible to extend the roofline model to include related ceilings. For example, we commonly    
+extend the roofline approach to use arithmetic-intensities based on data movement from different levels of cache (e.g. L1, L2 on the KNL), in order to 
+discover the relevant limiting cache level. The figure below shows an example of such a plot of an application limited by the L2 cache level.
+
+<center><img src="MultiRoofline.png" width=400></center>
+
+In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed 
+from benchmark values. For example, many codes use strided or indirect-addressed (scatter/gather) patterns. In some cases memory-latency is the limiting resources. 
+For convenience we include a table of empirical/effective bandwidths on the KNL nodes (Cori/Theta) and Titan GPUs for 
+different patterns. 
+
+INSERT Table from Sam?
+
+Finally, one may additional define an AI value and roofline-ceiling for data coming from off-node due to internode 
+communication. The relevant bandwidth here is the injection bandwidth of the node:
+
+INSERT Table from Sam?
+
+The value of the roofline approach is that relative performance of an application kernel to relevant ceilings (those related to fundamental limitations in an algorithm 
+that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture to quantity absolute performance and performance 
+portability. 
