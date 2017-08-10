@@ -44,7 +44,8 @@ pages:
             - OpenACC: perfport/directives/openacc.md
             - OpenMP: perfport/directives/openmp.md
         - Frameworks:
-            - perfport/frameworks/kokkos.md
+            - Kokkos: perfport/frameworks/kokkos.md
+            - RAJA: perfport/frameworks/raja.md
         - DSL: perfport/dsl/index.md
         - Summary: perfport/summary/index.md
     - Case Studies:
