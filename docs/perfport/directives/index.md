@@ -1,6 +1,11 @@
 Directives
 ================
 
+Brian to write
+
+Bronson to supplement on OpenACC
+
+
 Pros 
 
 *  Available for many different languages 

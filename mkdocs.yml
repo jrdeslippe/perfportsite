@@ -32,16 +32,21 @@ pages:
     - Overview: facilities/overview.md
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
-    - Resources: facilities/resources.md
 - Performance Portability:
     - Definition: perfport/definition.md
-    - Measurements: perfport/measurements.md
+    - Measurements: 
+        - Measurement Techniques: perfport/measurements/index.md
+        - Measuring Roofline Data on KNL: perfport/measurements/knl.md
+        - Measuring Roofline Data on GPUs: perfport/measurements/gpu.md
     - Approaches:
         - Libraries: perfport/libraries/index.md
-        - Directives: perfport/directives/index.md
-        - Frameworks: perfport/frameworks/index.md
+        - Directives:
+            - OpenACC: perfport/directives/openacc.md
+            - OpenMP: perfport/directives/openmp.md
+        - Frameworks:
+            - Kokkos: perfport/frameworks/kokkos.md
+            - RAJA: perfport/frameworks/raja.md
         - DSL: perfport/dsl/index.md
-        - Models: perfport/models/index.md
         - Summary: perfport/summary/index.md
     - Case Studies:
         - BoxLib:
@@ -59,4 +64,5 @@ pages:
             - Kokkos: case_studies/qcd/kokkos_implementation.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
+- Other Resources: resources.md
 - Demo: demo/demo.md

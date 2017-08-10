@@ -1,5 +1,7 @@
 # Performance Analysis Tools
 
+!Add HPC Toolkit and link to documentation on using these at centers
+
 Evaluating application performance portability across diverse computing
 architectures often requires the aid of performance analysis tools. Such tools
 provide detailed information and statistics characterizing an application's
@@ -40,7 +42,7 @@ from its official documentation.
 - [nvprof](http://docs.nvidia.com/cuda/profiler-users-guide/index.html):
   nvprof enables the collection of a timeline of CUDA-related activities on both
   CPU and GPU, including kernel execution, memory transfers, memory set and CUDA
-  API calls and events or metrics for CUDA kernels
+  API calls and events or metrics for CUDA kernels.
 - [Tuning and Analysis Utilities (TAU)](https://www.cs.uoregon.edu/research/tau/home.php):
   TAU Performance System is a portable profiling and tracing toolkit for
   performance analysis of parallel programs written in Fortran, C, C++, UPC,
