@@ -16,7 +16,7 @@
     
     
       
-        <title>Measuring Roofline Data on KNL - Performance Portability</title>
+        <title>Collecting Roofline on KNL - Performance Portability</title>
       
     
     
@@ -84,7 +84,7 @@
                 </span>
               
             
-            Measuring Roofline Data on KNL
+            Collecting Roofline on KNL
           
         </span>
       </div>
@@ -290,49 +290,12 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
     
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Measuring Roofline Data on KNL
-      </label>
     
-    <a href="./" title="Measuring Roofline Data on KNL" class="md-nav__link md-nav__link--active">
-      Measuring Roofline Data on KNL
+    <a href="./" title="Collecting Roofline on KNL" class="md-nav__link md-nav__link--active">
+      Collecting Roofline on KNL
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#compiling" title="Compiling" class="md-nav__link">
-    Compiling
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#running" title="Running" class="md-nav__link">
-    Running
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#using-the-gui" title="Using the GUI" class="md-nav__link">
-    Using the GUI
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
     
   </li>
 
@@ -343,8 +306,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../gpu/" title="Measuring Roofline Data on GPUs" class="md-nav__link">
-      Measuring Roofline Data on GPUs
+    <a href="../gpu/" title="Collecting Roofline on GPUs" class="md-nav__link">
+      Collecting Roofline on GPUs
     </a>
   </li>
 
@@ -817,34 +780,8 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#compiling" title="Compiling" class="md-nav__link">
-    Compiling
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#running" title="Running" class="md-nav__link">
-    Running
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#using-the-gui" title="Using the GUI" class="md-nav__link">
-    Using the GUI
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
   
 </nav>
                   </div>
@@ -857,9 +794,12 @@
               
                 
                 
-                  <h1>Measuring Roofline Data on KNL</h1>
-                
-                <h2 id="compiling">Compiling<a class="headerlink" href="#compiling" title="Permanent link">&para;</a></h2>
+                <h1 id="using-sde-and-vtune-to-calculate-roofline-data">Using SDE and VTUNE to calculate roofline data<a class="headerlink" href="#using-sde-and-vtune-to-calculate-roofline-data" title="Permanent link">&para;</a></h1>
+<p>NERSC has extensive documentation and examples for collecting AI and FLOPs using the Intel SDE and VTune 
+tools. You can find instructions for this 
+<a href="http://www.nersc.gov/users/application-performance/measuring-arithmetic-intensity/">here</a>.</p>
+<h1 id="using-vector-advisor-to-automate-roofline-collection">Using vector advisor to automate roofline collection<a class="headerlink" href="#using-vector-advisor-to-automate-roofline-collection" title="Permanent link">&para;</a></h1>
+<h2 id="compiling">Compiling<a class="headerlink" href="#compiling" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p>Compile code with the -g flag. </p>
@@ -912,6 +852,8 @@ vectorization, flop rate, arithmetic intensity, etc.</p>
 <p><center><img src="advisor4.png" width=500></center></p>
 <p>Clink on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
 in the cache-aware roofline.</p>
+<p>*While the above documents how to use Intel Advisor to gather L1-roofline data, you can contact NERSC 
+consultants at <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#111;&#110;&#115;&#117;&#108;&#116;&#64;&#110;&#101;&#114;&#115;&#99;&#46;&#103;&#111;&#118;">&#99;&#111;&#110;&#115;&#117;&#108;&#116;&#64;&#110;&#101;&#114;&#115;&#99;&#46;&#103;&#111;&#118;</a> for information on experimental DRAM roofline capbilities.</p>
                 
                   
                 
@@ -945,13 +887,13 @@ in the cache-aware roofline.</p>
           </a>
         
         
-          <a href="../gpu/" title="Measuring Roofline Data on GPUs" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../gpu/" title="Collecting Roofline on GPUs" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Measuring Roofline Data on GPUs
+                Collecting Roofline on GPUs
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
