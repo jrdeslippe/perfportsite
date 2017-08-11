@@ -16,7 +16,7 @@
     
     
       
-        <title>Kokkos Implementation - Performance Portability</title>
+        <title>Kokkos - Performance Portability</title>
       
     
     
@@ -76,15 +76,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Case Studies
-                </span>
-              
-                <span class="md-header-nav__parent">
                   QCD
                 </span>
               
+                <span class="md-header-nav__parent">
+                  Implementations
+                </span>
+              
             
-            Kokkos Implementation
+            Kokkos
           
         </span>
       </div>
@@ -416,6 +416,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../perfport/frameworks/raja/" title="RAJA" class="md-nav__link">
+      RAJA
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -520,8 +532,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../amr/code_layout/" title="Code Layout" class="md-nav__link">
-      Code Layout
+    <a href="../../amr/code_structure/" title="Code Structure" class="md-nav__link">
+      Code Structure
     </a>
   </li>
 
@@ -535,6 +547,42 @@
     <a href="../../amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1-5" type="checkbox" id="nav-3-4-1-5">
+    
+    <label class="md-nav__link" for="nav-3-4-1-5">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-1-5">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../amr/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -607,6 +655,27 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3-3" type="checkbox" id="nav-3-4-3-3" checked>
+    
+    <label class="md-nav__link" for="nav-3-4-3-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-3-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
@@ -615,11 +684,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Kokkos Implementation
+        Kokkos
       </label>
     
-    <a href="./" title="Kokkos Implementation" class="md-nav__link md-nav__link--active">
-      Kokkos Implementation
+    <a href="./" title="Kokkos" class="md-nav__link md-nav__link--active">
+      Kokkos
     </a>
     
       
@@ -631,6 +700,13 @@
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#complex-numbers-and-c" title="Complex Numbers and C++" class="md-nav__link">
+    Complex Numbers and C++
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#ensuring-vectorization" title="Ensuring Vectorization" class="md-nav__link">
@@ -658,6 +734,11 @@
   
 </nav>
     
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -745,6 +826,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#complex-numbers-and-c" title="Complex Numbers and C++" class="md-nav__link">
+    Complex Numbers and C++
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ensuring-vectorization" title="Ensuring Vectorization" class="md-nav__link">
     Ensuring Vectorization
   </a>
@@ -818,6 +906,17 @@
 <span class="p">};</span>
 </pre></div>
 
+<h2 id="complex-numbers-and-c">Complex Numbers and C++<a class="headerlink" href="#complex-numbers-and-c" title="Permanent link">&para;</a></h2>
+<p>We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as </p>
+<div class="codehilite"><pre><span></span><span class="n">c</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+</pre></div>
+
+<p>when <code>a</code>, <code>b</code> and <code>c</code> are complex numbers. Naively, this expression could be expanded into </p>
+<div class="codehilite"><pre><span></span><span class="n">re</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+=</span> <span class="n">re</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">re</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">im</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">im</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">im</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+=</span> <span class="n">re</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">im</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">im</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">re</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+
+<p>where <code>re(.), im(.)</code> denote the real and imaginary part of its argument respectively. This expresson can nicely be packed into a total of four FMA operations per line. However, in the simplified form above which is usually used in context of operator overloading, the compier would have to evaluate the right hand side first and then sum the result into <code>c</code>. This is much less efficient since in that case, only two FMA as well as two multiplications and additions could be used. One has to keep that in mind when doing complex algebra in C++. In many cases it is better to inline code and avoid otherwise useful operator overloading techniques for complex algebra.</p>
 <h2 id="ensuring-vectorization">Ensuring Vectorization<a class="headerlink" href="#ensuring-vectorization" title="Permanent link">&para;</a></h2>
 <p>Vectorization in Kokkos is achieved by a two-level <a href="../../perfport/models/kokkos.md#vectorization">nested parallelism</a>, where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spwans threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type <code>TST</code> needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span> 
@@ -841,7 +940,8 @@
 
 <p>The latter construct might look confusing first, because the access operator ignores the <code>lane</code> parameter. This is because the SIMT threading is implicit in Kokkos and each SIMT thread is holding it's own data <code>_data</code>. Nevertheless, it is useful to implement the access operator that way to preserve a common, portable style throughout the rest of the code.</p>
 <h3 id="specialization-for-cpu">Specialization for CPU<a class="headerlink" href="#specialization-for-cpu" title="Permanent link">&para;</a></h3>
-<p>In theory, these two types are sufficient for ensuring proper vectorization on both CPU and GPU. In our experiments however, we found that neither Intel nor GNU compiler could vectorize the complex operations inside the spinors properly, leading to a very poor performance. This is not a problem of Kokkos itself, it is merely the inability of compilers to efficiently vectorized complex algebra. We therefore provided a template  specialization for the <code>CPUSIMDComplex</code> datatype which we implemented by explicitly using AVX512 intrinsics. For example, the datatype then becomes</p>
+<p>In theory, these two types are sufficient for ensuring proper vectorization on both CPU and GPU. In our experiments however, we found that neither Intel nor GNU compiler could vectorize the complex operations inside the spinors properly, leading to a very poor performance. This is not a problem of Kokkos itself, it is merely the inability of compilers to efficiently vectorized complex algebra.
+We therefore provided a template  specialization for the <code>CPUSIMDComplex</code> datatype which we implemented by explicitly using AVX512 intrinsics. For example, the datatype then becomes</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;&gt;</span>
 <span class="k">struct</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">explicit</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{}</span>
@@ -870,6 +970,8 @@
   <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span> <span class="o">=</span> <span class="n">_mm512_fmadd_ps</span><span class="p">(</span> <span class="n">avec_im</span><span class="p">,</span><span class="n">perm_b</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
+
+<p>Note that we use inter-lane shuffle operations to swap complex and imaginary parts and use vectorized FMA operations. We suspect that compilers are unable to detect the opportunity of performing those inter-lane shuffles and thus fail to properly vectorize the code.</p>
                 
                   
                 

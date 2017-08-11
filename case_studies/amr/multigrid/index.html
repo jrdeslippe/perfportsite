@@ -416,6 +416,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../perfport/frameworks/raja/" title="RAJA" class="md-nav__link">
+      RAJA
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -522,8 +534,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../code_layout/" title="Code Layout" class="md-nav__link">
-      Code Layout
+    <a href="../code_structure/" title="Code Structure" class="md-nav__link">
+      Code Structure
     </a>
   </li>
 
@@ -597,6 +609,42 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1-5" type="checkbox" id="nav-3-4-1-5">
+    
+    <label class="md-nav__link" for="nav-3-4-1-5">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-1-5">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -662,10 +710,34 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3-3" type="checkbox" id="nav-3-4-3-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-3-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
-      Kokkos Implementation
+    <a href="../../qcd/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -797,9 +869,9 @@
                 
                 <h1 id="geometric-multigrid">Geometric Multigrid<a class="headerlink" href="#geometric-multigrid" title="Permanent link">&para;</a></h1>
 <p>Many problems encountered in BoxLib applications require solutions to linear
-system, e.g., elliptic partial differential equations such as the Poisson
-equation for self-gravity, and the diffusion equation. BoxLib therefore
-includes geometric multigrid solvers for solving problems which use both
+system, e.g., <a href="https://en.wikipedia.org/wiki/Elliptic_partial_differential_equation">elliptic partial differential equations</a> such as the <a href="https://en.wikipedia.org/wiki/Poisson%27s_equation">Poisson
+equation</a> for self-gravity, and the <a href="https://en.wikipedia.org/wiki/Diffusion_equation">diffusion equation</a>. BoxLib therefore
+includes <a href="https://en.wikipedia.org/wiki/Multigrid_method">geometric multigrid solvers</a> for solving problems which use both
 cell-centered and nodal data. For this project, we have focused on the
 cell-centered solver due to its relative simplicity compared to the nodal
 solver.</p>
@@ -821,7 +893,7 @@ memory bandwidth.</p>
 the system of linear equations. In geometric multigrid, common algorithms used
 here include Jacobi and Gauss-Seidel. By default, the BoxLib solver uses a
 variation on Gauss-Seidel called Gauss-Seidel red-black ("GSRB"). GSRB deviates
-from the original Gauss-Seidel method by exploiting a symmetry in the data
+from the original <a href="https://en.wikipedia.org/wiki/Gauss–Seidel_method">Gauss-Seidel method</a> by exploiting a symmetry in the data
 dependence among matrix elements, such that an update sweep of all matrix
 elements follows a stride-2 pattern rather than stride-1. (This property
 manifests in the innermost loop of the kernel shown below).</p>
@@ -934,7 +1006,7 @@ On the coarsest grid, the solver then solves the linear system exactly, before
 propagating the solution back up to finer grids. The solution algorithm chosen
 for this step is rarely influential on the overall performance of the multigrid
 algorithm, because the problem size at the coarsest grid is so small. In
-BoxLib, the default coarse grid solver algorithm is BiCGSTAB, a variation on
+BoxLib, the default coarse grid solver algorithm is <a href="https://en.wikipedia.org/wiki/Biconjugate_gradient_stabilized_method">BiCGSTAB</a>, a variation on
 the conjugate-gradient iterative method.</p>
                 
                   
@@ -954,7 +1026,7 @@ the conjugate-gradient iterative method.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../code_layout/" title="Code Layout" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../code_structure/" title="Code Structure" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -963,19 +1035,19 @@ the conjugate-gradient iterative method.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Code Layout
+                Code Structure
               </span>
             </div>
           </a>
         
         
-          <a href="../../gw/" title="GW Kernels" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../kokkos_implementation/" title="Kokkos" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                GW Kernels
+                Kokkos
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

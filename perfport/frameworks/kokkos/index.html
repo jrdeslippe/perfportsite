@@ -422,10 +422,49 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Kokkos
+      </label>
+    
     <a href="./" title="Kokkos" class="md-nav__link md-nav__link--active">
       Kokkos
     </a>
     
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#nested-parallelism" title="Nested parallelism" class="md-nav__link">
+    Nested parallelism
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../raja/" title="RAJA" class="md-nav__link">
+      RAJA
+    </a>
   </li>
 
         
@@ -531,8 +570,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../case_studies/amr/code_layout/" title="Code Layout" class="md-nav__link">
-      Code Layout
+    <a href="../../../case_studies/amr/code_structure/" title="Code Structure" class="md-nav__link">
+      Code Structure
     </a>
   </li>
 
@@ -546,6 +585,42 @@
     <a href="../../../case_studies/amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1-5" type="checkbox" id="nav-3-4-1-5">
+    
+    <label class="md-nav__link" for="nav-3-4-1-5">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-1-5">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../case_studies/amr/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -614,10 +689,34 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3-3" type="checkbox" id="nav-3-4-3-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-3-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../../case_studies/qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
-      Kokkos Implementation
+    <a href="../../../case_studies/qcd/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -701,6 +800,20 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#nested-parallelism" title="Nested parallelism" class="md-nav__link">
+    Nested parallelism
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -744,6 +857,54 @@ tutorial
     <span class="n">update</span> <span class="o">+=</span> <span class="n">y</span><span class="p">(</span> <span class="n">j</span> <span class="p">)</span> <span class="o">*</span> <span class="n">temp2</span><span class="p">;</span>
   <span class="p">},</span> <span class="n">result</span> <span class="p">);</span>
 </pre></div>
+
+<h2 id="nested-parallelism">Nested parallelism<a class="headerlink" href="#nested-parallelism" title="Permanent link">&para;</a></h2>
+<p>Modern CPU architectures exhibit a hierarchy of parallelism, and an application
+must exploit the complete hierarchy in order to achieve good performance. Each
+level of the hierarchy is generally characterized by a group of execution
+resources which share a pool of memory.</p>
+<p>On manycore CPUs such as Intel Xeon Phi, each processor contains ~70 cores,
+each of which supports 512 bit-wide SIMD instructions, and supports execution
+of 4 simultaneous hardware threads. On GPU-accelerated architectures, the host
+CPU has most of these same features, and the GPU often exhibits a very
+different type of parallelism - a GPU may feature many streaming
+multiprocessors, each of which executes a large number of threads, which are
+grouped into clusters which execute synchronously.</p>
+<p>Kokkos addresses this hierarchy via nested parallelism. In particular, at each
+level of a loop nest one can choose which execution policy to use. For example,
+on Xeon Phi, one may wish to use multi-threading for the coarsest level of
+parallelism, and SIMD instructions for the finest level. On a GPU, one may wish
+to use multiple streaming multiprocessors as the coarsest level, and warps of
+threads as the finest level. One can achieve this with the following example
+code (taken from <a href="https://github.com/kokkos/kokkos-tutorials/tree/master/GTC2017/Exercises/06">Exercise 6 of the GTC2017
+tutorials</a>):</p>
+<div class="codehilite"><pre><span></span><span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">repeat</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">repeat</span> <span class="o">&lt;</span> <span class="n">nrepeat</span><span class="p">;</span> <span class="n">repeat</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Application: &lt;y,Ax&gt; = y^T*A*x</span>
+  <span class="kt">double</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span> <span class="n">team_policy</span><span class="p">(</span> <span class="n">E</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">AUTO</span><span class="p">,</span> <span class="mi">32</span> <span class="p">),</span> <span class="n">KOKKOS_LAMBDA</span> <span class="p">(</span>
+  <span class="k">const</span> <span class="n">member_type</span> <span class="o">&amp;</span><span class="n">teamMember</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">update</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">e</span> <span class="o">=</span> <span class="n">teamMember</span><span class="p">.</span><span class="n">league_rank</span><span class="p">();</span>
+    <span class="kt">double</span> <span class="n">tempN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">TeamThreadRange</span><span class="p">(</span> <span class="n">teamMember</span><span class="p">,</span> <span class="n">N</span> <span class="p">),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">(</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">innerUpdateN</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="kt">double</span> <span class="n">tempM</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+      <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">ThreadVectorRange</span><span class="p">(</span> <span class="n">teamMember</span><span class="p">,</span> <span class="n">M</span> <span class="p">),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span>
+      <span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">innerUpdateM</span> <span class="p">)</span> <span class="p">{</span>
+
+        <span class="n">innerUpdateM</span> <span class="o">+=</span> <span class="n">A</span><span class="p">(</span> <span class="n">e</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span> <span class="p">);</span>
+      <span class="p">},</span> <span class="n">tempM</span> <span class="p">);</span>
+
+      <span class="n">innerUpdateN</span> <span class="o">+=</span> <span class="n">y</span><span class="p">(</span> <span class="n">e</span><span class="p">,</span> <span class="n">j</span> <span class="p">)</span> <span class="o">*</span> <span class="n">tempM</span><span class="p">;</span>
+    <span class="p">},</span> <span class="n">tempN</span> <span class="p">);</span>
+
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">single</span><span class="p">(</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">PerTeam</span><span class="p">(</span> <span class="n">teamMember</span> <span class="p">),</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="n">update</span> <span class="o">+=</span> <span class="n">tempN</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">},</span> <span class="n">result</span> <span class="p">);</span>
+</pre></div>
                 
                   
                 
@@ -777,13 +938,13 @@ tutorial
           </a>
         
         
-          <a href="../../dsl/" title="DSL" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../raja/" title="RAJA" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                DSL
+                RAJA
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

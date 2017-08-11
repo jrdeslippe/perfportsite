@@ -16,7 +16,7 @@
     
     
       
-        <title>Code Layout - Performance Portability</title>
+        <title>Code Structure - Performance Portability</title>
       
     
     
@@ -84,7 +84,7 @@
                 </span>
               
             
-            Code Layout
+            Code Structure
           
         </span>
       </div>
@@ -416,6 +416,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../perfport/frameworks/raja/" title="RAJA" class="md-nav__link">
+      RAJA
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -527,35 +539,12 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
     
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Code Layout
-      </label>
     
-    <a href="./" title="Code Layout" class="md-nav__link md-nav__link--active">
-      Code Layout
+    <a href="./" title="Code Structure" class="md-nav__link md-nav__link--active">
+      Code Structure
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#code-layout" title="Code Layout" class="md-nav__link">
-    Code Layout
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
     
   </li>
 
@@ -569,6 +558,42 @@
     <a href="../multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1-5" type="checkbox" id="nav-3-4-1-5">
+    
+    <label class="md-nav__link" for="nav-3-4-1-5">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-1-5">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -637,10 +662,34 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3-3" type="checkbox" id="nav-3-4-3-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-3-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
-      Kokkos Implementation
+    <a href="../../qcd/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -721,20 +770,8 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#code-layout" title="Code Layout" class="md-nav__link">
-    Code Layout
-  </a>
-  
-</li>
-      
-      
-      
-    </ul>
   
 </nav>
                   </div>
@@ -747,9 +784,7 @@
               
                 
                 
-                  <h1>Code Layout</h1>
-                
-                <h2 id="code-layout">Code Layout<a class="headerlink" href="#code-layout" title="Permanent link">&para;</a></h2>
+                <h1 id="code-structure">Code Structure<a class="headerlink" href="#code-structure" title="Permanent link">&para;</a></h1>
 <p>The typical form of a BoxLib application is a C++ "driver" code which manages
 the boxes on the domain, and calls Fortran kernels in a loop over the boxes
 owned by each MPI process. An example of this layout is shown below:</p>
@@ -830,6 +865,138 @@ which uses OpenMP tiling as described above would look like the following:</p>
 <code>Box</code> from <code>mfi.validbox()</code>, it constructs a smaller <code>Box</code> from
 <code>mfi.tilebox()</code>. The metadata format remains unchanged, allowing the Fortran
 function to remain unchanged as well.</p>
+<h1 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h1>
+<p>BoxLib abstracts the memory management by using the abstract <code>Arena</code> class.</p>
+<p><div class="codehilite"><pre><span></span><span class="cp">#ifndef BL_ARENA_H</span>
+<span class="cp">#define BL_ARENA_H</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;winstd.H&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt;</span><span class="cp"></span>
+
+<span class="k">class</span> <span class="nc">Arena</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="n">BoxLib</span>
+<span class="p">{</span>
+    <span class="n">Arena</span><span class="o">*</span> <span class="n">The_Arena</span> <span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">//</span>
+<span class="c1">// A Virtual Base Class for Dynamic Memory Management</span>
+<span class="c1">//</span>
+<span class="c1">// This is a virtual base class for objects that manage their own dynamic</span>
+<span class="c1">// memory allocation.  Since it is a virtual base class, you have to derive</span>
+<span class="c1">// something from it to use it.</span>
+<span class="c1">//</span>
+
+<span class="k">class</span> <span class="nc">Arena</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Arena</span> <span class="p">();</span>
+    <span class="c1">//</span>
+    <span class="c1">// Allocate a dynamic memory arena of size sz.</span>
+    <span class="c1">// A pointer to this memory should be returned.</span>
+    <span class="c1">//</span>
+    <span class="k">virtual</span> <span class="kt">void</span><span class="o">*</span> <span class="nf">alloc</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">sz</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//</span>
+    <span class="c1">// A pure virtual function for deleting the arena pointed to by pt.</span>
+    <span class="c1">//</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">free</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">pt</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//</span>
+    <span class="c1">// Given a minimum required arena size of sz bytes, this returns</span>
+    <span class="c1">// the next largest arena size that will align to align_size bytes.</span>
+    <span class="c1">//</span>
+    <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">align</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">sz</span><span class="p">);</span>
+
+<span class="k">protected</span><span class="o">:</span>
+
+    <span class="k">static</span> <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">align_size</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cp">#endif </span><span class="cm">/*BL_ARENA_H*/</span><span class="cp"></span>
+</pre></div>
+The most general container class in BoxLib, the <code>BaseFab</code>, calls the <code>Arena</code> data allocator to allocate its memory. Therefore, by providing a specialized Arena-descendant, the user can easily plug in his own data containers or decorate his allocations with alignment or memory placing directives.</p>
+<h1 id="c-kernel-rewrites">C++ Kernel Rewrites<a class="headerlink" href="#c-kernel-rewrites" title="Permanent link">&para;</a></h1>
+<p>Some programming models do not support Fortran and thus for using those, we need to port our kernels to C++. Below we show the ported GSRB kernel. For the sake of simplicity, we work directly with the fabs and not with the data pointers as we do in Fortran, so that we can use the access operator to index into our data containers. </p>
+<div class="codehilite"><pre><span></span><span class="kt">void</span> <span class="nf">C_GSRB_3D</span><span class="p">(</span>
+<span class="k">const</span> <span class="n">Box</span><span class="o">&amp;</span> <span class="n">bx</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Box</span><span class="o">&amp;</span> <span class="n">bbx</span><span class="p">,</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">nc</span><span class="p">,</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">rb</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Real</span> <span class="n">alpha</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Real</span> <span class="n">beta</span><span class="p">,</span>
+<span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">phi</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">bX</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">bY</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">bZ</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f0</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m0</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f1</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m1</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f2</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m2</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f3</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m3</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f4</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m4</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f5</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Mask</span><span class="o">&amp;</span> <span class="n">m5</span><span class="p">,</span>
+<span class="k">const</span> <span class="n">Real</span><span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">//box extends:</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">lo</span> <span class="o">=</span> <span class="n">bx</span><span class="p">.</span><span class="n">loVect</span><span class="p">();</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">hi</span> <span class="o">=</span> <span class="n">bx</span><span class="p">.</span><span class="n">hiVect</span><span class="p">();</span>
+    <span class="c1">//blo</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">blo</span> <span class="o">=</span> <span class="n">bbx</span><span class="p">.</span><span class="n">loVect</span><span class="p">();</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">bhi</span> <span class="o">=</span> <span class="n">bbx</span><span class="p">.</span><span class="n">hiVect</span><span class="p">();</span>
+
+    <span class="c1">//some parameters</span>
+    <span class="n">Real</span> <span class="n">omega</span><span class="o">=</span> <span class="mf">1.15</span><span class="p">;</span>
+    <span class="n">Real</span> <span class="n">dhx</span> <span class="o">=</span> <span class="n">beta</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">Real</span> <span class="n">dhy</span> <span class="o">=</span> <span class="n">beta</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">Real</span> <span class="n">dhz</span> <span class="o">=</span> <span class="n">beta</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span><span class="o">&lt;</span><span class="n">nc</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">ioff</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="n">rb</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="n">i</span><span class="o">+=</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+
+                    <span class="c1">//BC terms</span>
+                    <span class="n">Real</span> <span class="n">cf0</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m0</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f0</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+                    <span class="n">Real</span> <span class="n">cf1</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m1</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f1</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+                    <span class="n">Real</span> <span class="n">cf2</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m2</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f2</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+                    <span class="n">Real</span> <span class="n">cf3</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m3</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f3</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+                    <span class="n">Real</span> <span class="n">cf4</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m4</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f4</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+                    <span class="n">Real</span> <span class="n">cf5</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m5</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f5</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
+
+                    <span class="c1">//assign ORA constants</span>
+                    <span class="kt">double</span> <span class="n">gamma</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">a</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
+                                    <span class="o">+</span> <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="o">+</span> <span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)))</span>
+                                    <span class="o">+</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="o">+</span> <span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">)))</span>
+                                    <span class="o">+</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="o">+</span> <span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)));</span>
+
+                    <span class="kt">double</span> <span class="n">g_m_d</span> <span class="o">=</span> <span class="n">gamma</span>
+                                    <span class="o">-</span> <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">cf0</span> <span class="o">+</span> <span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">cf3</span><span class="p">)</span>
+                                    <span class="o">-</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">cf1</span> <span class="o">+</span> <span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">cf4</span><span class="p">)</span>
+                                    <span class="o">-</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">cf2</span> <span class="o">+</span> <span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">cf5</span><span class="p">);</span>
+
+                    <span class="kt">double</span> <span class="n">rho</span> <span class="o">=</span>  <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bX</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">))</span>
+                                <span class="o">+</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bY</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">))</span>
+                                <span class="o">+</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bZ</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">n</span><span class="p">));</span>
+
+                    <span class="kt">double</span> <span class="n">res</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">rho</span><span class="p">;</span>
+                    <span class="n">phi</span><span class="p">(</span><span class="n">IntVect</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">),</span><span class="n">n</span><span class="p">)</span> <span class="o">+=</span> <span class="n">omega</span><span class="o">/</span><span class="n">g_m_d</span> <span class="o">*</span> <span class="n">res</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>We try to avoid porting all Fortran kernels for our explorations but some of the frameworks would basically require that. We will make comments about this in appropriate places.</p>
                 
                   
                 

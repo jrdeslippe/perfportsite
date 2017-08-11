@@ -338,10 +338,46 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Libraries
+      </label>
     
     <a href="./" title="Libraries" class="md-nav__link md-nav__link--active">
       Libraries
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#considerations-for-using-libraries-for-portable-performance" title="Considerations for using libraries for portable performance" class="md-nav__link">
+    Considerations for using libraries for portable performance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
+    Some popular scientific libraries available on ASCR facilities
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -421,6 +457,18 @@
   <li class="md-nav__item">
     <a href="../frameworks/kokkos/" title="Kokkos" class="md-nav__link">
       Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../frameworks/raja/" title="RAJA" class="md-nav__link">
+      RAJA
     </a>
   </li>
 
@@ -527,8 +575,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../case_studies/amr/code_layout/" title="Code Layout" class="md-nav__link">
-      Code Layout
+    <a href="../../case_studies/amr/code_structure/" title="Code Structure" class="md-nav__link">
+      Code Structure
     </a>
   </li>
 
@@ -542,6 +590,42 @@
     <a href="../../case_studies/amr/multigrid/" title="Geometric Multigrid" class="md-nav__link">
       Geometric Multigrid
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-1-5" type="checkbox" id="nav-3-4-1-5">
+    
+    <label class="md-nav__link" for="nav-3-4-1-5">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-1-5">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/amr/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -610,10 +694,34 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-3-3" type="checkbox" id="nav-3-4-3-3">
+    
+    <label class="md-nav__link" for="nav-3-4-3-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-3-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../case_studies/qcd/kokkos_implementation/" title="Kokkos Implementation" class="md-nav__link">
-      Kokkos Implementation
+    <a href="../../case_studies/qcd/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -694,6 +802,29 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#considerations-for-using-libraries-for-portable-performance" title="Considerations for using libraries for portable performance" class="md-nav__link">
+    Considerations for using libraries for portable performance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
+    Some popular scientific libraries available on ASCR facilities
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -706,10 +837,37 @@
               
                 
                 
-                  <h1>Libraries</h1>
-                
-                <p>Bronson to write</p>
-<p>Libraries e.g. BLAS/FFT, MAGMA, CULA, Trillinos, PETSc</p>
+                <h1 id="libraries">Libraries<a class="headerlink" href="#libraries" title="Permanent link">&para;</a></h1>
+<p>The use of scientific libraries to achieve a measure of portable performance 
+has been used across many earlier computational platforms. 
+The ability to use higher-level abstractions via libraries allows developers to 
+concentrate their effort on algorithmic development, freeing them from having to 
+devote considerable effort to maximizing performance for many mathematical primitives. The most popular scientific libraries include 
+packages designed to solve problems in linear algebra (both dense and sparse), compute fast Fourier transforms (FFT), multigrid 
+methods, and initial value problems for ordinary differential 
+equations, along with other examples. Some of the best known scientific libraries include:</p>
+<p>These tasks often represent a good measure of the computational work to be found in many scientific 
+codes. For some codes, almost all of the computational intensity can be found in the use of a
+library for, e.g., eigenvalue solution or FFTs. If such a code makes use of libraries for their solution, 
+portability is very often assured. Indeed, even if a particular library has not been ported to a new
+architecture at a given time, the library source code is often available and can be compiled by the
+user on the new platform. However, the best performance is realized when either the library maintainers or
+the machine vendor (or both) undertake development to optimize a given library on a particular platform. 
+This obvious advantage has been realized by vendors, and for many of the libraries referred to earlier, this 
+optimization is done as a matter of course.</p>
+<p>Conversely, performance cannot be guaranteed with the same degree of certainty. First, although libraries often 
+do encapsulate a good measure of the required work, in most cases this is not <strong>all</strong> of the work, including 
+what is often strictly serial work. This fundamental constraint is sometimes exacerbated by the
+fact that architecture-specific implementations are evolving, despite the best efforts of both vendors and
+library maintainers. </p>
+<p>Codes with obvious "hot spots" can often make immediate use of libraries to acheive performance portability. 
+This is often easiest for codes written in Fortran and C, whereas bindings to many libraries in C++ can 
+be lacking or somewhat arcane to use. One of the biggest concerns in using libraries for extant codes is 
+the frequent requirement to recast data structures used in the code to the format used by the library. 
+The best approach to ameliorate this problem is often to simply use a memory copy: The relative cost of the 
+copy compared to the work done in the library is often small, and the use of a localized copy obviates the
+need to change data structures pervasively throughout the code.  </p>
+<h2 id="considerations-for-using-libraries-for-portable-performance">Considerations for using libraries for portable performance<a class="headerlink" href="#considerations-for-using-libraries-for-portable-performance" title="Permanent link">&para;</a></h2>
 <p>Pros</p>
 <ul>
 <li>
@@ -735,6 +893,48 @@
 </li>
 <li>
 <p>Opaque interior threading models </p>
+</li>
+</ul>
+<h2 id="some-popular-scientific-libraries-available-on-ascr-facilities">Some popular scientific libraries available on ASCR facilities<a class="headerlink" href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><a href="http://www.netlib.org/lapack/">BLAS/LAPACK</a> - dense linear algebra</p>
+<ul>
+<li>
+<p>BLAS and LAPACK are often contained in vendor-supplied library collections, like:</p>
+<ul>
+<li>
+<p><a href="https://software.intel.com/en-us/articles/intel-math-kernel-library-documentation">MKL</a> (Theta, Cori)</p>
+</li>
+<li>
+<p><a href="http://docs.cray.com/cgi-bin/craydoc.cgi?mode=View;id=S-2396-610;idx=books_search;this_sort=title;q=;type=books;title=Cray%20Application%20Developer%27s%20Environment%20User%27s%20Guide">Cray LibSci</a> (Theta, Cori, Titan) </p>
+</li>
+</ul>
+</li>
+<li>
+<p>In addition, other platform-specific implementations are avaialable, like:</p>
+<ul>
+<li>
+<p><a href="http://icl.cs.utk.edu/magma/">MAGMA</a> (GPU; Titan)</p>
+</li>
+<li>
+<p><a href="http://icl.cs.utk.edu/projectsfiles/plasma/html/">PLASMA</a> (multicore; Theta, Cori)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="http://www.fftw.org/">FFTW</a> - Fast Fourier Transform</p>
+<ul>
+<li>Like LAPACK/BLAS, FFTW-like APIs can be found in MKL and ACML</li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.mcs.anl.gov/petsc/">PETSc</a> - PDE solvers</p>
+<ul>
+<li>PETSc is much more like a framework, and often requires more extensive code changes to use efficiently </li>
+</ul>
 </li>
 </ul>
                 
