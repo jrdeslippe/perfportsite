@@ -27,9 +27,12 @@ Time(%)      Time     Calls    Avg           Min                Max           Na
 
 nvprof command to watch:
 
-FP =double precision ops 
-DR/ DW = dram read/write transactions
-TR/TW = dram read/write throughput
+FP= double precision ops 
+
+DR/DW= dram read/write transactions
+
+TR/TW= dram read/write throughput
+
 for the CUDA kernel -- smooth_kernel:
 
 ```shell

@@ -88,15 +88,32 @@ discover the relevant limiting cache level. The figure below shows an example of
 
 In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed 
 from benchmark values. For example, many codes use strided or indirect-addressed (scatter/gather) patterns. In some cases memory-latency is the limiting resources. 
-For convenience we include a table of empirical/effective bandwidths on the KNL nodes (Cori/Theta) and Titan GPUs for 
-different patterns. 
+For example we compute the following ceilings for different access patterns empirically:
 
-INSERT Table from Sam?
+For polynomial access pattern: x[i] = (x[i]+c0)
+
+| System                | DRAM  | L2     | L1     | GEMM   |
+|-----------------------| ------|--------|-----------------|
+| Titan (Kepler)        | 161   | 559    | -      | 1226   |
+| Summit Dev (4 Pascal) | 1930  | 6507   | -      | 17095  |
+| Cori (KNL)            | 413   | 1965   | 6443   | 2450   |
+
+Non contiguous accesses can also lower the effective bandwidth available:
+
+| Access Pattern  |  KNL Effective Bandwidth (Cache Mode) |
+|----------|----------|---------|
+| Dot Product | 219 |
+| Stride 2 Dot Product | 96 | 
+| Stride 100 Dot Product | 31 |
+| Stride 10000 Dot Product | 20 | 
+
+!!More numbers coming from protonu!!
 
 Finally, one may additional define an AI value and roofline-ceiling for data coming from off-node due to internode 
 communication. The relevant bandwidth here is the injection bandwidth of the node:
 
-INSERT Table from Sam?
+| System:              | Cori/Theta | Titan    | Summit  |
+| Injection Bandwidth: | 8 GB/s     | 6.4 GB/s | 23 GB/s |
 
 The value of the roofline approach is that relative performance of an application kernel to relevant ceilings (those related to fundamental limitations in an algorithm 
 that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture to quantity absolute performance and performance 
