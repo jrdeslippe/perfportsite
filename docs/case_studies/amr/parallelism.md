@@ -11,7 +11,7 @@ kernels on each box in series. An example is shown in the figure below, where
 the red and green boxes are assigned to the same MPI process.
 
 !["BoxLib box distribution"][boxlib_boxes]
-[boxlib_boxes]: cc_validbox.png "BoxLib box distribution"
+[boxlib_boxes]: images/cc_validbox.png "BoxLib box distribution"
 
 ## OpenMP
 
@@ -36,6 +36,6 @@ approach avoids unnecessary thread synchronization which would occur if threads
 were distributed among tiles within each box.
 
 !["BoxLib OpenMP tiling"][boxlib_tiling]
-[boxlib_tiling]: cc_tilebox.png "BoxLib OpenMP tiling"
+[boxlib_tiling]: images/cc_tilebox.png "BoxLib OpenMP tiling"
 
 The figures on this page are taken from the AMReX User's Guide.

@@ -1,9 +1,9 @@
 # Geometric Multigrid
 
 Many problems encountered in BoxLib applications require solutions to linear
-system, e.g., elliptic partial differential equations such as the Poisson
-equation for self-gravity, and the diffusion equation. BoxLib therefore
-includes geometric multigrid solvers for solving problems which use both
+system, e.g., [elliptic partial differential equations](https://en.wikipedia.org/wiki/Elliptic_partial_differential_equation) such as the [Poisson
+equation](https://en.wikipedia.org/wiki/Poisson%27s_equation) for self-gravity, and the [diffusion equation](https://en.wikipedia.org/wiki/Diffusion_equation). BoxLib therefore
+includes [geometric multigrid solvers](https://en.wikipedia.org/wiki/Multigrid_method) for solving problems which use both
 cell-centered and nodal data. For this project, we have focused on the
 cell-centered solver due to its relative simplicity compared to the nodal
 solver.
@@ -28,7 +28,7 @@ A relaxation consists of one or more iterations of an approximate solution to
 the system of linear equations. In geometric multigrid, common algorithms used
 here include Jacobi and Gauss-Seidel. By default, the BoxLib solver uses a
 variation on Gauss-Seidel called Gauss-Seidel red-black ("GSRB"). GSRB deviates
-from the original Gauss-Seidel method by exploiting a symmetry in the data
+from the original [Gauss-Seidel method](https://en.wikipedia.org/wiki/Gauss–Seidel_method) by exploiting a symmetry in the data
 dependence among matrix elements, such that an update sweep of all matrix
 elements follows a stride-2 pattern rather than stride-1. (This property
 manifests in the innermost loop of the kernel shown below).
@@ -155,5 +155,5 @@ On the coarsest grid, the solver then solves the linear system exactly, before
 propagating the solution back up to finer grids. The solution algorithm chosen
 for this step is rarely influential on the overall performance of the multigrid
 algorithm, because the problem size at the coarsest grid is so small. In
-BoxLib, the default coarse grid solver algorithm is BiCGSTAB, a variation on
+BoxLib, the default coarse grid solver algorithm is [BiCGSTAB](https://en.wikipedia.org/wiki/Biconjugate_gradient_stabilized_method), a variation on
 the conjugate-gradient iterative method.
