@@ -1,3 +1,11 @@
+# Using SDE and VTUNE to calculate roofline data
+
+NERSC has extensive documentation and examples for collecting AI and FLOPs using the Intel SDE and VTune 
+tools. You can find instructions for this 
+[here](http://www.nersc.gov/users/application-performance/measuring-arithmetic-intensity/).
+
+# Using vector advisor to automate roofline collection
+
 ##Compiling
 
 * Compile code with the -g flag. 
@@ -48,4 +56,5 @@ vectorization, flop rate, arithmetic intensity, etc.
 Clink on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
 in the cache-aware roofline.
 
-
+*While the above documents how to use Intel Advisor to gather L1-roofline data, you can contact NERSC 
+consultants at consult@nersc.gov for information on experimental DRAM roofline capbilities.
