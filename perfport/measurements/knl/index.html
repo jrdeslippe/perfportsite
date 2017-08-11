@@ -291,9 +291,48 @@
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Measuring Roofline Data on KNL
+      </label>
+    
     <a href="./" title="Measuring Roofline Data on KNL" class="md-nav__link md-nav__link--active">
       Measuring Roofline Data on KNL
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#compiling" title="Compiling" class="md-nav__link">
+    Compiling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running" title="Running" class="md-nav__link">
+    Running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-gui" title="Using the GUI" class="md-nav__link">
+    Using the GUI
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -779,6 +818,34 @@
   
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#compiling" title="Compiling" class="md-nav__link">
+    Compiling
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running" title="Running" class="md-nav__link">
+    Running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-gui" title="Using the GUI" class="md-nav__link">
+    Using the GUI
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -792,7 +859,59 @@
                 
                   <h1>Measuring Roofline Data on KNL</h1>
                 
-                
+                <h2 id="compiling">Compiling<a class="headerlink" href="#compiling" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Compile code with the -g flag. </p>
+</li>
+<li>
+<p>Optimizations flags can (should) be included. </p>
+</li>
+<li>
+<p>Using the -dynamic flag for dynamic linking is recommended.</p>
+</li>
+</ul>
+<h2 id="running">Running<a class="headerlink" href="#running" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>We recommend running applications using the command line interface advixe-cl. </p>
+</li>
+<li>
+<p>To access the binaries, load the advisor module using module load advisor.</p>
+</li>
+<li>
+<p>Since version 2017/update 2 the roofline is a standard feature and does not require setting any additional environment variables. </p>
+</li>
+<li>
+<p>To collect roofline data, Advisor needs to do two collection runs, survey and tripcounts. Survey is a quick pass with no noticeable overhead that is used 
+to count the application run time. Tripcounts has significant overhead.
+srun <srun options> advixe-cl -collect survey -project-dir <same data directory> -- <executable>
+srun <srun options> advixe-cl -collect tripcounts -flops-and-masks -project-dir <same data directory> -- <executable></p>
+</li>
+</ul>
+<p>*There are a number of additional flags that can be used to speed up the collection
+-no-stack-stitching 
+-no-auto-finalize can be used to skip the expensive data finalization step. This is recommended on KNL systems where the cores of the compute nodes are less 
+powerful than the cores of the login nodes. When the results are opened in the GUI, they will be finalized on the node running the GUI.</p>
+<h2 id="using-the-gui">Using the GUI<a class="headerlink" href="#using-the-gui" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Load advisor using  module load advisor.</p>
+</li>
+<li>
+<p>Open the GUI with advixe-gui</p>
+</li>
+</ul>
+<p><center><img src="advisor1.png" width=500></center></p>
+<p>The GUI opens to the welcome screen. Click on open result and navigate to the data directory you gave to advixe-cl</p>
+<p><center><img src="advisor2.png" width=500></center></p>
+<p>A new result opens to the summary page. This page gives useful overall metrics for the application and highlights the top five time-consuming loops.</p>
+<p><center><img src="advisor3.png" width=500></center></p>
+<p>Navigate to the Survey &amp; Roofline tab using the tabs on the top of the screen. The survey lists the loops of the application and provides information on 
+vectorization, flop rate, arithmetic intensity, etc.</p>
+<p><center><img src="advisor4.png" width=500></center></p>
+<p>Clink on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
+in the cache-aware roofline.</p>
                 
                   
                 

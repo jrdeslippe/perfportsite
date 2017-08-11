@@ -961,12 +961,75 @@ discover the relevant limiting cache level. The figure below shows an example of
 <p><center><img src="MultiRoofline.png" width=500></center></p>
 <p>In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed 
 from benchmark values. For example, many codes use strided or indirect-addressed (scatter/gather) patterns. In some cases memory-latency is the limiting resources. 
-For convenience we include a table of empirical/effective bandwidths on the KNL nodes (Cori/Theta) and Titan GPUs for 
-different patterns. </p>
-<p>INSERT Table from Sam?</p>
+For example we compute the following ceilings for different access patterns empirically:</p>
+<p>For polynomial access pattern: x[i] = (x[i]+c0)</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>DRAM</th>
+<th>L2</th>
+<th>L1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Titan (Kepler)</td>
+<td>161</td>
+<td>559</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Summit Dev (4 Pascal)</td>
+<td>1930</td>
+<td>6507</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Cori (KNL)</td>
+<td>413</td>
+<td>1965</td>
+<td>6443</td>
+</tr>
+</tbody>
+</table>
+<p>Non contiguous accesses can also lower the effective bandwidth available:</p>
+<table>
+<thead>
+<tr>
+<th>Access Pattern</th>
+<th>KNL Effective Bandwidth (Cache Mode)</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dot Product</td>
+<td>219</td>
+<td></td>
+</tr>
+<tr>
+<td>Stride 2 Dot Product</td>
+<td>96</td>
+<td></td>
+</tr>
+<tr>
+<td>Stride 100 Dot Product</td>
+<td>31</td>
+<td></td>
+</tr>
+<tr>
+<td>Stride 10000 Dot Product</td>
+<td>20</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>!!More numbers coming from protonu!!</p>
 <p>Finally, one may additional define an AI value and roofline-ceiling for data coming from off-node due to internode 
 communication. The relevant bandwidth here is the injection bandwidth of the node:</p>
-<p>INSERT Table from Sam?</p>
+<p>| System:              | Cori/Theta | Titan    | Summit  |
+| Injection Bandwidth: | 8 GB/s     | 6.4 GB/s | 23 GB/s |</p>
 <p>The value of the roofline approach is that relative performance of an application kernel to relevant ceilings (those related to fundamental limitations in an algorithm 
 that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture to quantity absolute performance and performance 
 portability. </p>

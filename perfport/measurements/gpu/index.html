@@ -821,10 +821,10 @@ Time<span class="o">(</span>%<span class="o">)</span>      Time     Calls    Avg
 <li>DRAM R/W throughput</li>
 </ol>
 <p>nvprof command to watch:</p>
-<p>FP =double precision ops 
-DR/ DW = dram read/write transactions
-TR/TW = dram read/write throughput
-for the CUDA kernel -- smooth_kernel:</p>
+<p>FP= double precision ops </p>
+<p>DR/DW= dram read/write transactions</p>
+<p>TR/TW= dram read/write throughput</p>
+<p>for the CUDA kernel -- smooth_kernel:</p>
 <div class="codehilite"><pre><span></span>nvprof  --kernels <span class="s2">&quot;smooth_kernel&quot;</span> --metrics flop_count_dp  --metrics dram_read_throughput  --metrics dram_write_throughput --metrics dram_read_transactions --metrics 
 dram_write_transactions ./build/bin/hpgmg-fv <span class="m">6</span> <span class="m">8</span> 
 </pre></div>
