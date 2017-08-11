@@ -56,6 +56,7 @@ pages:
           - Geometric Multigrid: case_studies/amr/multigrid.md
           - Implementations:
             - Kokkos: case_studies/amr/kokkos_implementation.md
+            - OpenMP 4.x: case_studies/amr/openmp_implementation.md
         - GW Kernels: case_studies/gw/index.md
         - QCD:
           - Overview: case_studies/qcd/overview.md
