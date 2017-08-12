@@ -36,8 +36,8 @@ pages:
     - Definition: perfport/definition.md
     - Measurements: 
         - Measurement Techniques: perfport/measurements/index.md
-        - Measuring Roofline Data on KNL: perfport/measurements/knl.md
-        - Measuring Roofline Data on GPUs: perfport/measurements/gpu.md
+        - Collecting Roofline on KNL: perfport/measurements/knl.md
+        - Collecting Roofline on GPUs: perfport/measurements/gpu.md
     - Approaches:
         - Libraries: perfport/libraries/index.md
         - Directives:
