@@ -1,9 +1,9 @@
 ##Hardware In-Depth
 
-|System-> | [Cori](http://www.nersc.gov/users/computational-systems/cori/configuration/)  |  [Theta](http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40))                          | [Titan](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/)             |
+|System-> | Cori  |  Theta                          | Titan             |
 |:---:|:--------:|:---------:|:-----------------------:|
 | Facility | NERSC | ALCF | OLCF |
-| Model | Cray XC40 | Cray XC40 | Cray XK7 |
+| Model | [Cray XC40](http://www.nersc.gov/users/computational-systems/cori/configuration/) | [Cray XC40]((http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40)) | [Cray XK7](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/) |
 | Processor | Intel Xeon Phi (2nd gen) | Intel Xeon Phi (2nd gen) | AMD Opteron ("Interlagos") |
 | Specific Processor | ? | [Intel SKU 7230](http://ark.intel.com/products/94034/Intel-Xeon-Phi-Processor-7230-16GB-1_30-GHz-64-core) | AMD Opteron 6274 |
 | Processor Cores | 68 | 64 | 16 CPU cores (in 8 physical modules) |
@@ -24,7 +24,7 @@
 
 ##Software Environment
 
-|System-> | [Cori](http://www.nersc.gov/users/computational-systems/cori/configuration/)  |  [Theta](http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40))                          | [Titan](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/)            |
+|System-> | Cori | Theta | Titan |
 |:---|:--------|:---------|:-----------------------|
 | Software environment management | [modules](http://www.nersc.gov/users/software/nersc-user-environment/modules/) | [modules](http://www.alcf.anl.gov/user-guides/onboarding-guide#step4) | [modules](https://www.olcf.ornl.gov/support/system-user-guides/titan-user-guide/#172) |
 | Batch Job Scheduler | [Slurm](http://www.nersc.gov/users/computational-systems/cori/running-jobs/batch-jobs/) | [Cobalt](http://www.alcf.anl.gov/user-guides/running-jobs-xc40) | [PBS](https://www.olcf.ornl.gov/support/system-user-guides/titan-user-guide/#273) |
@@ -63,7 +63,7 @@
 Use these wrappers to properly cross-compile your source code for the compute
 nodes of the systems, and bring in appropriate headers for MPI, etc.
 
-|System-> | [Cori](http://www.nersc.gov/users/computational-systems/cori/configuration/)  |  [Theta](http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40))                          | [Titan](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/)             |
+|System-> | Cori | Theta | Titan |
 |:---:|:--------:|:---------:|:-----------------------:|
 | C++ | ? | `CC` | `CC` |
 | C | ? | `cc` | `cc` |
