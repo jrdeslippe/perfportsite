@@ -66,4 +66,5 @@ pages:
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
 - Other Resources: resources.md
-- Demo: demo/demo.md
+# see Brandon's markdown demo page here:
+#- Demo: demo/demo.md
