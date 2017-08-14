@@ -1016,8 +1016,24 @@ For example we compute the following ceilings for different access patterns empi
 <p>!!More numbers coming from protonu!!</p>
 <p>Finally, one may additional define an AI value and roofline-ceiling for data coming from off-node due to internode 
 communication. The relevant bandwidth here is the injection bandwidth of the node:</p>
-<p>| System:              | Cori/Theta | Titan    | Summit  |
-| Injection Bandwidth: | 8 GB/s     | 6.4 GB/s | 23 GB/s |</p>
+<table>
+<thead>
+<tr>
+<th>System:</th>
+<th>Cori/Theta</th>
+<th>Titan</th>
+<th>Summit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Injection Bandwidth:</td>
+<td>8 GB/s</td>
+<td>6.4 GB/s</td>
+<td>23 GB/s</td>
+</tr>
+</tbody>
+</table>
 <p>The value of the roofline approach is that relative performance of an application kernel to relevant ceilings (those related to fundamental limitations in an algorithm 
 that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture to quantity absolute performance and performance 
 portability. </p>
