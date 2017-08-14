@@ -2,24 +2,23 @@
 
 |System-> | Cori  |  Theta                          | Titan             |
 |:---:|:--------:|:---------:|:-----------------------:|
-| Facility | NERSC | ALCF | OLCF |
+|Facility|[NERSC](http://www.nersc.gov/)|[ALCF](http://www.alcf.anl.gov)|[OLCF](http://www.olcf.ornl.gov)|
 | Model | [Cray XC40](http://www.nersc.gov/users/computational-systems/cori/configuration/) | [Cray XC40]((http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40)) | [Cray XK7](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/) |
-| Processor | Intel Xeon Phi (2nd gen) | Intel Xeon Phi (2nd gen) | AMD Opteron ("Interlagos") |
-| Specific Processor | ? | [Intel SKU 7230](http://ark.intel.com/products/94034/Intel-Xeon-Phi-Processor-7230-16GB-1_30-GHz-64-core) | AMD Opteron 6274 |
+|Processor|[Intel Xeon Phi 7250 ("Knights Landing")](https://ark.intel.com/products/94035/Intel-Xeon-Phi-Processor-7250-16GB-1_40-GHz-68-core)|[Intel Xeon Phi 7230 ("Knights Landing")](https://ark.intel.com/products/94034/Intel-Xeon-Phi-Processor-7230-16GB-1_30-GHz-64-core)|[AMD Opteron 6274 ("Interlagos")](https://www.amd.com/Documents/Opteron_6000_QRG.pdf)|
 | Processor Cores | 68 | 64 | 16 CPU cores (in 8 physical modules) |
-| Processor Base Frequency | ? | 1.3 GHz | 2.2 GHz |
-| Processor Max Frequency | ? | 1.5 GHz | 3.1GHz (disabled) |
+| Processor Base Frequency | 1.4 GHz | 1.3 GHz | 2.2 GHz |
+| Processor Max Frequency | 1.6 GHz | 1.5 GHz | 3.1 GHz (disabled) |
 | Processor On-Package Memory | 16 GB MCDRAM | 16 GB MCDRAM | n/a |
-| Processor DRAM | ? | 192 GB DDR4 | 32 GB  |
-| Accelerator | (none) | (none) | NVIDIA Tesla ("Kepler") K20X |
+| Processor DRAM | 96 GB DDR4 | 192 GB DDR4 | 32 GB |
+|Accelerator|(none)|(none)|[NVIDIA Tesla K20X ("Kepler")](http://www.nvidia.com/content/PDF/kepler/Tesla-K20X-BD-06397-001-v05.pdf)|
 | Nodes | 9 688  | 3 624 | 18 688 |
 | Perf. Per Node | 2.6 TF | 2.6 TF | 1.4 TF |
-| Node local storage | ? | 128 GB SSD | n/a |
-| External Burst Buffer | ? | n/a | n/a |
-| Parallel File System | ? | 10 PB Lustre | 28 PB Lustre  |
-| Interconnect | ? | Cray Aries | Cray Gemini |
-| Topology | ? | Dragonfly | 3D torus |
-| Peak Perf | 30 PF | 10 PF | 27 PFF |
+| Node local storage | (none) | 128 GB SSD | (none) |
+| External Burst Buffer | 1.8 PB | (none) | (none) |
+| Parallel File System | 30 PB Lustre | 10 PB Lustre | 28 PB Lustre  |
+| Interconnect | Cray Aries | Cray Aries | Cray Gemini |
+| Topology | Dragonfly | Dragonfly | 3D torus |
+| Peak Perf | 30 PF | 10 PF | 27 PF |
 
 
 ##Software Environment
