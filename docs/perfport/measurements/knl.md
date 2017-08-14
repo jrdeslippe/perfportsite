@@ -38,20 +38,20 @@ powerful than the cores of the login nodes. When the results are opened in the G
 
 * Open the GUI with advixe-gui
 
-<center><img src="advisor1.png" width=500></center>
+<center><img src="/perfport/measurements/advisor1.png" width=500></center>
 
 The GUI opens to the welcome screen. Click on open result and navigate to the data directory you gave to advixe-cl
 
-<center><img src="advisor2.png" width=500></center>
+<center><img src="/perfport/measurements/advisor2.png" width=500></center>
 
 A new result opens to the summary page. This page gives useful overall metrics for the application and highlights the top five time-consuming loops.
 
-<center><img src="advisor3.png" width=500></center>
+<center><img src="/perfport/measurements/advisor3.png" width=500></center>
 
 Navigate to the Survey & Roofline tab using the tabs on the top of the screen. The survey lists the loops of the application and provides information on 
 vectorization, flop rate, arithmetic intensity, etc.
 
-<center><img src="advisor4.png" width=500></center>
+<center><img src="/perfport/measurements/advisor4.png" width=500></center>
 
 Clink on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
 in the cache-aware roofline.

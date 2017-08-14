@@ -113,6 +113,7 @@ Finally, one may additional define an AI value and roofline-ceiling for data com
 communication. The relevant bandwidth here is the injection bandwidth of the node:
 
 | System:              | Cori/Theta | Titan    | Summit  |
+|----------------------|------------|----------|---------|
 | Injection Bandwidth: | 8 GB/s     | 6.4 GB/s | 23 GB/s |
 
 The value of the roofline approach is that relative performance of an application kernel to relevant ceilings (those related to fundamental limitations in an algorithm 
