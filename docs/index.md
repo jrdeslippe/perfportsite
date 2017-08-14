@@ -19,7 +19,7 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 | Location | OLCF     |
 | Architecture | CPU + NVIDIA GPU |
 | Scale | 18,688 Nodes |
-| Picture | <img src="images/titan.jpg" width=200> |
+| Picture | <img src="images/titan.opt.jpg" width=200> |
 
 
 | System   | Cori    |
@@ -28,14 +28,14 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 | Architecture | Xeon-Phi |
 | Scale | 9688 Nodes |
 | Notes | SSD Burst-Buffer IO layer |
-| Picture | <img src="images/cori.jpg" width=200> |
+| Picture | <img src="images/cori.opt.jpg" width=200> |
 
 | System   | Theta    |
 |----------|----------|
 | Location | ALCF     |
 | Architecture | Xeon-Phi |
 | Scale | 3624 Nodes |
-| Picture | <img src="images/theta.jpg" width=200> |
+| Picture | <img src="images/theta.opt.jpg" width=200> |
 
 The two processor architectures deployed on these systems are the CPU+NVidia GPU hybrid architecture on Titan and the "self-hosted" Xeon-Phi processors 
 (code named "Knights Landing"). These two architectures, while seemingly quite different at first appearance, have a number of similarities that we believe 
