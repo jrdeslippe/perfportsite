@@ -114,3 +114,18 @@ qsub -l nodes=512 ./theta_script.sh
 ```
 The `-l nodes=512` argument requests 512 nodes (this can also be put in the batch script).
 
+
+### Cori
+
+NERSC provides a [page in the MyNERSC
+website](https://my.nersc.gov/script_generator.php) which generates job scripts
+automatically based on specified runtime configurations. An example script is
+shown below, in which a code uses 512 nodes of Xeon Phi with MCDRAM configured
+in "flat" mode, with 4 MPI processes per node and 34 OpenMP threads per MPI
+process, using 2 hyper-threads per physical core of Xeon Phi:
+
+###Job Script
+
+```bash
+{!facilities/cori_script.sh!}
+```
