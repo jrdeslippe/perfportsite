@@ -317,8 +317,23 @@
         }, 
         {
             "location": "/perfport/summary/", 
-            "text": "This will be a comparison of all the approaches we tried.\n\n\n\n\n\n\n\n\nApproach\n\n\nBenefits\n\n\nChallenges\n\n\n\n\n\n\n\n\n\n\nOpenMP 4.5\n\n\nSupport for C, C++, Fortran\n\n\nreliant on quality of compiler implementation\n\n\n\n\n\n\nKokkos\n\n\n\n\n\n\n\n\n\n\nRAJA", 
+            "text": "Summary and Recommendations\n\n\nComparison of Approaches\n\n\nThis will be a comparison of all the approaches we tried.\n\n\n\n\n\n\n\n\nApproach\n\n\nBenefits\n\n\nChallenges\n\n\n\n\n\n\n\n\n\n\nOpenMP 4.5\n\n\nSupport for C, C++, Fortran\n\n\nreliant on quality of compiler implementation\n\n\n\n\n\n\nKokkos\n\n\n\n\n\n\n\n\n\n\nRAJA\n\n\n\n\n\n\n\n\n\n\n\n\nRecommendations", 
             "title": "Summary"
+        }, 
+        {
+            "location": "/perfport/summary/#summary-and-recommendations", 
+            "text": "", 
+            "title": "Summary and Recommendations"
+        }, 
+        {
+            "location": "/perfport/summary/#comparison-of-approaches", 
+            "text": "This will be a comparison of all the approaches we tried.     Approach  Benefits  Challenges      OpenMP 4.5  Support for C, C++, Fortran  reliant on quality of compiler implementation    Kokkos      RAJA", 
+            "title": "Comparison of Approaches"
+        }, 
+        {
+            "location": "/perfport/summary/#recommendations", 
+            "text": "", 
+            "title": "Recommendations"
         }, 
         {
             "location": "/case_studies/amr/overview/", 
