@@ -446,10 +446,79 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        DSL
+      </label>
     
     <a href="./" title="DSL" class="md-nav__link md-nav__link--active">
       DSL
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nmodl-a-dsl-for-computational-neuroscience" title="NMODL, A DSL for Computational Neuroscience" class="md-nav__link">
+    NMODL, A DSL for Computational Neuroscience
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" title="References" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-example-dsls-for-hpc" title="Other Example DSLs for HPC" class="md-nav__link">
+    Other Example DSLs for HPC
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -752,18 +821,6 @@
   </li>
 
     
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../../demo/demo/" title="Demo" class="md-nav__link">
-      Demo
-    </a>
-  </li>
-
-    
   </ul>
 </nav>
                   </div>
@@ -778,6 +835,62 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nmodl-a-dsl-for-computational-neuroscience" title="NMODL, A DSL for Computational Neuroscience" class="md-nav__link">
+    NMODL, A DSL for Computational Neuroscience
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" title="References" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-example-dsls-for-hpc" title="Other Example DSLs for HPC" class="md-nav__link">
+    Other Example DSLs for HPC
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -790,9 +903,94 @@
               
                 
                 
-                  <h1>DSL</h1>
-                
-                <p>Tim and Bronson to Write</p>
+                <h1 id="domain-specific-languages-dsls">Domain-Specific Languages (DSLs)<a class="headerlink" href="#domain-specific-languages-dsls" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>Domain-Specific Languages (DSLs) offer the possibility of expressing computation 
+at a very high level of abstraction, rendering the mechanics of running on complex 
+modern platforms much more tractable. Given the level of abstraction afforded by DSLs, they
+can be used to produce very portable code. 
+But, the performance of a DSL relies on the ability of the
+compilers and runtime to effectively exploit architectural details (like the hardware 
+and software environments) to carry out the high-level operations specified by the DSL programmer. </p>
+<p>The actual implementation of DSLs can include annotations that are used to extend a general purpose
+language (e.g. C or Fortran) or DSLs that are embedded in higher-level languages like Lua, Python, or R.  </p>
+<p>Given the current state-of-the-art for DSLs, they are seldom adopted for new code projects, except
+as proof-of-principle exercises. Nevertheless, several HPC DSLs do exist, and if their structure is
+congruent to a particular problem or set of problems, experimentation with this programming model 
+could prove fruitful. </p>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h3 id="nmodl-a-dsl-for-computational-neuroscience">NMODL, A DSL for Computational Neuroscience<a class="headerlink" href="#nmodl-a-dsl-for-computational-neuroscience" title="Permanent link">&para;</a></h3>
+<p><a href="http://www.neuron.yale.edu/neuron/static/docs/help/neuron/nmodl/nmodl.html">NMODL</a>,
+an evolution of the earlier MODL, is designed for neuroscientists to enter
+neural tissue models into the NEURON tissue simulation code. The large-scale
+HPC branch of the simulation code, CoreNEURON, is central to the <a href="http://bluebrain.epfl.ch/">Blue Brain
+Project</a> at EPFL, which is itself key to the brain
+simulation component of the larger European Brain Project.</p>
+<p>CoreNEURON is essentially solving a large set of coupled nonlinear ODEs
+modeling electrochemistry and other aspects of neural tissue behavior. NMODL
+reflects this, having key abstractions for dependent/independent variables and
+their derivatives in the equations; specifying chemical reactions; and
+maintaining consistency of units. Handling of units is important as
+experimental neuroscience is an important driver of the models. Single lines
+of NMODL are translated potentially into many lines of C code---lines which
+the neuroscientist does not have to write (and get correct). Here is an
+example showing some NMODL syntax <a href="#nmodl_blog_post">[3]</a>:</p>
+<div class="codehilite"><pre><span></span>NEURON {
+  SUFFIX leak
+  NONSPECIFIC_CURRENT I
+  RANGE i, e, g
+}
+
+PARAMETER {
+  g = 0.001  (siemens/cm2)  &lt; 0, 1e9 &gt;
+  e = -65    (millivolt)
+}
+
+ASSIGNED {
+  i  (milliamp/cm2)
+  v  (millivolt)
+}
+</pre></div>
+
+<p>NMODL is part of the performance portability strategy for CoreNEURON. The code
+generator produces code targeting specified architecture, using
+OpenMP/CUDA/OpenMP/vector intrinsics/OpenCL as appropriate. This allows for
+highly optimized compiled code. The generic components of the CoreNEURON
+framework are optimized by experts, independently of the models coming in from
+NMODEL. Here is a sketch of the overall pipeline; in green are example
+specific hardware architectures targeted:</p>
+<p><img alt="CoreNEURON pipeline" src="./CoreNEURONPipeline.png" /></p>
+<h4 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<p>M. L. Hines and N. T. Carnevale, <a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=6789741&amp;isnumber=6789470">"Expanding NEURON's Repertoire of
+Mechanisms with
+NMODL,"</a>
+in Neural Computation, vol. 12, no. 5, pp. 995-1007, May 1 2000.  doi:
+10.1162/089976600300015475</p>
+</li>
+<li>
+<p><a href="http://www.neuron.yale.edu/neuron/static/docs/help/neuron/nmodl/nmodl.html">NMODEL Model Description Language</a></p>
+</li>
+<li>
+<p><a name="nmodl_blog_post"></a><a href="http://mcraveiro.blogspot.com/2015/11/nerd-food-tooling-in-computational.html">Nerd Food: Tooling in Computational Neuroscience - Part I: NEURON</a></p>
+</li>
+</ol>
+<h2 id="other-example-dsls-for-hpc">Other Example DSLs for HPC<a class="headerlink" href="#other-example-dsls-for-hpc" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><a href="http://ebblang.org/">Ebb</a> is a DSL for the solution of partial differential equations on meshes. </p>
+</li>
+<li>
+<p><a href="https://crd.lbl.gov/departments/applied-mathematics/ANAG/research/d-tec-amrstencil/">AMRStencil</a> is a DSL to implement solvers on AMR meshes.</p>
+</li>
+<li>
+<p><a href="http://usqcd-software.github.io/qdpxx/">QDP++</a> is a data-parallel programming environment for Lattice QCD.</p>
+</li>
+<li>
+<p><a href="http://www.csc.lsu.edu/~gb/TCE/">The Tensor Contraction Engine</a> is a DSL that allows chemists to specify the computation of tensor contractions encountered in many-body quantum calculations.</p>
+</li>
+</ul>
                 
                   
                 

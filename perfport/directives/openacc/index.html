@@ -374,9 +374,76 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        OpenACC
+      </label>
+    
     <a href="./" title="OpenACC" class="md-nav__link md-nav__link--active">
       OpenACC
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#openacc-at-a-glance" title="OpenACC at a glance" class="md-nav__link">
+    OpenACC at a glance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-openacc-on-ascr-facilities" title="How to use OpenACC on ASCR facilities" class="md-nav__link">
+    How to use OpenACC on ASCR facilities
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#olcf" title="OLCF" class="md-nav__link">
+    OLCF
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-cc" title="Using C/C++" class="md-nav__link">
+    Using C/C++
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-fortran" title="Using Fortran" class="md-nav__link">
+    Using Fortran
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -756,18 +823,6 @@
   </li>
 
     
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../../../demo/demo/" title="Demo" class="md-nav__link">
-      Demo
-    </a>
-  </li>
-
-    
   </ul>
 </nav>
                   </div>
@@ -785,6 +840,60 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#openacc-at-a-glance" title="OpenACC at a glance" class="md-nav__link">
+    OpenACC at a glance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-openacc-on-ascr-facilities" title="How to use OpenACC on ASCR facilities" class="md-nav__link">
+    How to use OpenACC on ASCR facilities
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#olcf" title="OLCF" class="md-nav__link">
+    OLCF
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-cc" title="Using C/C++" class="md-nav__link">
+    Using C/C++
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-fortran" title="Using Fortran" class="md-nav__link">
+    Using Fortran
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -796,7 +905,143 @@
               
                 
                 
-                <h1 id="for-bronson-to-write">(For Bronson to write)<a class="headerlink" href="#for-bronson-to-write" title="Permanent link">&para;</a></h1>
+                <h1 id="openacc">OpenACC<a class="headerlink" href="#openacc" title="Permanent link">&para;</a></h1>
+<p>OpenACC is a set of standardized, high-level pragmas that enable C/C++ and Fortran programmers 
+to exploit parallel (co)processors, especially GPUs. OpenACC pragmas can be used to annotate 
+codes to enable data location, data transfer, and loop or code block parallelism.</p>
+<p>Though OpenACC has much in common with OpenMP, the syntax of the directives is different. 
+More importantly, OpenACC can best be described as having 
+a <em>descriptive</em> model, in constrast to the more <em>prescriptive</em> model presented by OpenMP.
+This difference in philosophy can most readily be seen by, e.g.,  comparing the <code>acc loop</code> directive
+to the OpenMP implementation of the equivalent construct. In OpenMP, the programmer has responsibility 
+to specify how the parallelism in a loop is distributed (e.g., via <code>distribute</code> and <code>schedule</code> clauses). 
+In OpenACC, the runtime determines how to decompose the iterations across gangs or workers and vectors.
+At an even higher level, an OpenACC programmer can use the <code>acc kernels</code> construct to allow the compiler complete freedom 
+to map the available parallelism in a code block to the available hardware.</p>
+<h2 id="openacc-at-a-glance">OpenACC at a glance<a class="headerlink" href="#openacc-at-a-glance" title="Permanent link">&para;</a></h2>
+<p>Some of the most important  data and control clauses for two of the most 
+used constructs in OpenACC programming - <code>$acc parallel</code> and <code>$acc kernels</code> - are 
+listed below. The data placement and movement clauses also appear in <code>$acc data</code> constructs.
+<code>$acc loop</code> provides control of parallelism similarly to <code>$acc parallel</code> but provides loop-level control. </p>
+<p>Much more detail can be found at:</p>
+<ul>
+<li>
+<p><a href="https://www.openacc.org/">openacc.org</a></p>
+</li>
+<li>
+<p><a href="../www.openacc.org/sites/default/files/inline.../OpenACC_Programming_Guide_0.pdf">OpenACC Best Practices Guide</a></p>
+</li>
+<li>
+<p><a href="https://developer.nvidia.com/openacc">NVIDIA OpenACC resources</a></p>
+</li>
+<li>
+<p><a href="https://www.olcf.ornl.gov/support/system-user-guides/accelerated-computing-guide/#371">OLCF Accelerator Programming Guide; Directive Programming</a></p>
+</li>
+<li>
+<p><a href="https://www.olcf.ornl.gov/support/tutorials/">OLCF Accelerator Programming Tutorials</a> (includes examples of interoperability with CUDA and GPU libraries like CuFFT)</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">construct</th>
+<th align="left">important clauses</th>
+<th align="right">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>$acc parallel</code></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">num_gangs(expression)</td>
+<td align="right">Controls how many parallel gangs are created</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">num_workers(expression)</td>
+<td align="right">Controls how many workers are created in each gang</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">vector_length(list)</td>
+<td align="right">Controls vector length of each worker</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">private(list)</td>
+<td align="right">A copy of each variable in list is allocated to each gang</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">firstprivate(list)</td>
+<td align="right">private variables initialized from host</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">reduction(operator:list)</td>
+<td align="right">private variables combined across gangs</td>
+</tr>
+<tr>
+<td align="left"><code>$acc kernels</code></td>
+<td align="left"></td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">copy(list)</td>
+<td align="right">Allocates memory on GPU and copies data from host to GPU when entering region and copies data to the host when exiting region</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">copyin(list)</td>
+<td align="right">Allocates memory on GPU and copies data from host to GPU when entering region</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">copyout(list)</td>
+<td align="right">Allocates memory on GPU and copies data to the host when exiting region</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">create(list)</td>
+<td align="right">Allocates memory on GPU but does not copy</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">present(list)</td>
+<td align="right">Data is already present on GPU from another containing data region</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-use-openacc-on-ascr-facilities">How to use OpenACC on ASCR facilities<a class="headerlink" href="#how-to-use-openacc-on-ascr-facilities" title="Permanent link">&para;</a></h2>
+<h3 id="olcf">OLCF<a class="headerlink" href="#olcf" title="Permanent link">&para;</a></h3>
+<h4 id="using-cc">Using C/C++<a class="headerlink" href="#using-cc" title="Permanent link">&para;</a></h4>
+<p>PGI Compiler</p>
+<div class="codehilite"><pre><span></span>$ module load cudatoolkit
+$ cc -acc vecAdd.c -o vecAdd.out
+</pre></div>
+
+<p>Cray Compiler</p>
+<div class="codehilite"><pre><span></span>$ module switch PrgEnv-pgi PrgEnv-cray
+$ module load craype-accel-nvidia35
+$ cc -h pragma=acc vecAdd.c -o vecAdd.out
+</pre></div>
+
+<h4 id="using-fortran">Using Fortran<a class="headerlink" href="#using-fortran" title="Permanent link">&para;</a></h4>
+<p>PGI Compiler</p>
+<div class="codehilite"><pre><span></span>$ module load cudatoolkit
+$ ftn -acc vecAdd.f90 -o vecAdd.out
+</pre></div>
+
+<p>Cray Compiler</p>
+<div class="codehilite"><pre><span></span>$ module switch PrgEnv-pgi PrgEnv-cray
+$ module load craype-accel-nvidia35
+$ ftn -h acc vecAdd.f90 -o vecAdd.out
+</pre></div>
                 
                   
                 
