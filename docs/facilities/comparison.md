@@ -64,9 +64,9 @@ nodes of the systems, and bring in appropriate headers for MPI, etc.
 
 |System-> | Cori | Theta | Titan |
 |:---:|:--------:|:---------:|:-----------------------:|
-| C++ | ? | `CC` | `CC` |
-| C | ? | `cc` | `cc` |
-| Fortran | ? | `ftn` | `ftn` |
+| C++ | `CC` | `CC` | `CC` |
+| C | `cc` | `cc` | `cc` |
+| Fortran | `ftn` | `ftn` | `ftn` |
 
 
 ##Job Submission
