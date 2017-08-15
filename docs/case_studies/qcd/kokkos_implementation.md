@@ -1,6 +1,6 @@
 # Kokkos Implementation
 
-In this implementation, we will use the ```Kokkos::View``` type as our data container. Therefore, the [spinor and gaugefield classes](./code_structure.md#Data_Primitives) become
+In Kokkos, it is advised to use the ```Kokkos::View``` datatype as our data container. Therefore, the [spinor and gaugefield classes](./code_structure.md#Data_Primitives) become
 
 ```C++
 template<typename ST,int nspin> 
@@ -164,4 +164,16 @@ class GPUComplex<float> : public float2 {
 The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts. 
 Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the ```nvprof``` output in which the corresponding sections are not marked as hotspots any more. 
 
-Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that we are still limited by something else probably memory latency. We will discuss this issue in the results section.
+Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency. 
+
+# Index Computations
+
+Investigating this issue with ```nvprof``` indicates that performance might be impacted by significant integer calculation overhead. For example, the first screenshot below shows the instruction decomposition for the Wilson operator from the optimized [QUDA library](https://github.com/lattice/quda).
+
+![instruction decomposition for QUDA Wilson dslash kernel](images/quda_dslash_instruction_count.png)
+
+It exhibits that about 55% of all instructions are floating point instructions, there is basically no flow control and only about 28% integer arithmetic. For the Kokkos kernel ```nvprof``` shows the following picture.
+
+![instruction decomposition for Kokkos Wilson dslash kernel](images/kokkos_dslash_instruction_count.png)
+
+This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. Since we are not doing significant amounts of index calculations in our kernel bodies (i.e. inside Kokkos functors), it means that Kokkos is inserting that, probably for indexing into the views. This can hurt performance especially on older GPU architectures and also on KNL, where integer operations are not vectorized. Currently, we do not see an easy workaround as this behaviour is buried inside the Kokkos framework.

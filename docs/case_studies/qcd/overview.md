@@ -11,7 +11,7 @@ euclidian space-time is discretized by introducing a lattice spacing $a$ as well
 ## Wilson Fermions
 The most expensive part of Lattice QCD is the calculation of so-called quark propagators, i.e.
 computing the solution of the Dirac equation
-$(m - /\!\!\!\!D)\psi = \eta$, where $m$ is the mass of the particle, $\eta$ is a given vector (we will refer to this object as *source* or *right-hand-side spinor*)
+$(m - /\!\!\!\!D)\psi = \eta$, where $m$ is the mass of the quark, $\eta$ is a given vector (we will refer to this object as *source* or *right-hand-side spinor*)
 and $/\!\!\!\!D$ is a so-called gauge-covariant, Fermion derivative operator. There are many possibilities for discretizing the
 continuum version of the Fermion derivative operator and the most common one are the so-called [Wilson fermions](). In this discretizaton,
 the operator, also called Wilson operator, is given by
