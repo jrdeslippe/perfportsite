@@ -34,26 +34,6 @@ The best approach to ameliorate this problem is often to simply use a memory cop
 copy compared to the work done in the library is often small, and the use of a localized copy obviates the
 need to change data structures pervasively throughout the code.  
 
-## Considerations for using libraries for portable performance  
-
-Pros
-
-* Often encapsulate much of the computational intensity found in scientific codes
-
-* Can allow immediate portability under some circumstances
-
-* Performance becomes a task for library authors/maintainers
-
-Cons
-
-* Limited set of portable libraries at present
-
-* May not capture all the important/expensive tasks in a given code  
-
-* Often require recasting data structures to match library requirements
-
-* Opaque interior threading models 
-
 ## Some popular scientific libraries available on ASCR facilities
 
 * [BLAS/LAPACK](http://www.netlib.org/lapack/) - dense linear algebra
@@ -77,4 +57,20 @@ Cons
 * [PETSc](https://www.mcs.anl.gov/petsc/) - PDE solvers
 
     - PETSc is much more like a framework, and often requires more extensive code changes to use efficiently 
+
+
+## Benefits and Challenges
+
+### Benefits
+
+* Often encapsulate much of the computational intensity found in scientific codes
+* Can allow immediate portability under some circumstances
+* Performance becomes a task for library authors/maintainers
+
+### Challenges
+
+* Limited set of portable libraries at present
+* May not capture all the important/expensive tasks in a given code
+* Often require recasting data structures to match library requirements
+* Opaque interior threading models
 
