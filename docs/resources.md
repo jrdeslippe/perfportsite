@@ -18,7 +18,9 @@
 
 * ALCF
 
-    * [CUG 2016 presentations](http://esp.alcf.anl.gov/#ALCF_Theta_ESP_IXPUG2016_talks)
+    * [CUG 2016
+      presentations](http://esp.alcf.anl.gov/#ALCF_Theta_ESP_IXPUG2016_talks)
+      from ALCF Theta Early Science Program
 
     * ALCF Theta Early Science Program Technical Reports - these these
       describe the code development, porting, and optimization efforts of each
