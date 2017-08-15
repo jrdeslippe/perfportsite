@@ -255,3 +255,17 @@ ftn-6430 ftn: ACCEL MAIN, File = main.f90, Line = 12
 Note in the last compiler report that OpenMP automatically threads the loop and
 partitions the threads into threadblocks of the appropriate size for the device
 executing the loop.
+
+## Benefits and Challenges
+
+### Benefits
+
+* Available for many different languages
+* Prescriptive control of execution
+* Allow performance optimization
+* Controlled by well-defined standards bodies
+
+### Challenges
+
+* Sensitive to compiler support/maturity
+* Evolving standards
