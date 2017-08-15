@@ -29,6 +29,15 @@ from its official documentation.
   collected and analysis produced by use of these tools can help the user to
   find answers to two fundamental programming questions: _How fast is my
   program running?_ and _How can I make it run faster?_
+- [HPCToolkit](http://hpctoolkit.org/): HPCToolkit is an integrated suite of
+  tools for measurement and analysis of program performance on computers
+  ranging from multicore desktop systems to the nation's largest
+  supercomputers. By using statistical sampling of timers and hardware
+  performance counters, HPCToolkit collects accurate measurements of a
+  program's work, resource consumption, and inefficiency and attributes them
+  to the full calling context in which they occur. HPCToolkit works with
+  multilingual, fully optimized applications that are statically or
+  dynamically linked.
 - [Intel Advisor](https://software.intel.com/en-us/intel-advisor-xe):
   Intel Advisor is used early in the process of adding vectorization into your
   code, or while converting parts of a serial program to a parallel
@@ -47,3 +56,142 @@ from its official documentation.
   TAU Performance System is a portable profiling and tracing toolkit for
   performance analysis of parallel programs written in Fortran, C, C++, UPC,
   Java, Python.
+
+##Using Tools on ASCR Facility Systems
+
+Below are brief instructions and links to documentation or presentations on
+using some of the performance analysis tools on the current systems.
+
+* Jump to:
+    * [Cori](#cori_usage)
+    * [Theta](#theta_usage)
+    * [Titan](#titan_usage)
+
+###<a name="cori_usage"></a>Cori
+
+####Allinea MAP
+
+NERSC's [documentation on
+MAP](http://www.nersc.gov/users/software/performance-and-debugging-tools/MAP/)
+explains the software environment setup, how to run MAP on Cori using the GUI
+client or command-line mode. It also discusses looking at profiling results in
+the GUI.
+
+####CrayPAT
+
+NERSC's [documentation on
+CrayPAT](http://www.nersc.gov/users/software/performance-and-debugging-tools/craypat/)
+explains how to set up and use CrayPAT on Cori. It includes hot to use the
+Cray Apprentice2 GUI to visualize performance data and Cray Reveal for
+loopmark and source code analysis.
+
+####Intel Advisor
+
+NERSC's [documentation on
+Advisor](http://www.nersc.gov/users/software/performance-and-debugging-tools/advisor/)
+explains how to use it on Cori, including how to launch jobs and how to use
+the GUI to view results.
+
+####Intel VTune Amplifier
+
+NERSC's [documentation on
+VTune](http://www.nersc.gov/users/software/performance-and-debugging-tools/vtune/)
+explains how to use VTune Amplifier XE on Cori, including module setup,
+linking with `-dynamic`, and compiling with `-g`. It also has example job
+scripts for collecting different kinds of profiling data and a section on
+using the VTUne GUI.  ```
+
+
+
+###<a name="theta_usage"></a>Theta
+
+####Allinea MAP
+
+Ryan Huylguin's
+[presentation](https://www.alcf.anl.gov/files/hulguin-allinea_ddt_map-v1.pdf)
+explains the basic setup and gives example `aprun` syntax for running under
+Allinea MAP. You use this syntax in the `aprun` command in your Cobalt job
+script.
+
+####CrayPAT
+
+A Cray
+[presentation](https://www.alcf.anl.gov/files/wagenbreth-perftools_Argonne_30april2017_v2.0_1.pdf)
+given at ALCF describes how to load appropriate modules and build your code to
+use CrayPAT, both the "lite" and full versions. You then run your code using
+the normal Cobalt job script. Note that you must first load the module to
+select the Cray programming environment (and compile/recompile your code with
+that environment). The default is the Intel environment, so if you have not
+changed it here is a command to switch to the Cray environment:
+
+```
+module swap PrgEnv-intel PrgEnv-cray
+```
+
+####HPCToolkit
+
+Mark Krentel's [presentation](https://www.alcf.anl.gov/files/hpctoolkit.pdf)
+has quick start information for using HPCToolkit on Theta. In the `aprun`
+command in your job script, you insert `hpcstruct` before your executable
+program name.
+
+####Intel Advisor & VTune Amplifier
+
+James Tullos' [quick start
+presentation](https://www.alcf.anl.gov/files/Tullos-Using_Intel_VTune_Amplifier_XE_on_Knights_Landing_1.1.pdf)
+covers usage of Advisor as well as VTune Amplifier. To run the VTune Amplifier
+command line on theta, insert the `amplxe-cl` command before your executable
+in the `aprun` command in your job script. For example, to look at hotspots:
+
+```bash
+...
+aprun ... amplxe-cl -collect advanced-hotspots -- myExecutable ....
+....
+```
+
+####Tuning and Analysis Utilities (TAU)
+
+For all TAU usage modes, you should first load the TAU module:
+
+```
+module load tau
+```
+
+The Hands-On section of Sameer Shende's
+[presentation](https://www.alcf.anl.gov/files/shende-TAU-ALCF-v1.0.pdf)
+illustrates using TAU on Theta via a Cobalt interactive session (`qsub
+-I`). You may also run a normal batch job, inserting the `tau_exec` command
+before your executable program name in the `aprun` command in your Cobalt
+batch script. To use TAU without recompiling your code, you must have linked
+it as a dynamic executable (link using `-dynamic`), and you should have
+compiled and linked with `-g`. To use with compiler and/or explicit
+source-code instrumentation, you should compile using the TAU compiler
+wrappers as explained in the presentation.
+
+
+###<a name="titan_usage"></a>Titan
+
+####CrayPAT
+
+OLCF's [documentation on
+CrayPAT](https://www.olcf.ornl.gov/kb_articles/software-craypat/) includes a
+10-step usage guide for basic analysis of your program on Titan using
+CrayPAT. It explains using the `pat_report` tool for text reports and
+Apprentice2 for GUI analysis. There are more details on the [OLCF CrayPAT
+software page](https://www.olcf.ornl.gov/kb_articles/software-craypat/).
+
+####NVPROF
+
+OLCF's [documentation on accelerator performance
+tools](https://www.olcf.ornl.gov/kb_articles/gpu-performance-tools/) explains
+how to set up your environment and run using the NVPROF profiler to gather
+performance data from the GPUs.
+
+####Tuning and Analysis Utilities (TAU)
+
+OLCF's [documentation on accelerator performance
+tools](https://www.olcf.ornl.gov/kb_articles/gpu-performance-tools/) briefly
+explains how use TAU profiling and tracing tools for CPU-GPU hybrid
+programs. There are more details on the [OLCF TAU software
+page](https://www.olcf.ornl.gov/kb_articles/software-tau/).
+
