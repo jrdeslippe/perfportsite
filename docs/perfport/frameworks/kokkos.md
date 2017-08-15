@@ -88,3 +88,16 @@ for ( int repeat = 0; repeat < nrepeat; repeat++ ) {
     });
   }, result );
 ```
+
+## Benefits and Challenges
+
+### Benefits
+
+* Provide good portability through the use of platform-dependent back-ends
+* Promote good programming practices
+
+### Challenges
+
+* Generally C++ only (at present)
+* Do not represent recognized standards(yet)
+* Evolving quickly

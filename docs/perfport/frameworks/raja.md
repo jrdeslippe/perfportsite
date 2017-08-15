@@ -53,3 +53,16 @@ RAJA::forall<RAJA::cuda_exec<CUDA_BLOCK_SIZE>>
   });
 checkSolution(C, N);
 ```
+
+## Benefits and Challenges
+
+### Benefits
+
+* Provide good portability through the use of platform-dependent back-ends
+* Promote good programming practices
+
+### Challenges
+
+* Generally C++ only (at present)
+* Do not represent recognized standards(yet)
+* Evolving quickly
