@@ -92,4 +92,16 @@ $ ftn -h acc vecAdd.f90 -o vecAdd.out
 ```
 
 
+## Benefits and Challenges (BRONSON TO SUPPLEMENT)
 
+### Benefits
+
+* Available for many different languages
+* Prescriptive control of execution
+* Allow performance optimization
+* Controlled by well-defined standards bodies
+
+### Challenges
+
+* Sensitive to compiler support/maturity
+* Evolving standards
