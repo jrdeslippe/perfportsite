@@ -252,8 +252,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cori" title="Cori" class="md-nav__link">
-    Cori
+  <a href="#theta" title="Theta" class="md-nav__link">
+    Theta
   </a>
   
     <nav class="md-nav">
@@ -279,8 +279,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#theta" title="Theta" class="md-nav__link">
-    Theta
+  <a href="#titan" title="Titan" class="md-nav__link">
+    Titan
   </a>
   
     <nav class="md-nav">
@@ -306,41 +306,14 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#titan" title="Titan" class="md-nav__link">
-    Titan
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#job-script_2" title="Job Script" class="md-nav__link">
-    Job Script
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#job-submit-command_2" title="Job Submit Command" class="md-nav__link">
-    Job Submit Command
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cori_1" title="Cori" class="md-nav__link">
+  <a href="#cori" title="Cori" class="md-nav__link">
     Cori
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#job-script_3" title="Job Script" class="md-nav__link">
+  <a href="#job-script_2" title="Job Script" class="md-nav__link">
     Job Script
   </a>
   
@@ -842,6 +815,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/qcd/results_summary/" title="Results Summary" class="md-nav__link">
+      Results Summary
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -941,8 +926,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cori" title="Cori" class="md-nav__link">
-    Cori
+  <a href="#theta" title="Theta" class="md-nav__link">
+    Theta
   </a>
   
     <nav class="md-nav">
@@ -968,8 +953,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#theta" title="Theta" class="md-nav__link">
-    Theta
+  <a href="#titan" title="Titan" class="md-nav__link">
+    Titan
   </a>
   
     <nav class="md-nav">
@@ -995,41 +980,14 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#titan" title="Titan" class="md-nav__link">
-    Titan
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#job-script_2" title="Job Script" class="md-nav__link">
-    Job Script
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#job-submit-command_2" title="Job Submit Command" class="md-nav__link">
-    Job Submit Command
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cori_1" title="Cori" class="md-nav__link">
+  <a href="#cori" title="Cori" class="md-nav__link">
     Cori
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#job-script_3" title="Job Script" class="md-nav__link">
+  <a href="#job-script_2" title="Job Script" class="md-nav__link">
     Job Script
   </a>
   
@@ -1108,13 +1066,13 @@
 <td align="center">Processor On-Package Memory</td>
 <td align="center">16 GB MCDRAM</td>
 <td align="center">16 GB MCDRAM</td>
-<td align="center">n/a</td>
+<td align="center">n/a (6 GB GDDR5 on K20X GPU)</td>
 </tr>
 <tr>
 <td align="center">Processor DRAM</td>
 <td align="center">96 GB DDR4</td>
 <td align="center">192 GB DDR4</td>
-<td align="center">32 GB</td>
+<td align="center">32 GB DDR3</td>
 </tr>
 <tr>
 <td align="center">Accelerator</td>
@@ -1405,11 +1363,8 @@ nodes of the systems, and bring in appropriate headers for MPI, etc.</p>
 </tbody>
 </table>
 <h2 id="job-submission">Job Submission<a class="headerlink" href="#job-submission" title="Permanent link">&para;</a></h2>
-<h3 id="cori">Cori<a class="headerlink" href="#cori" title="Permanent link">&para;</a></h3>
-<h4 id="job-script">Job Script<a class="headerlink" href="#job-script" title="Permanent link">&para;</a></h4>
-<h4 id="job-submit-command">Job Submit Command<a class="headerlink" href="#job-submit-command" title="Permanent link">&para;</a></h4>
 <h3 id="theta"><a href="https://www.alcf.anl.gov/XC40-system-runnning-jobs">Theta</a><a class="headerlink" href="#theta" title="Permanent link">&para;</a></h3>
-<h4 id="job-script_1">Job Script<a class="headerlink" href="#job-script_1" title="Permanent link">&para;</a></h4>
+<h4 id="job-script">Job Script<a class="headerlink" href="#job-script" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#COBALT -t 30</span>
 <span class="c1">#COBALT --attrs mcdram=cache:numa=quad</span>
@@ -1430,41 +1385,41 @@ aprun -n <span class="nv">$n_mpi_ranks</span> -N <span class="nv">$n_mpi_ranks_p
 
 <p>The <code>#COBALT -t 30</code> line indicates 30 minutes runtime. Generally, <code>#COBALT</code>
 lines are equivalent to specifying <code>qsub</code> command-line arguments.</p>
-<h4 id="job-submit-command_1">Job Submit Command<a class="headerlink" href="#job-submit-command_1" title="Permanent link">&para;</a></h4>
+<h4 id="job-submit-command">Job Submit Command<a class="headerlink" href="#job-submit-command" title="Permanent link">&para;</a></h4>
 <p><div class="codehilite"><pre><span></span>qsub -n 512 ./theta_script.sh
 </pre></div>
 The <code>-n 512</code> argument requests 512 nodes.</p>
-<h3 id="titan">Titan<a class="headerlink" href="#titan" title="Permanent link">&para;</a></h3>
-<h4 id="job-script_2">Job Script<a class="headerlink" href="#job-script_2" title="Permanent link">&para;</a></h4>
+<h3 id="titan"><a href="https://www.olcf.ornl.gov/support/system-user-guides/titan-user-guide/#273">Titan</a><a class="headerlink" href="#titan" title="Permanent link">&para;</a></h3>
+<h4 id="job-script_1">Job Script<a class="headerlink" href="#job-script_1" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#PBS -A &lt;yourOLCFProjectName&gt;</span>
 <span class="c1">#PBS -N test</span>
 <span class="c1">#PBS -j oe</span>
 <span class="nb">export</span> <span class="nv">n_nodes</span><span class="o">=</span><span class="nv">$JOBSIZE</span>
-<span class="nb">export</span> <span class="nv">n_mpi_ranks_per_node</span><span class="o">=</span><span class="m">32</span>
+<span class="nb">export</span> <span class="nv">n_mpi_ranks_per_node</span><span class="o">=</span><span class="m">8</span>
 <span class="nb">export</span> <span class="nv">n_mpi_ranks</span><span class="o">=</span><span class="k">$((</span><span class="nv">$n_nodes</span> <span class="o">*</span> <span class="nv">$n_mpi_ranks_per_node</span><span class="k">))</span>
 
 <span class="nb">cd</span> <span class="nv">$MEMBERWORK</span>/&lt;yourOLCFProjectName&gt;
 date
 
-<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">16</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">2</span>
 
 aprun -n <span class="nv">$n_mpi_ranks</span> -N <span class="nv">$n_mpi_ranks_per_node</span> <span class="se">\</span>
-  -d <span class="m">16</span>  &lt;executable&gt; &lt;executable args&gt;
+  -d <span class="m">2</span>  &lt;executable&gt; &lt;executable args&gt;
 </pre></div>
 
-<h4 id="job-submit-command_2">Job Submit Command<a class="headerlink" href="#job-submit-command_2" title="Permanent link">&para;</a></h4>
+<h4 id="job-submit-command_1">Job Submit Command<a class="headerlink" href="#job-submit-command_1" title="Permanent link">&para;</a></h4>
 <p><div class="codehilite"><pre><span></span>qsub -l nodes=512 ./theta_script.sh
 </pre></div>
 The <code>-l nodes=512</code> argument requests 512 nodes (this can also be put in the batch script).</p>
-<h3 id="cori_1">Cori<a class="headerlink" href="#cori_1" title="Permanent link">&para;</a></h3>
+<h3 id="cori"><a href="http://www.nersc.gov/users/computational-systems/cori/running-jobs/">Cori</a><a class="headerlink" href="#cori" title="Permanent link">&para;</a></h3>
 <p>NERSC provides a <a href="https://my.nersc.gov/script_generator.php">page in the MyNERSC
 website</a> which generates job scripts
 automatically based on specified runtime configurations. An example script is
 shown below, in which a code uses 512 nodes of Xeon Phi with MCDRAM configured
 in "flat" mode, with 4 MPI processes per node and 34 OpenMP threads per MPI
 process, using 2 hyper-threads per physical core of Xeon Phi:</p>
-<h3 id="job-script_3">Job Script<a class="headerlink" href="#job-script_3" title="Permanent link">&para;</a></h3>
+<h3 id="job-script_2">Job Script<a class="headerlink" href="#job-script_2" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -N 512</span>
 <span class="c1">#SBATCH -C knl,quad,flat</span>

@@ -739,6 +739,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../results_summary/" title="Results Summary" class="md-nav__link">
+      Results Summary
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -903,7 +915,7 @@
 </pre></div>
 
 <p>Here, the type <code>TST</code> denotes a thread-spinor-type which belongs to the <code>CBThreadSpinor</code> class. It is important to make the distinction between <code>CBSpinor</code> and <code>CBThreadSpinor</code> because, depending on the performance portability framework used, this type has to be different on CPU or GPU. What we would like to achieve ultimately is displayed in the picture below:</p>
-<p><img alt="A demo image" src="../images/gpu_vs_cpu_vec.png" /></p>
+<p><img alt="Vectorization on GPU and CPU" src="../images/gpu_vs_cpu_vec.png" /></p>
 <p>In case of the GPU (left), individual threads are each working on a single/scalar entry of the global spinor, i.e. on a single right hand side component. In case of the CPU (right), each thread is working on a chunk of right hand sites, ideally using its vector units. In both cases, the input and output spinor datatype is the same and the work spinor type is optimized for the targeted architecture. </p>
 <p>Note that, similar to the data classes discussed above, this skeleton-dslash allows us to specialize the Wilson operator for a variety of performance portable frameworks. Additionally, if we need more architectural specialization than the various frameworks could offer, this can be implemented cleanly by operator overloading and template specializations.</p>
                 

@@ -360,16 +360,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#considerations-for-using-libraries-for-portable-performance" title="Considerations for using libraries for portable performance" class="md-nav__link">
-    Considerations for using libraries for portable performance
+  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
+    Some popular scientific libraries available on ASCR facilities
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
-    Some popular scientific libraries available on ASCR facilities
+  <a href="#benefits-and-challenges" title="Benefits and Challenges" class="md-nav__link">
+    Benefits and Challenges
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benefits" title="Benefits" class="md-nav__link">
+    Benefits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenges" title="Challenges" class="md-nav__link">
+    Challenges
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -737,6 +757,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../case_studies/qcd/results_summary/" title="Results Summary" class="md-nav__link">
+      Results Summary
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -809,16 +841,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#considerations-for-using-libraries-for-portable-performance" title="Considerations for using libraries for portable performance" class="md-nav__link">
-    Considerations for using libraries for portable performance
+  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
+    Some popular scientific libraries available on ASCR facilities
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Some popular scientific libraries available on ASCR facilities" class="md-nav__link">
-    Some popular scientific libraries available on ASCR facilities
+  <a href="#benefits-and-challenges" title="Benefits and Challenges" class="md-nav__link">
+    Benefits and Challenges
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benefits" title="Benefits" class="md-nav__link">
+    Benefits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenges" title="Challenges" class="md-nav__link">
+    Challenges
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -867,34 +919,6 @@ the frequent requirement to recast data structures used in the code to the forma
 The best approach to ameliorate this problem is often to simply use a memory copy: The relative cost of the 
 copy compared to the work done in the library is often small, and the use of a localized copy obviates the
 need to change data structures pervasively throughout the code.  </p>
-<h2 id="considerations-for-using-libraries-for-portable-performance">Considerations for using libraries for portable performance<a class="headerlink" href="#considerations-for-using-libraries-for-portable-performance" title="Permanent link">&para;</a></h2>
-<p>Pros</p>
-<ul>
-<li>
-<p>Often encapsulate much of the computational intensity found in scientific codes</p>
-</li>
-<li>
-<p>Can allow immediate portability under some circumstances</p>
-</li>
-<li>
-<p>Performance becomes a task for library authors/maintainers</p>
-</li>
-</ul>
-<p>Cons</p>
-<ul>
-<li>
-<p>Limited set of portable libraries at present</p>
-</li>
-<li>
-<p>May not capture all the important/expensive tasks in a given code  </p>
-</li>
-<li>
-<p>Often require recasting data structures to match library requirements</p>
-</li>
-<li>
-<p>Opaque interior threading models </p>
-</li>
-</ul>
 <h2 id="some-popular-scientific-libraries-available-on-ascr-facilities">Some popular scientific libraries available on ASCR facilities<a class="headerlink" href="#some-popular-scientific-libraries-available-on-ascr-facilities" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
@@ -936,6 +960,20 @@ need to change data structures pervasively throughout the code.  </p>
 <li>PETSc is much more like a framework, and often requires more extensive code changes to use efficiently </li>
 </ul>
 </li>
+</ul>
+<h2 id="benefits-and-challenges">Benefits and Challenges<a class="headerlink" href="#benefits-and-challenges" title="Permanent link">&para;</a></h2>
+<h3 id="benefits">Benefits<a class="headerlink" href="#benefits" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Often encapsulate much of the computational intensity found in scientific codes</li>
+<li>Can allow immediate portability under some circumstances</li>
+<li>Performance becomes a task for library authors/maintainers</li>
+</ul>
+<h3 id="challenges">Challenges<a class="headerlink" href="#challenges" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Limited set of portable libraries at present</li>
+<li>May not capture all the important/expensive tasks in a given code</li>
+<li>Often require recasting data structures to match library requirements</li>
+<li>Opaque interior threading models</li>
 </ul>
                 
                   

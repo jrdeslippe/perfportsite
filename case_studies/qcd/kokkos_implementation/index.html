@@ -735,6 +735,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#specialization-for-gpu" title="Specialization for GPU" class="md-nav__link">
+    Specialization for GPU
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -751,6 +758,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../results_summary/" title="Results Summary" class="md-nav__link">
+      Results Summary
+    </a>
   </li>
 
         
@@ -847,6 +866,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#specialization-for-gpu" title="Specialization for GPU" class="md-nav__link">
+    Specialization for GPU
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -868,7 +894,7 @@
                 
                 
                 <h1 id="kokkos-implementation">Kokkos Implementation<a class="headerlink" href="#kokkos-implementation" title="Permanent link">&para;</a></h1>
-<p>In this implementation, we will use the <code>Kokkos::View</code> type as our data container. Therefore, the <a href="../code_structure/#Data_Primitives">spinor and gaugefield classes</a> become</p>
+<p>In Kokkos, it is advised to use the <code>Kokkos::View</code> datatype as our data container. Therefore, the <a href="../code_structure/#Data_Primitives">spinor and gaugefield classes</a> become</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
 <span class="k">class</span> <span class="nc">CBSpinor</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span> 
@@ -889,7 +915,7 @@
 </pre></div>
 
 <p>Note that the site index dimension is a runtime dimension (denoted by <code>*</code>) whereas the other dimensions - color and spin - are fixed (denoted by <code>[const]</code>). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code. </p>
-<p>In the <a href="../code_structure/#wilson_operator">Wilsion operator class</a>, all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes</p>
+<p>In the <a href="../code_structure/#wilson_operator">Wilson operator class</a>, all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
@@ -971,7 +997,50 @@ We therefore provided a template  specialization for the <code>CPUSIMDComplex</c
 <span class="p">}</span>
 </pre></div>
 
-<p>Note that we use inter-lane shuffle operations to swap complex and imaginary parts and use vectorized FMA operations. We suspect that compilers are unable to detect the opportunity of performing those inter-lane shuffles and thus fail to properly vectorize the code.</p>
+<p>Note that we use inter-lane shuffle operations to swap complex and imaginary parts and use vectorized FMA operations. We suspect that compilers are unable to detect the opportunity of performing those inter-lane shuffles and thus fail to properly vectorize the code. The amount of specialization employed here is contained in about 14 functions spreading across 182 lines of code. This is not a huge investment and also does not really destroy portability as most of the code is still written in a portable way.</p>
+<h3 id="specialization-for-gpu">Specialization for GPU<a class="headerlink" href="#specialization-for-gpu" title="Permanent link">&para;</a></h3>
+<p>Although vectorization issues are usually less severe on SIMT architectures, we ran into problems of vectorized loads and stores of complex numbers. using <code>nvprof</code>, we found that a load and store of a <code>Kokkos::complex</code> instance created two transactions, i.e. one for the real and one for the imaginary part. The <code>nvprof</code> screenshot shown below illustrates this issue.</p>
+<p><img alt="nvprof split transactions" src="../images/cuda_complex_split_transactions.png" /></p>
+<p>These <em>split-transactions</em> have the potential of wasting bandwidth and thus should be avoided. A (partial) solution is to use CUDA 9 instead of CUDA 8: apparently, the compiler improved so that it is able to remove at least all the split stores, but not all split loads.
+To improve that situation, we decide to write our own complex class which we derived from the CUDA <code>float2</code> datatype (this is for single precision, one could use <code>double2</code> for double precision). By doing so, we make sure that the data member has correct alignment properties and thus helps the compiler to issue optimized store and load iterations. The implementation of this class is sketched below.</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;&gt;</span>
+<span class="k">class</span> <span class="nc">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">float2</span> <span class="p">{</span> 
+  <span class="k">public</span><span class="o">:</span>
+    <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T2</span><span class="o">&gt;</span>
+    <span class="k">explicit</span>  <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">T1</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="n">T2</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="o">&gt;</span>
+    <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="n">T1</span><span class="o">&gt;&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+      <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="p">...</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts. 
+Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the <code>nvprof</code> output in which the corresponding sections are not marked as hotspots any more. </p>
+<p>Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency. </p>
+<h1 id="index-computations">Index Computations<a class="headerlink" href="#index-computations" title="Permanent link">&para;</a></h1>
+<p>Investigating this issue with <code>nvprof</code> indicates that performance might be impacted by significant integer calculation overhead. For example, the first screenshot below shows the instruction decomposition for the Wilson operator from the optimized <a href="https://github.com/lattice/quda">QUDA library</a>.</p>
+<p><img alt="instruction decomposition for QUDA Wilson dslash kernel" src="../images/quda_dslash_instruction_count.png" /></p>
+<p>It exhibits that about 55% of all instructions are floating point instructions, there is basically no flow control and only about 28% integer arithmetic. For the Kokkos kernel <code>nvprof</code> shows the following picture.</p>
+<p><img alt="instruction decomposition for Kokkos Wilson dslash kernel" src="../images/kokkos_dslash_instruction_count.png" /></p>
+<p>This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. Since we are not doing significant amounts of index calculations in our kernel bodies (i.e. inside Kokkos functors), it means that Kokkos is inserting that, probably for indexing into the views. This can hurt performance especially on older GPU architectures and also on KNL, where integer operations are not vectorized. Currently, we do not see an easy workaround as this behaviour is buried inside the Kokkos framework.</p>
                 
                   
                 
@@ -1005,13 +1074,13 @@ We therefore provided a template  specialization for the <code>CPUSIMDComplex</c
           </a>
         
         
-          <a href="../../nek/" title="NekBone" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../results_summary/" title="Results Summary" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                NekBone
+                Results Summary
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
