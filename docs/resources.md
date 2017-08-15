@@ -18,4 +18,12 @@
 
 * ALCF
 
+    * [CUG 2016 presentations](http://esp.alcf.anl.gov/#ALCF_Theta_ESP_IXPUG2016_talks)
+
+    * ALCF Theta Early Science Program Technical Reports - these these
+      describe the code development, porting, and optimization efforts of each
+      of the [12
+      projects](https://www.alcf.anl.gov/articles/alcf-selects-projects-theta-early-science-program)
+      in the ALCF Theta [Early Science Program](http://esp.alcf.anl.gov). _Coming in Fall 2018._
+
 Bronson / Jack / Tim to Fill In
