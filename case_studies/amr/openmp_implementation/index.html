@@ -794,7 +794,7 @@ non-invasive code modifications through directives which are ignored as
 comments if OpenMP is not activated during compilation.</p>
 <p>BoxLib already contains a large amount of OpenMP in the C++ framework to
 implement thread parallelization and loop tiling (see <a href="../parallelism/">here</a>
-and <a href="./code_layout.md">here</a> for more details). However, these directives are
+and <a href="../code_structure/">here</a> for more details). However, these directives are
 limited to version 3.0 and older, and consist primarily of multi-threading of
 loops, such that the Fortran kernel execution happens entirely within a
 thread-private region. This approach yields high performance on self-hosted
