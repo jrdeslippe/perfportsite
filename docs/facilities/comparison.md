@@ -8,8 +8,8 @@
 | Processor Cores | 68 | 64 | 16 CPU cores (in 8 physical modules) |
 | Processor Base Frequency | 1.4 GHz | 1.3 GHz | 2.2 GHz |
 | Processor Max Frequency | 1.6 GHz | 1.5 GHz | 3.1 GHz (disabled) |
-| Processor On-Package Memory | 16 GB MCDRAM | 16 GB MCDRAM | n/a |
-| Processor DRAM | 96 GB DDR4 | 192 GB DDR4 | 32 GB |
+| Processor On-Package Memory | 16 GB MCDRAM | 16 GB MCDRAM | n/a (6 GB GDDR5 on K20X GPU) |
+| Processor DRAM | 96 GB DDR4 | 192 GB DDR4 | 32 GB DDR3 |
 |Accelerator|(none)|(none)|[NVIDIA Tesla K20X ("Kepler")](http://www.nvidia.com/content/PDF/kepler/Tesla-K20X-BD-06397-001-v05.pdf)|
 | Nodes | 9 688  | 3 624 | 18 688 |
 | Perf. Per Node | 2.6 TF | 2.6 TF | 1.4 TF |
@@ -72,13 +72,6 @@ nodes of the systems, and bring in appropriate headers for MPI, etc.
 ##Job Submission
 
 
-###Cori
-
-####Job Script
-
-####Job Submit Command
-
-
 ###[Theta](https://www.alcf.anl.gov/XC40-system-runnning-jobs)
 
 ####Job Script
@@ -98,7 +91,7 @@ qsub -n 512 ./theta_script.sh
 The `-n 512` argument requests 512 nodes.
 
 
-###Titan
+###[Titan](https://www.olcf.ornl.gov/support/system-user-guides/titan-user-guide/#273)
 
 ####Job Script
 
@@ -115,7 +108,7 @@ qsub -l nodes=512 ./theta_script.sh
 The `-l nodes=512` argument requests 512 nodes (this can also be put in the batch script).
 
 
-### Cori
+###[Cori](http://www.nersc.gov/users/computational-systems/cori/running-jobs/)
 
 NERSC provides a [page in the MyNERSC
 website](https://my.nersc.gov/script_generator.php) which generates job scripts
