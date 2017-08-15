@@ -24,7 +24,7 @@ private:
 
 Note that the site index dimension is a runtime dimension (denoted by ```*```) whereas the other dimensions - color and spin - are fixed (denoted by ```[const]```). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code. 
 
-In the [Wilsion operator class](./code_structure.md#wilson_operator), all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes
+In the [Wilson operator class](./code_structure.md#wilson_operator), all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes
 
 ```C++
 template<typename GT, typename ST, typename TST>
@@ -121,4 +121,40 @@ void ComplexCMadd<float,8,CPUSIMDComplex,CPUSIMDComplex>(CPUSIMDComplex<float,8>
 }
 ```
 
-Note that we use inter-lane shuffle operations to swap complex and imaginary parts and use vectorized FMA operations. We suspect that compilers are unable to detect the opportunity of performing those inter-lane shuffles and thus fail to properly vectorize the code.
+Note that we use inter-lane shuffle operations to swap complex and imaginary parts and use vectorized FMA operations. We suspect that compilers are unable to detect the opportunity of performing those inter-lane shuffles and thus fail to properly vectorize the code. The amount of specialization employed here is contained in about 14 functions spreading across 182 lines of code. This is not a huge investment and also does not really destroy portability as most of the code is still written in a portable way.
+
+### Specialization for GPU
+Although vectorization issues are usually less severe on SIMT architectures, we ran into problems of vectorized loads and stores of complex numbers. using ```nvprof```, we found that a load and store of a ```Kokkos::complex``` instance created two transactions, i.e. one for the real and one for the imaginary part. These *split-transactions* waste bandwidth and should be avoided. A (partial) solution is to use CUDA 9 instead of CUDA 8: apparently, the compiler improved so that it is able to remove at least all the split stores, but not all split loads.
+To improve that situation, we decide to write our own complex class which we derived from the CUDA ```float2``` datatype (this is for single precision, one could use ```double2``` for double precision). By doing so, we make sure that the data member has correct alignment properties and thus helps the compiler to issue optimized store and load iterations. Using this class got rid of all uncoalesced data access issues even in CUDA 8. The implementation of that class is very straightforward and shown below.
+
+```C++
+template<>
+class GPUComplex<float> : public float2 { 
+  public:
+    explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>() {
+      x = 0.;
+      y = 0.;
+    }
+
+    template<typename T1, typename T2>
+    explicit  KOKKOS_INLINE_FUNCTION GPUComplex<float>(const T1& re, const T2& im) {
+      x = re;
+      y = im;
+    }
+    
+    explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>(const float& re, const float& im) {
+      x = re; y = im;
+    }
+    
+    template<typename T1>
+    KOKKOS_INLINE_FUNCTION GPUComplex<float>& operator=(const GPUComplex<T1>& src) {
+      x = src.x;
+      y = src.y;
+      return *this;
+    }
+    
+    ...
+};
+```
+
+The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts.
