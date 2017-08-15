@@ -63,6 +63,7 @@ pages:
           - Code Structure: case_studies/qcd/code_structure.md
           - Implementations:
             - Kokkos: case_studies/qcd/kokkos_implementation.md
+          - Results Summary: case_studies/qcd/results_summary.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
 - Other Resources: resources.md
