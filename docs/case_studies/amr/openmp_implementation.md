@@ -4,7 +4,9 @@ Since version 4.0, OpenMP has supported accelerator devices through data
 offloading and kernel execution semantics. OpenMP presents an appealing
 opportunity to achieve performance portability, as it requires fairly
 non-invasive code modifications through directives which are ignored as
-comments if OpenMP is not activated during compilation.
+comments if OpenMP is not activated during compilation. However, as we discuss
+below, it is currently challenging to achieve a portable implementation of any
+kernel (to say nothing of one which has high performance).
 
 BoxLib already contains a large amount of OpenMP in the C++ framework to
 implement thread parallelization and loop tiling (see [here](./parallelism.md)
@@ -154,3 +156,60 @@ off the device, since the fine grid `f` and the coarse grid `c` are not changed
 on the host before the next kernel which requires this data executes on the
 device. The only data which must be mapped to the device (but not mapped back)
 are the `lo` and `hi` bounds of the loop indices.
+
+## Challenges
+
+We encountered several significant barriers to achieving performance
+portability using OpenMP.
+
+### Undefined behavior of `target` construct in absence of a device
+
+OpenMP 4.0 introduced the `target` construct, allowing the use to move data
+among a host and its attached devices. The traditional `parallel` construct
+from earlier versions of the OpenMP specification do not specify a mechanism
+for executing code on a device, or how to move data to or from a device.
+Therefore, we explored the possibility of executing loops decorated with the
+`target` construct on a host, in order to compare the behavior of the code with
+the original loops which were annotated with the `parallel` construct.
+
+Unfortunately, the OpenMP 4.5 API specification does not specify the behavior
+of code regions decorated with a `target` construct in the absence of a device.
+We have found that this has resulted in a wide range in behavior of OpenMP
+implementations in different compilers when executing `target` regions on the
+host:
+
+* **GCC**: supports `target` regions on host CPU, but exhibits significant
+  performance degradation compared to traditional `parallel do` construct, due
+to a bug in the way threads are cached in libgomp.
+
+* **Intel**: by default looks for an x100-series Xeon Phi ("Knights Corner")
+  co-processor, and compilation will fail at link time if the KNC libraries are
+unavailable. If the libraries are available but the co-processor is not,
+however, it will fail at execution time because the KNC ISA is incompatible
+with KNL and Xeon.
+Fortunately, Intel does support host execution of the `target` construct via
+the `-qopenmp-offload=host` compiler flag. However, the product documentation
+does not specify the behavior of the OpenMP run time when `target` regions
+execute on the host.
+
+* **Cray**: supports execution of `target` construct on both CPU host and
+  device, through the `craype-accel-*` modules. To compile `target` regions for
+the host, one must load the `craype-accel-host` module; for devices, one must
+load the appropriate accelerator module, e.g., `craype-accel-nvidia60` for
+NVIDIA "Pascal" GPUs.
+
+### Compiler bugs
+
+Our progress in implementing the OpenMP `target` construct has also been
+hindered by compiler problems.
+
+* As noted above, GCC encounters a performance regression when executing
+  `target` regions on the host CPU. This has been reported in GCC Bugzilla as
+bug [#80859](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859).
+
+* CCE 8.6.0 and 8.6.1 (the latest available as of August 2017) encounter a
+  segmentation fault on one of the source files in BoxLib. This has been
+reported to Cray as bug #189702. CCE 8.6.1 was
+
+* CCE 8.6.1 fails to link BoxLib at all (without `target` constructs), with g++
+  tuple errors. This has been reported to Cray as bug #189760.
