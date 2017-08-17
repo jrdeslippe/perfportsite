@@ -16,7 +16,7 @@
     
     
       
-        <title>Definition - Performance Portability</title>
+        <title>Overview and Definition - Performance Portability</title>
       
     
     
@@ -80,7 +80,7 @@
                 </span>
               
             
-            Definition
+            Overview and Definition
           
         </span>
       </div>
@@ -241,9 +241,11 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
     
-    <a href="./" title="Definition" class="md-nav__link md-nav__link--active">
-      Definition
+    
+    <a href="./" title="Overview and Definition" class="md-nav__link md-nav__link--active">
+      Overview and Definition
     </a>
     
   </li>
@@ -784,6 +786,8 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
 </nav>
                   </div>
@@ -796,9 +800,62 @@
               
                 
                 
-                  <h1>Definition</h1>
-                
-                <p>The 2016 DOE Center of Excellence (COE) meeting in Phoenix brought together engineers from the DOE's Office of Science and National Nuclear Security Agency 
+                <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
+<p>As shown on the detailed <a href="http://performanceportability.org/facilities/comparison/">facility comparison page</a>, the Cori, Theta and Titan systems have a lot 
+in common including interconnect (Cray Gemini or Aries) and software environment. The most striking difference between the systems from a portability point 
+of view is the node-level architecture. 
+Cori and Theta both being containing Intel Knights Landing (KNL) powered nodes while Titan contains a heterogeneous architecture with an AMD 16-Core CPU 
+coupled with an NVIDIA K20X GPU (where the majority of the compute capacity lies) on each node. Comparing just the important node memory hierarchy and 
+parallelism features we have:</p>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>DDR Memory</th>
+<th>Device Memory</th>
+<th>Cores/SMs (DP)</th>
+<th>Vector-Width/Warp-Size (DP)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cori (KNL)</td>
+<td>96 GB</td>
+<td>16 GB</td>
+<td>68</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Theta (KNL)</td>
+<td>192 GB</td>
+<td>16 GB</td>
+<td>64</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Titan (K20X)</td>
+<td></td>
+<td>6 GB</td>
+<td>14 SMs, 896 CUDA cores</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<p>where DP stands for Double Precision and SM stands for Streaming Multiprocessor. Two challenges that need to be overcome by the performance portability 
+approaches are:</p>
+<ol>
+<li>
+<p>How to express parallelism in a portable way across the KNL processor cores and vector-lanes and across the 896 SIMT threads that the K20x 
+CUDA cores support. </p>
+</li>
+<li>
+<p>How to express data movement and locality across the memory hierarcy containing both host and device memory. </p>
+</li>
+</ol>
+<p>In the following pages we discuss how to measure a successful performance portability approach, what are the available approaches and some case-studies from 
+the Office of Science workload. First however, we turn our attention to defining what performance-portability means. </p>
+<h1 id="definition">Definition<a class="headerlink" href="#definition" title="Permanent link">&para;</a></h1>
+<p>The 2016 DOE Center of Excellence (COE) meeting in Phoenix brought together engineers from the DOE's Office of Science and National Nuclear Security Agency 
 as well as vendor staff (from Intel, NVIDIA, IBM, Cray and others) to share portability lessons and best practicies from their respect app-readiness 
 programs. One of the high-level take-away messages from the meeting is that "there is not yet a universally accepted defition of 'performance portability'". 
 There is generally agreement on what performance-portability "basically means" but details differ in everyone's idea for the term. A number of attendees 

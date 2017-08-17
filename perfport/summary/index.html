@@ -236,8 +236,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../definition/" title="Definition" class="md-nav__link">
-      Definition
+    <a href="../definition/" title="Overview and Definition" class="md-nav__link">
+      Overview and Definition
     </a>
   </li>
 
@@ -1072,9 +1072,9 @@ mostly ignoring this when running on a CPU or KNL system (when they work at all 
 <p>In many cases (the most common configuration at NERSC and ALCF), the KNLs are configured in cache mode where the on-chip MCDRAM is treated as a last-level 
 cache instead of as a addressable memory domain. In this case, applications running see only a single domain. </p>
 <h2 id="recommendations">Recommendations<a class="headerlink" href="#recommendations" title="Permanent link">&para;</a></h2>
-<p>At present, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly. But, as we saw in our 
-case studies, likely some level of code divergence (<code>IFDEF</code>s etc) will be necessary to get code that performs near its ceiling on all of Cori, Theta, Titan 
-and Summit. </p>
+<p>At present, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly (see individual approach pages 
+for list of pros + cons). But, as we saw in our case studies, likely some level of code divergence (<code>IFDEF</code>s etc) will be necessary to get code that performs
+near its ceiling on all of Cori, Theta, Titan and Summit. </p>
 <p>However, we've shown that performance-portability approaches and implementations are evolving and maturing extremely quickly, and now is a good time to 
 consider evaluating these approaches in your applications and device a longer strategy. </p>
 <p>In general, we have the following recommendations:</p>
