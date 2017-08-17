@@ -22,7 +22,7 @@ private:
 };
 ```
 
-Note that the site index dimension is a runtime dimension (denoted by ```*```) whereas the other dimensions - color and spin - are fixed (denoted by ```[const]```). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code. 
+Note that the site index dimension is a runtime dimension (denoted by ```*```) whereas the other dimensions - color and spin - are fixed (denoted by ```[const]```). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code.
 
 In the [Wilson operator class](./code_structure.md#wilson_operator), all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes
 
@@ -42,6 +42,8 @@ class Dslash {
     }
 };
 ```
+
+Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a neighbor class which either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture. 
 
 ## Complex Numbers and C++
 We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as 
