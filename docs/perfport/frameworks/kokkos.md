@@ -24,8 +24,10 @@ tutorial
 \#2](https://github.com/kokkos/kokkos-tutorials/tree/master/GTC2017/Exercises/02).
 
 ```C++
-  Kokkos::View<double*>  x( "x", 128 ); // a vector of length 128
-  Kokkos::View<double**> A( "A", 128, 128 ); // a matrix of size 128^2
+  const int N=128; const int M=128;
+  Kokkos::View<double*>  x( "x", M ); // a vector of length N
+  Kokkos::View<double*>  y( "y", N ); // a vector of length M
+  Kokkos::View<double**> A( "A", N, M ); // a matrix of size  NxM
 
   Kokkos::parallel_reduce( N, KOKKOS_LAMBDA ( int j, double &update ) {
     double temp2 = 0;
