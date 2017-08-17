@@ -47,7 +47,6 @@ pages:
             - Kokkos: perfport/frameworks/kokkos.md
             - RAJA: perfport/frameworks/raja.md
         - DSL: perfport/dsl/index.md
-        - Summary: perfport/summary/index.md
     - Case Studies:
         - BoxLib:
           - Overview: case_studies/amr/overview.md
@@ -67,6 +66,7 @@ pages:
           - Results Summary: case_studies/qcd/results_summary.md
         - NekBone: case_studies/nek/index.md
         - MD: case_studies/md/index.md
+    - Summary: perfport/summary/index.md
 - Other Resources: resources.md
 # see Brandon's markdown demo page here:
 #- Demo: demo/demo.md
