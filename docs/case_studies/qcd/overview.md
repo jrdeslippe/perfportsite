@@ -14,7 +14,7 @@ computing the solution of the Dirac equation
 $(m - /\!\!\!\!D)\psi = \eta$, where $m$ is the mass of the quark, $\eta$ is a given vector (we will refer to this object as *source* or *right-hand-side spinor*)
 and $/\!\!\!\!D$ is a so-called gauge-covariant, Fermion derivative operator. There are many possibilities for discretizing the
 continuum version of the Fermion derivative operator and the most common one are the so-called [Wilson fermions](). In this discretizaton,
-the operator, also called Wilson operator, is given by
+the operator, also called *Wilson operator* or *Dslash* (inspired by the mathematical notation), is given by
 
 $$
 /\!\!\!\!D(x,y) = \sum\limits_{\mu=0}^3 U_{\mu}(x)(1-\gamma_{\mu})\delta_{y,x+\hat{\mu}}+U^{\dagger}_{\mu}(x-\hat{\mu})(1+\gamma_{\mu})\delta_{y,x-\hat{\mu}}.
@@ -31,7 +31,7 @@ It is thus importanto to find out whether the Wilson operator can be implemented
 In this section we will briefly discuss architecture-independent implementation details of the Wilson operator. 
 
 ### Multiple Right Hand Sides
-An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side vectors simulatenously.
+An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side (MRHS) vectors simulatenously.
 This case is also relevant to many lattice QCD applications so that we have implemented this optimization in our small test case. 
 
 ### Arithmetic Intensity
