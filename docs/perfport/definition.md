@@ -1,4 +1,6 @@
-# Overview
+# Overview and Definition
+
+## Overview
 
 As shown on the detailed [facility comparison page](http://performanceportability.org/facilities/comparison/), the Cori, Theta and Titan systems have a lot 
 in common including interconnect (Cray Gemini or Aries) and software environment. The most striking difference between the systems from a portability point 
@@ -24,7 +26,7 @@ CUDA cores support.
 In the following pages we discuss how to measure a successful performance portability approach, what are the available approaches and some case-studies from 
 the Office of Science workload. First however, we turn our attention to defining what performance-portability means. 
 
-# Definition
+## Definition
 
 The 2016 DOE Center of Excellence (COE) meeting in Phoenix brought together engineers from the DOE's Office of Science and National Nuclear Security Agency 
 as well as vendor staff (from Intel, NVIDIA, IBM, Cray and others) to share portability lessons and best practicies from their respect app-readiness 

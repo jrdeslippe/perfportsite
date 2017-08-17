@@ -1,5 +1,8 @@
 # Summary and Recommendations
 
+We summarize below some of our high-level findings from the survey of available performance-portability options, the case-studies from the Office of Science 
+workload and from the outcome of recent DOE performance portability workshops.
+
 ## Comparison of Leading Approaches
 
 |Approach|Benefits|Challenges|
