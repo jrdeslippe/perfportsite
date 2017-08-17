@@ -22,7 +22,7 @@ private:
   // dims are: site, color, spin. 
   // the * means that the number of sites is not decided at
   // compile time, but at initialization
-  spin_container<ST*[color][spin]> data;
+  spin_container<ST*[3][spin]> data;
 };
 
 template<typename GT> 
@@ -62,17 +62,17 @@ public:
 
       Zero(res_sum);
 
-      // go for direction T - minus
+      // go for direction -T
       ProjectDir3<ST,TST,isign>(s_in, proj_res,NeighborTMinus(site,target_cb));
       mult_adj_u_halfspinor<GT,TST>(g_in_src_cb,proj_res,mult_proj_res,NeighborTMinus(site,target_cb),3);
       Recons23Dir3<TST,isign>(mult_proj_res,res_sum);
             
-      // go for direction T - plus
+      // go for direction +T
       ProjectDir3<ST,TST,-isign>(s_in,proj_res,NeighborTPlus(site,target_cb));
-      mult_u_halfspinor<GT,TST>(g_in_target_cb,proj_res,mult_proj_res,site,3);
+      mult_u_halfspinor<GT,TST>(g_in_target_cb,proj_res,mult_proj_res,site,NeighborTPlus(site,target_cb),3);
       Recons23Dir3<TST,-isign>(mult_proj_res, res_sum);
 
-      // go for other directions: -Z,+Z, -Y, +Y, -X, +X
+      // go for other directions: -Z, +Z, -Y, +Y, -X, +X
       ...
     }
   }
