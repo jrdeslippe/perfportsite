@@ -1,0 +1,18 @@
+- GCC
+  - "teams" on CPU - thread pooling problem
+  - 7.1 linking error with -foffload=nvptx-none
+    - full Fortran "target" -foffload support will come in 7.2
+    - only partially supported in 7.1
+    - wait for Thorsten before writing this down
+  - would be nice if it was more verbose during compilation
+    - IBM tells you exactly when it's generating PTX code
+    - GCC is usually mum
+
+- Intel
+  - by default, wants to offload to KNC
+    - does not work on KNL
+    - requires some device library to "offload" to KNL
+    - maybe an Intel bug? or a Cray bug?
+
+- Cray
+  - 8.5.7 compiler on Titan segfaults while compiling on our code
