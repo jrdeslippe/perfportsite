@@ -29,17 +29,17 @@ In the [Wilson operator class](./code_structure.md#wilson_operator), all what we
 ```C++
 template<typename GT, typename ST, typename TST>
 class Dslash {
-    public:
-    void operator(const CBSpinor<ST,4>& s_in,
-                  const CBGaugeField<GT>& g_in,
-                  CBSpinor<ST,4>& s_out,
-                  int plus_minus) 
-    {
-        // Threaded loop over sites
-        Kokkos::parallel_for(num_sites, KOKKOS_LAMBDA(int i) {
-            ...
-            });
-    }
+public:
+  void operator(const CBSpinor<ST,4>& s_in,
+                const CBGaugeField<GT>& g_in,
+                CBSpinor<ST,4>& s_out,
+                int plus_minus) 
+  {
+    // Threaded loop over sites
+    Kokkos::parallel_for(num_sites, KOKKOS_LAMBDA(int i) {
+      ...
+    });
+  }
 };
 ```
 
@@ -67,20 +67,24 @@ Vectorization in Kokkos is achieved by a two-level [nested parallelism](../../pe
 ```C++
 template<typename T,N> 
 struct CPUSIMDComplex {
-    Kokkos::complex<T> _data[N];
-    T& operator()(int lane) {
-        return _data[lane];
-    }
-    ...
+  Kokkos::complex<T> _data[N];
+    
+  T& operator()(int lane) {
+    return _data[lane];
+  }
+  
+  ...
 };
 
 template<typename T,N> 
 struct GPUSIMDComplex {
-    Kokkos::complex<T> _data;
-    T& operator()(int lane) {
-        return _data;
-    }
-    ...
+  Kokkos::complex<T> _data;
+    
+  T& operator()(int lane) {
+    return _data;
+  }
+  
+  ...
 };
 ```
 
@@ -94,13 +98,14 @@ We therefore provided a template  specialization for the ```CPUSIMDComplex``` da
 ```C++
 template<>
 struct CPUSIMDComplex<float,8> {
-    explicit CPUSIMDComplex<float,8>() {}
+  explicit CPUSIMDComplex<float,8>() {}
     
-    union {
-        Kokkos::complex<float> _data[8];
-        __m512 _vdata;
-    };
-    ...
+  union {
+    Kokkos::complex<float> _data[8];
+    __m512 _vdata;
+  };
+  
+  ...
 };
 ```
 

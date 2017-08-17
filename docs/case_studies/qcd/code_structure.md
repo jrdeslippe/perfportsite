@@ -17,19 +17,19 @@ For facilitating this workflow, we define spinor and gauge link classes (in C++-
 template<typename ST,int nspin> 
 class CBSpinor {
 public: 
-    ...
+  ...
 private:
-    // dims are: site, color, spin
-    spin_container<ST[site,color,spin]> data;
+  // dims are: site, color, spin
+  spin_container<ST[site,color,spin]> data;
 };
 
 template<typename GT> 
 class CBGaugeField {
 public:
-    ...
+  ...
 private:
-    // dims are: site, direction, color, color
-    gauge_container<GT[site,4,3,3]> data;
+  // dims are: site, direction, color, color
+  gauge_container<GT[site,4,3,3]> data;
 };
 ```
 
@@ -45,29 +45,29 @@ Our dslash class is implemented as follow:
 ```C++
 template<typename GT, typename ST, typename TST>
 class Dslash {
-    public:
-    void operator(const CBSpinor<ST,4>& s_in,
-                  const CBGaugeField<GT>& g_in,
-                  CBSpinor<ST,4>& s_out,
-                  int plus_minus) 
-    {
-        // Threaded loop over sites
-        parallel_for(int i=0; i<num_sites; i++){
-            CBThreadSpinor<TST,4> res_sum_;
-            CBThreadSpinor<TST,2> proj_res, mult_proj_res;
+  public:
+  void operator(const CBSpinor<ST,4>& s_in,
+                const CBGaugeField<GT>& g_in,
+                CBSpinor<ST,4>& s_out,
+                int plus_minus) 
+  {
+    // Threaded loop over sites
+    parallel_for(int i=0; i<num_sites; i++){
+      CBThreadSpinor<TST,4> res_sum_;
+      CBThreadSpinor<TST,2> proj_res, mult_proj_res;
         
-            //go for directions +T
-            //stream-in from +T direction and project to 2-spinor
-            project_dir<ST,TST>(s_in[i], i, proj_res, T_PLUS);
-            //multiply with gauge link
-            mult_adj_u_halfspinor<GT,TST>(g_in[i][T_PLUS], proj_res, mult_proj_res);
-            //reconstruct and add to result
-            reconstruct_dir<TST,ST>(mult_proj_res, res_sum);
+      //go for directions +T
+      //stream-in from +T direction and project to 2-spinor
+      project_dir<ST,TST>(s_in[i], i, proj_res, T_PLUS);
+      //multiply with gauge link
+      mult_adj_u_halfspinor<GT,TST>(g_in[i][T_PLUS], proj_res, mult_proj_res);
+      //reconstruct and add to result
+      reconstruct_dir<TST,ST>(mult_proj_res, res_sum);
             
-            //go for direction -T
-            ...
-        }
+      //go for direction -T
+      ...
     }
+  }
 };
 ```
 
