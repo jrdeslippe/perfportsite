@@ -1,12 +1,14 @@
 # Summary and Recommendations
 
-## Comparison of Approaches
+## Comparison of Leading Approaches
 
 |Approach|Benefits|Challenges|
 |:------------:|:-------------------:|:------------:|
-|OpenMP 4.5 | Standardized. Support for C, C++, Fortran | Reliant on quality of compiler implementation (which vary a lot) |
+|Libraries  | Mostly great when available | Many Cuda based libraries (e.g. CUFFT) are C only (require a bridge to use in FORTRAN) and don't have common interfaces. In many cases libraries don't exist for problem |
+|OpenMP 4.5 | Standardized. Support for C, C++, FORTRAN and others. Simple to get started. | Limiting in expressability (particularly on GPUs). Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems. |
+|OpenACC    | Standardized. Support for C, C++, FORTRAN. | Poor support in compilers (only PGI and Cray compilers) |
 |Kokkos     | Allows significant expressability (particularly on GPUs.) | Only supports C++. Vector parallelism. N |
-|RAJA|      |    |
+|DSLs       | Great when available | Limited to only a small number of communities. Need to be maintained and supported for new architectures |
 
 ## State of the Field
 
@@ -73,10 +75,37 @@ efficient vector code, meaning the parallel code here is limited to relatively s
 
 ### Memory Management
 
-As we mention above, the KNL and GPU
+As we mention above, the KNL and GPU architectures both have high-bandwidth on device memory as well as lower bandwidth access to traditional DDR on the 
+node. Since the support of unified virtual memory (UVM) on recent GPUs, both memory spaces can be accessed from the GPU or KNL. One difference is that 
+because host memory is still separated from the GPU via PCI-express or NVLink, the gap in latency and bandwidth compared to the device memory can be 
+signficantly higher. 
+
+In principle, directives like OpenMP's `map` function could be used to portably move data, the reality is that compiler implementations don't support this - 
+mostly ignoring this when running on a CPU or KNL system (when they work at all on these systems). 
+
+Kokkos allows the user to define separate host and devmem domains, which does support this functionality in a portable way.
+
+In many cases (the most common configuration at NERSC and ALCF), the KNLs are configured in cache mode where the on-chip MCDRAM is treated as a last-level 
+cache instead of as a addressable memory domain. In this case, applications running see only a single domain. 
 
 ## Recommendations
 
-At this point in time, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly. But, as we saw in our 
-case studies, likely some level of code divergence (`IFDEFS` etc) will be necessary to get code that performs near its ceiling on all of Cori, Theta, Titan 
+At present, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly. But, as we saw in our 
+case studies, likely some level of code divergence (`IFDEF`s etc) will be necessary to get code that performs near its ceiling on all of Cori, Theta, Titan 
 and Summit. 
+
+However, we've shown that performance-portability approaches and implementations are evolving and maturing extremely quickly, and now is a good time to 
+consider evaluating these approaches in your applications and device a longer strategy. 
+
+In general, we have the following recommendations:
+
+0. Actively profile your application using our suggested tools to make sure you have identified a minimal set of performance critical regions. 
+
+1. If a well-supported library or DSL is available to address your performance critical regions, use it.
+
+2. If you have an existing code that is not written in C++, evaluate whether OpenMP 4.5 can support your application with minimal code differences.
+
+3. If you have an existing code that is written in C++, evaluate whether Kokkos or OpenMP 4.5 can support your application with minimal code differences.
+
+4. Reach out to your DOE SC facility with use cases and deficiencies in these options so that we can actively push for changes in the upcoming releases and 
+standards.
