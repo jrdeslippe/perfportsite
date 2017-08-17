@@ -2,11 +2,11 @@
 
 Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:
 
-* stream-in the relevant spinors (or block of spinors in case of multiple right hand sides) from memory
-* project 4-spinors to 2-spinors
-* read relevant gauge links and apply the dslash to those vectors
-* inject 2-spinors into 4-spinors
-* stream-out the solution vectors to memory
+* stream-in the relevant neighboring spinor (or block of spinors in case of multiple right hand sides) from memory
+* project the 4-spinor to a 2-spinor
+* read relevant gauge link and multiply it or or its hermitian adjoint with the projected spinor 
+* reconstruct the 4-spinor from the resulting 2-spinor and accumulate to the sum over directions
+* stream-out the resulting summed vector to memory
 
 In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.
 
@@ -19,8 +19,10 @@ class CBSpinor {
 public: 
   ...
 private:
-  // dims are: site, color, spin
-  spin_container<ST[site,color,spin]> data;
+  // dims are: site, color, spin. 
+  // the * means that the number of sites is not decided at
+  // compile time, but at initialization
+  spin_container<ST*[color][spin]> data;
 };
 
 template<typename GT> 
@@ -29,7 +31,9 @@ public:
   ...
 private:
   // dims are: site, direction, color, color
-  gauge_container<GT[site,4,3,3]> data;
+  // The * means that the number of sites is not decided at 
+  // compile time, but at initialization
+  gauge_container<GT*[4][3][3]>;
 };
 ```
 
@@ -43,28 +47,32 @@ At this point in time, the dslash testcode is not multi-node ready, so we will f
 Our dslash class is implemented as follow:
 
 ```C++
-template<typename GT, typename ST, typename TST>
+template<typename GT, typename ST, typename TST, const int isign, const int target_cb>>
 class Dslash {
-  public:
+public:
   void operator(const CBSpinor<ST,4>& s_in,
                 const CBGaugeField<GT>& g_in,
-                CBSpinor<ST,4>& s_out,
-                int plus_minus) 
+                CBSpinor<ST,4>& s_out)
   {
     // Threaded loop over sites
     parallel_for(int i=0; i<num_sites; i++){
-      CBThreadSpinor<TST,4> res_sum_;
+
+      CBThreadSpinor<TST,4> res_sum;
       CBThreadSpinor<TST,2> proj_res, mult_proj_res;
-        
-      //go for directions +T
-      //stream-in from +T direction and project to 2-spinor
-      project_dir<ST,TST>(s_in[i], i, proj_res, T_PLUS);
-      //multiply with gauge link
-      mult_adj_u_halfspinor<GT,TST>(g_in[i][T_PLUS], proj_res, mult_proj_res);
-      //reconstruct and add to result
-      reconstruct_dir<TST,ST>(mult_proj_res, res_sum);
+
+      Zero(res_sum);
+
+      // go for direction T - minus
+      ProjectDir3<ST,TST,isign>(s_in, proj_res,NeighborTMinus(site,target_cb));
+      mult_adj_u_halfspinor<GT,TST>(g_in_src_cb,proj_res,mult_proj_res,NeighborTMinus(site,target_cb),3);
+      Recons23Dir3<TST,isign>(mult_proj_res,res_sum);
             
-      //go for direction -T
+      // go for direction T - plus
+      ProjectDir3<ST,TST,-isign>(s_in,proj_res,NeighborTPlus(site,target_cb));
+      mult_u_halfspinor<GT,TST>(g_in_target_cb,proj_res,mult_proj_res,site,3);
+      Recons23Dir3<TST,-isign>(mult_proj_res, res_sum);
+
+      // go for other directions: -Z,+Z, -Y, +Y, -X, +X
       ...
     }
   }
