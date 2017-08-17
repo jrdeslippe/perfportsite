@@ -92,16 +92,17 @@ $ ftn -h acc vecAdd.f90 -o vecAdd.out
 ```
 
 
-## Benefits and Challenges (BRONSON TO SUPPLEMENT)
+## Benefits and Challenges
 
 ### Benefits
 
 * Available for many different languages
-* Prescriptive control of execution
-* Allow performance optimization
+* Interoperable with other approaches (e.g. CUDA or OpenMP)
+* Allows performance optimization
 * Controlled by well-defined standards bodies
 
 ### Challenges
 
-* Sensitive to compiler support/maturity
+* Relatively few compiler implementations at present (versus OpenMP)
 * Evolving standards
+* Descriptive approach sometimes impedes very high performance for a given kernel
