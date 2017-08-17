@@ -34,7 +34,7 @@ pages:
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
 - Performance Portability:
-    - Definition: perfport/definition.md
+    - Overview and Definition: perfport/definition.md
     - Measurements: 
         - Measurement Techniques: perfport/measurements/index.md
         - Collecting Roofline on KNL: perfport/measurements/knl.md

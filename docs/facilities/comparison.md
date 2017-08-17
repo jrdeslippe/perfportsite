@@ -5,10 +5,10 @@
 |Facility|[NERSC](http://www.nersc.gov/)|[ALCF](http://www.alcf.anl.gov)|[OLCF](http://www.olcf.ornl.gov)|
 | Model | [Cray XC40](http://www.nersc.gov/users/computational-systems/cori/configuration/) | [Cray XC40]((http://www.alcf.anl.gov/user-guides/computational-systems#theta-(xc40)) | [Cray XK7](https://www.olcf.ornl.gov/computing-resources/titan-cray-xk7/) |
 |Processor|[Intel Xeon Phi 7250 ("Knights Landing")](https://ark.intel.com/products/94035/Intel-Xeon-Phi-Processor-7250-16GB-1_40-GHz-68-core)|[Intel Xeon Phi 7230 ("Knights Landing")](https://ark.intel.com/products/94034/Intel-Xeon-Phi-Processor-7230-16GB-1_30-GHz-64-core)|[AMD Opteron 6274 ("Interlagos")](https://www.amd.com/Documents/Opteron_6000_QRG.pdf)|
-| Processor Cores | 68 | 64 | 16 CPU cores (in 8 physical modules) |
+| Processor Cores | 68 | 64 | 16 CPU cores (2668 (896) SP (DP) CUDA cores on K20X GPU) |
 | Processor Base Frequency | 1.4 GHz | 1.3 GHz | 2.2 GHz |
 | Processor Max Frequency | 1.6 GHz | 1.5 GHz | 3.1 GHz (disabled) |
-| Processor On-Package Memory | 16 GB MCDRAM | 16 GB MCDRAM | n/a (6 GB GDDR5 on K20X GPU) |
+| On-Device Memory | 16 GB MCDRAM | 16 GB MCDRAM | (6 GB GDDR5 on K20X GPU) |
 | Processor DRAM | 96 GB DDR4 | 192 GB DDR4 | 32 GB DDR3 |
 |Accelerator|(none)|(none)|[NVIDIA Tesla K20X ("Kepler")](http://www.nvidia.com/content/PDF/kepler/Tesla-K20X-BD-06397-001-v05.pdf)|
 | Nodes | 9 688  | 3 624 | 18 688 |

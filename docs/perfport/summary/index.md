@@ -90,9 +90,9 @@ cache instead of as a addressable memory domain. In this case, applications runn
 
 ## Recommendations
 
-At present, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly. But, as we saw in our 
-case studies, likely some level of code divergence (`IFDEF`s etc) will be necessary to get code that performs near its ceiling on all of Cori, Theta, Titan 
-and Summit. 
+At present, the reality is that the options for writing performance portable code are fairly immature and evolving rapidly (see individual approach pages 
+for list of pros + cons). But, as we saw in our case studies, likely some level of code divergence (`IFDEF`s etc) will be necessary to get code that performs
+near its ceiling on all of Cori, Theta, Titan and Summit. 
 
 However, we've shown that performance-portability approaches and implementations are evolving and maturing extremely quickly, and now is a good time to 
 consider evaluating these approaches in your applications and device a longer strategy. 

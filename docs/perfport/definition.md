@@ -1,3 +1,31 @@
+# Overview
+
+As shown on the detailed [facility comparison page](http://performanceportability.org/facilities/comparison/), the Cori, Theta and Titan systems have a lot 
+in common including interconnect (Cray Gemini or Aries) and software environment. The most striking difference between the systems from a portability point 
+of view is the node-level architecture. 
+Cori and Theta both being containing Intel Knights Landing (KNL) powered nodes while Titan contains a heterogeneous architecture with an AMD 16-Core CPU 
+coupled with an NVIDIA K20X GPU (where the majority of the compute capacity lies) on each node. Comparing just the important node memory hierarchy and 
+parallelism features we have:
+
+| Node | DDR Memory | Device Memory | Cores/SMs (DP) | Vector-Width/Warp-Size (DP) | 
+|------|------------|---------------|-------|--------------|
+| Cori (KNL)  | 96 GB | 16 GB | 68 | 8 | 
+| Theta (KNL)  | 192 GB | 16 GB | 64 | 8 |
+| Titan (K20X) | | 6 GB | 14 SMs, 896 CUDA cores | 32 |
+
+where DP stands for Double Precision and SM stands for Streaming Multiprocessor. Two challenges that need to be overcome by the performance portability 
+approaches are:
+
+1. How to express parallelism in a portable way across the KNL processor cores and vector-lanes and across the 896 SIMT threads that the K20x 
+CUDA cores support. 
+
+2. How to express data movement and locality across the memory hierarcy containing both host and device memory. 
+
+In the following pages we discuss how to measure a successful performance portability approach, what are the available approaches and some case-studies from 
+the Office of Science workload. First however, we turn our attention to defining what performance-portability means. 
+
+# Definition
+
 The 2016 DOE Center of Excellence (COE) meeting in Phoenix brought together engineers from the DOE's Office of Science and National Nuclear Security Agency 
 as well as vendor staff (from Intel, NVIDIA, IBM, Cray and others) to share portability lessons and best practicies from their respect app-readiness 
 programs. One of the high-level take-away messages from the meeting is that "there is not yet a universally accepted defition of 'performance portability'". 
