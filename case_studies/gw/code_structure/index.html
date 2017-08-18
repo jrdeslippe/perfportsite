@@ -647,10 +647,46 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Code structure
+      </label>
     
     <a href="./" title="Code structure" class="md-nav__link md-nav__link--active">
       Code structure
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#orignal-code-structure" title="Orignal code structure" class="md-nav__link">
+    Orignal code structure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#portability-considerations" title="Portability considerations" class="md-nav__link">
+    Portability considerations
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -888,6 +924,29 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#orignal-code-structure" title="Orignal code structure" class="md-nav__link">
+    Orignal code structure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#portability-considerations" title="Portability considerations" class="md-nav__link">
+    Portability considerations
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -900,9 +959,40 @@
               
                 
                 
-                  <h1>Code structure</h1>
-                
-                
+                <h1 id="code-structure">Code structure<a class="headerlink" href="#code-structure" title="Permanent link">&para;</a></h1>
+<h2 id="orignal-code-structure">Orignal code structure<a class="headerlink" href="#orignal-code-structure" title="Permanent link">&para;</a></h2>
+<p>The inner loops of the FORTRAN-90 code have the following form. </p>
+<div class="codehilite"><pre><span></span><span class="c">!$OMP DO reduction(+:achtemp)</span>
+<span class="k">do </span><span class="n">igp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ngpown</span>
+  <span class="p">...</span>
+
+  <span class="k">do </span><span class="n">iw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span> <span class="c">! Original Inner Loop Bad for Vectorization</span>
+
+    <span class="p">...</span>
+
+    <span class="k">do </span><span class="n">ig</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncouls</span>
+
+      <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+      <span class="p">...</span>
+      <span class="n">scht</span> <span class="o">=</span> <span class="n">scht</span> <span class="o">+</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span> 
+
+    <span class="n">enddo</span> <span class="c">! loop over g</span>
+
+    <span class="n">achtemp</span><span class="p">(</span><span class="n">iw</span><span class="p">)</span> <span class="o">=</span> <span class="n">achtemp</span><span class="p">(</span><span class="n">iw</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5D0</span><span class="o">*</span><span class="n">scht</span><span class="o">*</span><span class="n">vcoul</span><span class="p">(</span><span class="n">igp</span><span class="p">)</span>
+
+  <span class="n">enddo</span>   
+
+<span class="n">enddo</span> 
+</pre></div>
+
+<p>where in the prouction we block the <code>ig</code> loop around the <code>iw</code> loop in order to gain data reuse. However, the inner 'ig' loop is left appropriately long to 
+get efficient vector performance - typically block sizes of around 256 are used, which is many vector lengths on a KNL processor.</p>
+<h2 id="portability-considerations">Portability considerations<a class="headerlink" href="#portability-considerations" title="Permanent link">&para;</a></h2>
+<p>There are essentially three hot-arrays in this code, for convenience named array1, array2, array3 corresponding to the three complex-double precision arrays 
+on the equation in the previous page: <span>\(M\)</span>, <span>\(\Omega\)</span> and <span>\(\tilde{\omega}\)</span>. It will be important to place these in the fastest memory tier. </p>
+<p>The data-structures are generally double-precision complex. This is a native FORTRAN type, but is less standard in C/C++. Performance additionally requires 
+a fast vectorizable-divide instruction for complex-numbers or a suitable work-around. This was an issue only the earlier generation Xeon-Phi, Knights 
+Corner, for example.</p>
                 
                   
                 

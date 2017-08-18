@@ -988,7 +988,9 @@ math-libaries. The standard code is implemented in FORTRAN-90 with MPI+OpenMP, w
 general used to parallelize over <span>\(n\)</span>, <span>\(n'\)</span>, while OpenMP parallelizes the <span>\(G'\)</span> loop and the <span>\(G\)</span> loop is left for vectorization. Significant data re-use of 
 the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require 3 <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. Initial 
 roofline plots for KNL Xeon Processors are shown below. </p>
-<p><center><img src="gwroofline.png" width=400></center></p>
+<p><center><img src="gwroofline.png" width=600></center></p>
+<p>The gap between the code performance and the ceiling can be explained by two factors: 1. the code lacks multiply-add balance 2. the divide instruction has a 
+multi-cycle latency. </p>
                 
                   
                 
