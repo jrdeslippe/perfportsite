@@ -15,13 +15,13 @@ In theory, one would like to make the data resident on the *device* all the time
 template <typename T, int D>
 class KArenaND {
 public:
-    //
-    // Allocates a dynamic memory arena of size sz.
-    // Returns a pointer to this memory.
-    //
-    virtual void* alloc (const std::vector<std::size_t>& _sz) = 0;
+  //
+  // Allocates a dynamic memory arena of size sz.
+  // Returns a pointer to this memory.
+  //
+  virtual void* alloc (const std::vector<std::size_t>& _sz) = 0;
 protected:
-    virtual void free() = 0;
+  virtual void free() = 0;
 };
 ```
 
@@ -31,21 +31,23 @@ We then (partially) specialize this class in order generate a ```KArena3D```-var
 template <typename T>
 class KArenaND<T,3> {
 public:
-    //
-    // Allocates a dynamic memory arena of size sz.
-    // Returns a pointer to this memory.
-    //
-    void* alloc (const std::vector<size_t>& sz_vec);
-    //pass access operator through to simplify things
-    T& operator()(int a0, int a1, int a2);
-    const T& operator()(int a0, int a1, int a2) const;
-    T& operator()(const IntVect& a);
-    const T& operator()(const IntVect& a) const;
-    //and return the view
-    Kokkos::View<T***>& viewData(){ return view; }
+  //
+  // Allocates a dynamic memory arena of size sz.
+  // Returns a pointer to this memory.
+  //
+  void* alloc (const std::vector<size_t>& sz_vec);
+  
+  // pass access operator through to simplify things
+  T& operator()(int a0, int a1, int a2);
+  const T& operator()(int a0, int a1, int a2) const;
+  T& operator()(const IntVect& a);
+  const T& operator()(const IntVect& a) const;
+  
+  // and return the view
+  Kokkos::View<T***>& viewData(){ return view; }
 private:
-    void free();
-    Kokkos::View<T***> view;
+  void free();
+  Kokkos::View<T***> view;
 };
 ```
 
@@ -55,13 +57,15 @@ The corresponding allocator looks like then:
 template<typename T>
 void* KArenaND<T,3>::alloc (const std::vector<size_t>& _sz_vec)
 {
-    if(_sz_vec.size()!=3){
-        BoxLib::Abort("Error, the vector size passed to KArenaND has to be equal to its dimension!");
-    }
-    //important: reverse dimensions for optimal access
-    view = Kokkos::View<T***>("KArena_view3D",_sz_vec[2],_sz_vec[1],_sz_vec[0]);
-    //provide interface compatibility with the rest of boxlib, but never use that pointer.
-    return reinterpret_cast<void*>(view.ptr_on_device());
+  if(_sz_vec.size()!=3){
+    BoxLib::Abort("Error, the vector size passed to KArenaND has to be equal to its dimension!");
+  }
+  
+  // important: reverse dimensions for optimal access
+  view = Kokkos::View<T***>("KArena_view3D",_sz_vec[2],_sz_vec[1],_sz_vec[0]);
+  
+  // provide interface compatibility with the rest of boxlib, but never use that pointer.
+  return reinterpret_cast<void*>(view.ptr_on_device());
 }
 ```
 
@@ -74,9 +78,9 @@ We further implemented operators to access the memory, which basically pass the 
 template<typename T>
 T& KArenaND<T,3>::operator()(int a0, int a1, int a2)
 {
-    //indices reversed compared to BoxLib
-    //in roder to ensure interface compatibility
-    return view(a2,a1,a0);
+  // indices reversed compared to BoxLib
+  // in roder to ensure interface compatibility
+  return view(a2,a1,a0);
 }
 ```
 
@@ -149,7 +153,7 @@ Furthermore, it is not clear what performance Kokkos can deliver for the tasks a
 
 ## Second Attempt
 Since porting the full application is a major effort but we still want to assess Kokkos' potential for BoxLib, we followed a different strategy in this attempt: we will port all performance relevant GMG kernels to Kokkos, copying data into a suitable view before calling the kernel, then using Kokkos' parallel dispatcher to launch the kernels, and then fill the results back into BoxLib's own ```BaseFab``` datatype. 
-It is important to note that BoxLib uses many offsets for indexing and those can be different for different fields. 
+It is important to note that BoxLib uses offsets in the array-indexing and those can be different for different fields (e.g. some fields have ghost zones and some do not).
 
 We thus decided to encapsulate this complexity into a new class. Below we show the declaration of the one specialized for ```FArraBox``` datatypes, i.e. ```BaseFab``` instances with types ```Real```.
 
@@ -158,94 +162,152 @@ template<>
 class ViewFab<Real> {
 public:
 
-    //swap indices here to get kokkos'-canonical layout
-    KOKKOS_INLINE_FUNCTION
-    Real& operator()(const int& i, const int& j, const int& k, const int& n = 0){
+  // swap indices here to get kokkos'-canonical layout
+  KOKKOS_INLINE_FUNCTION
+  Real& operator()(const int& i, const int& j, const int& k, const int& n = 0){
+    return data(n, k-smallend[2], j-smallend[1], i-smallend[0]);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  Real& operator()(const int& i, const int& j, const int& k, const int& n = 0) const {
       return data(n, k-smallend[2], j-smallend[1], i-smallend[0]);
-    }
+  }
 
-    KOKKOS_INLINE_FUNCTION
-    Real& operator()(const int& i, const int& j, const int& k, const int& n = 0) const {
-        return data(n, k-smallend[2], j-smallend[1], i-smallend[0]);
-    }
+  void init(const FArrayBox& rhs_, const std::string& name_);
 
-    void init(const FArrayBox& rhs_, const std::string& name_);
+  ViewFab(){}
 
-    ViewFab(){}
+  ViewFab(const FArrayBox& rhs_, const std::string& name_){
+      init(rhs_,name_);
+  }
 
-    ViewFab(const FArrayBox& rhs_, const std::string& name_){
-        init(rhs_,name_);
-    }
-
-    ViewFab<Real>& operator=(const ViewFab<Real>& rhs_);
-    
-    //write the view data into a FArrayBox
-    void fill(FArrayBox& lhs_) const;
+  ViewFab<Real>& operator=(const ViewFab<Real>& rhs_);
+  
+  // write the view data into a FArrayBox
+  void fill(FArrayBox& lhs_) const;
 private:
-    std::string name;
-    int numvars;
-    IntVect smallend, bigend, length;
-    Kokkos::View<Real****> data;
+  std::string name;
+  int numvars;
+  IntVect smallend, bigend, length;
+  Kokkos::View<Real****> data;
 };
 ```
 
 The important aspect is that the access operator hides the offset indexing and thus keeps the kernels clean.
-Note that this class is similar to what we try to use in our first attempt, but this time we do not bury it deep into the Framework but rather only use it for making the individual kernels performance portable. The access operators need to be decorated with ```KOKKOS_INLINE_FUNCTION``` macros because they will be called from the device.
+Note that this class is similar to what we try to use in our first attempt, but this time we do not bury it deep into the Framework but rather only use it for making the individual kernels performance portable. The access operators need to be decorated with ```KOKKOS_INLINE_FUNCTION``` macros because they will be called from the device. In order to copy relevant *metadata* to the device, we use the functor approach. That means we pack all relevant parameters into a functor object and then provide an access operator to it. For example, the average (restriction) functor is
 
-The average (restriction kernel) becomes:
 ```C++
-void C_AVERAGE(const Box& bx,
-               const int nc,
-               FArrayBox& c,
-               const FArrayBox& f){
+struct C_AVERAGE_FUNCTOR{
+public:
+  C_AVERAGE_FUNCTOR(const FArrayBox& c_, const FArrayBox& f_) : cv(c_,"cv"), fv(f_,"fv"){
+    cv.syncH2D();
+    fv.syncH2D();
+  }
 
-    const int *lo = bx.loVect();
-    const int *hi = bx.hiVect();
-    const int* cb = bx.cbVect();
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const int n, const int k, const int j, const int i) const{
+    cv(i,j,k,n) =  (fv(2*i+1,2*j+1,2*k,n) + fv(2*i,2*j+1,2*k,n) + fv(2*i+1,2*j,2*k,n) + fv(2*i,2*j,2*k,n))*0.125;
+    cv(i,j,k,n) += (fv(2*i+1,2*j+1,2*k+1,n) + fv(2*i,2*j+1,2*k+1,n) + fv(2*i+1,2*j,2*k+1,n) + fv(2*i,2*j,2*k+1,n))*0.125;
+  }
 
-    //convert fabs to views
-    ViewFab<Real> cv(c,"c"), fv(f,"f");
+  void fill(FArrayBox& cfab){
+    cv.syncD2H();
+    cv.fill(cfab);
+  }
+private:
+  ViewFab<Real> cv, fv;
+};
+```
 
-    //define iteration policy
-    typedef Kokkos::Experimental::MDRangePolicy<Kokkos::Experimental::Rank<3> > t_policy;
+It contains the two viewfabs needed and makes sure that data is uploaded to and downloaded from the device when needed. The average-kernel then simply becomes:
 
-    //execute kernel
-    Kokkos::Experimental::md_parallel_for(t_policy({0,lo[2],lo[1],lo[0]},
-                                                   {nc,hi[2]+1,hi[1]+1,hi[0]+1},
-                                                   {nc,cb[2],cb[1],cb[0]}),
-      KOKKOS_LAMBDA(const int n, const int k, const int j, const int i){
-        cv(i,j,k,n) =  0.125 * (   fv(2*i+1,2*j+1,2*k,n) 
-                                 + fv(2*i,2*j+1,2*k,n) 
-                                 + fv(2*i+1,2*j,2*k,n) 
-                                 + fv(2*i,2*j,2*k,n)
-                               );
-        cv(i,j,k,n) += 0.125 * (   fv(2*i+1,2*j+1,2*k+1,n) 
-                                 + fv(2*i,2*j+1,2*k+1,n) 
-                                 + fv(2*i+1,2*j,2*k+1,n) 
-                                 + fv(2*i,2*j,2*k+1,n)
-                               );
-      });
+```C++
+void C_AVERAGE(
+const Box& bx,
+const int nc,
+FArrayBox& c,
+const FArrayBox& f){
+	
+  const int *lo = bx.loVect();
+  const int *hi = bx.hiVect();
+  const int* cb = bx.cbVect();
+	
+  // create functor
+  C_AVERAGE_FUNCTOR cavfunc(c,f);
+    
+  // define policy
+  typedef Kokkos::Experimental::MDRangePolicy<Kokkos::Experimental::Rank<4> > t_policy;
 
-    //write results back to fab
-    cv.fill(c);
+  // execute
+  Kokkos::Experimental::md_parallel_for(t_policy({0, lo[2], lo[1], lo[0]},{nc, hi[2]+1, hi[1]+1, hi[0]+1},{nc, cb[2], cb[1], cb[0]}),cavfunc);
+
+  // write back
+  cavfunc.fill(c);
 }
 ```
 
-In order to employ loop-collapsing and additional cache blocking, we use the experimental multi-dimensional iteration policy feature. We added a cache-block-sizes vector ```cb``` which can be specified in the input file passed to the application. In principle, all kernels can be ported like the above example, with the exception of the GSRB kernel.
-There we use a 2D iteration policy and express the loop over ```i``` explicitly in the lambda. This is necessary because the Kokkos iteration policies cannot do strided data access at the moment. The relevant part of the kernel is displayed below:
+In order to employ loop-collapsing and additional cache blocking, we use the experimental multi-dimensional iteration policy feature. We added a cache-block-sizes vector ```cb``` which can be specified in the input file passed to the application. Most kernels can be ported like the one in the above example. The GSRB kernel though has non-unit stride access in the ```i``` loop, because of the red-black iteration pattern. For this case, we pass half of the actual range to the iteration policy and expand the index inside the loop. The access operator of the corresponding functor becomes
 
 ```C++
-Kokkos::Experimental::md_parallel_for(t_policy({0,lo[2],lo[1]},
-                                               {nc,hi[2]+1,hi[1]+1},
-                                               {nc,cb[2],cb[1]}),
-  KOKKOS_LAMBDA(const int n, const int k, const int j){
-    int ioff = (lo[0] + j + k + rb) % 2;
-    for(int i=ioff; i<=hi[0]; i+=2){
-      ...
+struct C_GSRB_FUNCTOR{
+public:
+  ...
+  
+  KOKKOS_INLINE_FUNCTION
+  void operator()(const int n, const int k, const int j, const int ii) const{
+
+    int ioff = (lo0 + j + k + rb) % 2;
+    int i = 2 * (ii-lo0) + lo0 + ioff;
+      
+    //be careful to not run over
+    if(i<=hi0){
+
+      // boundary condition terms
+      Real cf0 = ( (i==blo[0]) && (m0v(blo[0]-1,j,k)>0) ? f0v(blo[0],j,k) : 0. );
+      Real cf1 = ( (j==blo[1]) && (m1v(i,blo[1]-1,k)>0) ? f1v(i,blo[1],k) : 0. );
+      Real cf2 = ( (k==blo[2]) && (m2v(i,j,blo[2]-1)>0) ? f2v(i,j,blo[2]) : 0. );
+      Real cf3 = ( (i==bhi[0]) && (m3v(bhi[0]+1,j,k)>0) ? f3v(bhi[0],j,k) : 0. );
+      Real cf4 = ( (j==bhi[1]) && (m4v(i,bhi[1]+1,k)>0) ? f4v(i,bhi[1],k) : 0. );
+      Real cf5 = ( (k==bhi[2]) && (m5v(i,j,bhi[2]+1)>0) ? f5v(i,j,bhi[2]) : 0. );
+
+      // assign overrelaxation constants
+      double gamma =  alpha * av(i,j,k)
+                    + dhx * (bXv(i,j,k) + bXv(i+1,j,k))
+                    + dhy * (bYv(i,j,k) + bYv(i,j+1,k))
+                    + dhz * (bZv(i,j,k) + bZv(i,j,k+1));
+
+      double g_m_d =  gamma
+                    - dhx * (bXv(i,j,k)*cf0 + bXv(i+1,j,k)*cf3)
+                    - dhy * (bYv(i,j,k)*cf1 + bYv(i,j+1,k)*cf4)
+                    - dhz * (bZv(i,j,k)*cf2 + bZv(i,j,k+1)*cf5);
+
+      double rho =  dhx * (bXv(i,j,k)*phiv(i-1,j,k,n) + bXv(i+1,j,k)*phiv(i+1,j,k,n))
+                  + dhy * (bYv(i,j,k)*phiv(i,j-1,k,n) + bYv(i,j+1,k)*phiv(i,j+1,k,n))
+                  + dhz * (bZv(i,j,k)*phiv(i,j,k-1,n) + bZv(i,j,k+1)*phiv(i,j,k+1,n));
+
+      double res = rhsv(i,j,k,n) - gamma * phiv(i,j,k,n) + rho;
+      phiv(i,j,k,n) += omega/g_m_d * res;
     }
-  });
+  }
+
+  ...
+};
 ```
 
-We experimented with including the full loop over ```i``` into our iteration policy and then skipping the iteration if ```(i + j + k) % 2 != 0```, but that decreased performance on the CPU by more than 50%. For facilitating this, it would be desirable if Kokkos would provide an iteration policy which can perform strided loops.
+Note that we still have to avoid running over array bounds. That can occur when the grid extent in ```i```-direction is odd. The iteration policy now becoes
 
-This approach clearly comes with data transfer overhead which we would have avoided if we would have followed through our first attempt. However, in the performance timings we will report later on, we explicitly exclude that overhead and just assess the runtime of the kernels themselves. That way, we can determine if Kokkos is a viable framework for ensuring performance portability of BoxLib across acthitectures.
+```C++
+// instantiate functor
+C_GSRB_FUNCTOR cgsrbfunc(bx, bbx, rb, alpha, beta, phi, rhs, a, bX, bY, bZ, f0, m0, f1, m1, f2, m2, f3, m3, f4, m4, f5, m5, h);
+
+// compute bounds used in i-iteration
+int length0 = std::floor( (hi[0]-lo[0]+1) / 2 );
+int up0 = lo[0] + length0;
+
+// dispatch kernel
+Kokkos::Experimental::md_parallel_for(t_policy({0, lo[2], lo[1], lo[0]}, {nc, hi[2]+1, hi[1]+1, up0+1}, {nc, cb[2], cb[1], length0}), cgsrbfunc);
+```
+
+We experimented with including the full loop over ```i``` into our iteration policy and then skipping the iteration if ```(i + j + k) % 2 != 0```, but that decreased performance on the CPU by more than 50%. In general, it would be good if Kokkos' range policies allow for strided iterations.
+
+The above approach clearly comes with data transfer overhead which we would have avoided if we would have followed through our first attempt. However, in the performance timings we will report later on, we explicitly exclude that overhead and just assess the runtime of the kernels themselves. That way, we can determine if Kokkos is a viable framework for ensuring performance portability of BoxLib across acthitectures.

@@ -58,7 +58,13 @@ pages:
             - Kokkos: case_studies/amr/kokkos_implementation.md
             - OpenMP 4.x: case_studies/amr/openmp_implementation.md
           - Performance: case_studies/amr/performance_comparison.md
-        - GW Kernels: case_studies/gw/index.md
+        - BGW: 
+          - Overview: case_studies/gw/index.md
+          - Code structure: case_studies/gw/code_structure.md
+          - Implementations:
+            - Kokkos: case_studies/gw/kokkos_implementation.md
+            - OpenMP 4.x: case_studies/gw/openmp_implementation.md
+          - Summary: case_studies/gw/summary.md
         - QCD:
           - Overview: case_studies/qcd/overview.md
           - Code Structure: case_studies/qcd/code_structure.md
