@@ -37,8 +37,8 @@ major bottleneck in the application.
 The fact that the denominator in the above equation depends on $n'$, $G$ and $G'$ means it is difficult to write the matrix-reduction using standard 
 math-libaries. The baseline code is implemented in FORTRAN-90 utilizing an MPI+OpenMP parallel approach, with care given to ensure a vectorizable inner loop. MPI parallelism is 
 generally used to parallelize over $n$ and $n'$, while OpenMP parallelizes the $G'$ loop and the $G$ loop is left for vectorization. Significant data re-use of 
-the arrays is possible if many values of $E$ are required. At minimum, we require three $E$ values; which leads to an arithmetic intensity of > 1. Initial 
-roofline plots for KNL Xeon processors are shown below. 
+the arrays is possible if many values of $E$ are required. At minimum, we require three $E$ values; which leads to an arithmetic intensity of > 1. An initial 
+roofline plot for KNL Xeon processors are shown below. 
 
 <center><img src="gwroofline.png" width=600></center>
 
