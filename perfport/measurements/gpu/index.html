@@ -327,8 +327,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-use-the-metric-summary-mode-you-can-specify-the-target-kernel-to-collect-information-such-as" title="2. Use the metric summary mode (you can specify the target kernel) to collect information such as:" class="md-nav__link">
-    2. Use the metric summary mode (you can specify the target kernel) to collect information such as:
+  <a href="#2-use-the-metric-summary-mode" title="2. Use the metric summary mode" class="md-nav__link">
+    2. Use the metric summary mode
   </a>
   
 </li>
@@ -930,8 +930,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-use-the-metric-summary-mode-you-can-specify-the-target-kernel-to-collect-information-such-as" title="2. Use the metric summary mode (you can specify the target kernel) to collect information such as:" class="md-nav__link">
-    2. Use the metric summary mode (you can specify the target kernel) to collect information such as:
+  <a href="#2-use-the-metric-summary-mode" title="2. Use the metric summary mode" class="md-nav__link">
+    2. Use the metric summary mode
   </a>
   
 </li>
@@ -969,7 +969,8 @@ Time<span class="o">(</span>%<span class="o">)</span>      Time     Calls    Avg
  <span class="m">51</span>.96%  <span class="m">2</span>.52256s   <span class="m">1764</span>  <span class="m">1</span>.4300ms  <span class="m">1</span>.4099ms  <span class="m">1</span>.4479ms      void smooth_kernel&lt;<span class="nv">int</span><span class="o">=</span><span class="m">7</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>, <span class="nv">int</span><span class="o">=</span><span class="m">4</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>&gt;<span class="o">(</span>level_type, int, int, double, double, int, double*, double*<span class="o">)</span>
 </pre></div>
 
-<h2 id="2-use-the-metric-summary-mode-you-can-specify-the-target-kernel-to-collect-information-such-as">2. Use the metric summary mode (you can specify the target kernel) to collect information such as:<a class="headerlink" href="#2-use-the-metric-summary-mode-you-can-specify-the-target-kernel-to-collect-information-such-as" title="Permanent link">&para;</a></h2>
+<h2 id="2-use-the-metric-summary-mode">2. Use the metric summary mode<a class="headerlink" href="#2-use-the-metric-summary-mode" title="Permanent link">&para;</a></h2>
+<p>You can use this mode and specify the target kernel to collect information such as:</p>
 <ul>
 <li>Floating point ops</li>
 <li>DRAM R/W transactions</li>
@@ -992,8 +993,8 @@ dram_write_transactions ./build/bin/hpgmg-fv <span class="m">6</span> <span clas
 </pre></div>
 
 <p>You may instead replace the DRAM metrics with L2 metrics to compute a cache-based roofline. For example, replace <code>dram_write_throughput</code> with 
-<code>l2_write_throughput</code>.</p>
-<p>To compute Arithmetic Intensity you can use the following methods:</p>
+<code>l2_write_throughput</code>. You can find other available metrics <a href="http://docs.nvidia.com/cuda/profiler-users-guide/#metrics-reference">here</a>.</p>
+<p>To compute Arithmetic Intensity you can then use the following equivalent methods:</p>
 <p>Method I:  </p>
 <p>FP / ( DR + DW ) * (size of transaction = 32 Bytes)</p>
 <p>Method II:</p>
