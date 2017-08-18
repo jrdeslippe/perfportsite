@@ -1,5 +1,8 @@
 ##Hardware In-Depth
 
+Below we compare indeph the Cori, Theta and Titan systems, software environment and job submission process to add office of science users in utilizing 
+multiple resources.
+
 |System-> | Cori  |  Theta                          | Titan             |
 |:---:|:--------:|:---------:|:-----------------------:|
 |Facility|[NERSC](http://www.nersc.gov/)|[ALCF](http://www.alcf.anl.gov)|[OLCF](http://www.olcf.ornl.gov)|
