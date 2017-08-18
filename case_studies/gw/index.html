@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
     
     
       
@@ -23,9 +23,9 @@
       <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-2dfbe9b10d.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
       
-        <link rel="stylesheet" href="../../assets/stylesheets/application-c0c27c47c4.palette.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-02c2a4388f.palette.css">
       
     
     
@@ -92,17 +92,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search" role="dialog">
+<div class="md-search" data-md-component="search">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -657,8 +657,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#science-description" title="Science Description" class="md-nav__link">
-    Science Description
+  <a href="#description" title="Description" class="md-nav__link">
+    Description
   </a>
   
 </li>
@@ -931,8 +931,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#science-description" title="Science Description" class="md-nav__link">
-    Science Description
+  <a href="#description" title="Description" class="md-nav__link">
+    Description
   </a>
   
 </li>
@@ -960,19 +960,19 @@
                 
                 
                 <h1 id="overview-of-berkeleygw-case-study">Overview of BerkeleyGW Case Study<a class="headerlink" href="#overview-of-berkeleygw-case-study" title="Permanent link">&para;</a></h1>
-<h2 id="science-description">Science Description<a class="headerlink" href="#science-description" title="Permanent link">&para;</a></h2>
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>BerkeleyGW is a material science application that predicts the excited-state properties of a wide range of materials from molecules and nanostuctures to 
-crystals including systems with defects and complex interfaces. The excited-state properties of materials (properties associated with electrons in states 
-above the lowest energy configuration) are important for a number of important energy application including material design of batteries, 
-semiconductors, quantum computing devices, photovoltaics and emitting devices among other applications. The BerkeleyGW application is commonly used in 
+crystals - including systems with defects and complex interfaces. The excited-state properties of materials (properties associated with electrons in states 
+above the lowest energy configuration) are important for a number of important energy applications including the material design of batteries, 
+semiconductors, quantum computing devices, photovoltaics and emitting devices among others. The BerkeleyGW application is commonly used in 
 conjunction with Density Functional Theory (DFT) applications like Quantum ESPRESSO, PARATEC, ABINIT which compute accurately the ground-state properties of 
 materials. In BerkeleyGW, the electronic energies are computed as a solution to the so-called Dyson equation:</p>
 <span>\[
-\left[ -\frac{1}{2}\nabla^2+V_{\rm loc}+\Sigma(E_{n}) \right] \phi_{n}=E_{n}\phi_{n}.
-\]</span><p>Which is similar in form to the DFT Kohn-Sham equations with the addition of the energy-dependent Self-Energy operator <span>\(\Sigma\)</span>.</p>
-<p>BerkeleyGW contains many similar computational bottlenecks of DFT applications including a significant amount of time spent in dense linear algebra. 
-Additionally, similarly to quantum chemistry packages, there are a number of tensor-contractions that cannot be performed in library calls. One such 
-occurence is the evaluation of the electron "Self-Energy" within the common General Plasmon Pole approximation:</p>
+\left[ -\frac{1}{2}\nabla^2+V_{\rm loc}+\Sigma(E_{n}) \right] \phi_{n}=E_{n}\phi_{n},
+\]</span><p>which is similar in form to the DFT Kohn-Sham equations with the addition of the energy-dependent Self-Energy operator <span>\(\Sigma\)</span>.</p>
+<p>BerkeleyGW contains many of the computational bottlenecks of DFT applications including a significant amount of time spent in FFTs and dense linear algebra. 
+Additionally, similarly to quantum chemistry packages, there are a number of tensor-contraction operations that cannot be performed in library calls. One such 
+occurence is the evaluation of the electron "Self-Energy" within the common General Plasmon Pole (GPP) approximation:</p>
 <span>\[
 \Sigma_{n}=
 \sum_{n'}\sum_{{\bf GG}'}
@@ -981,15 +981,16 @@ M^{*}_{n'n}(-{\bf G})M_{n'n}(-{\bf G}')\frac{\Omega^2_{{\bf GG}'}}
 \left(E\,{-}\,E_{n'}{-}
 \tilde{\omega}_{{\bf GG}'}\right)}
 v{\left({\bf G}'\right)}
-\]</span><p>where <span>\(M\)</span>, <span>\(\Omega\)</span> and <span>\(\tilde{\omega}\)</span> are precomputed complex double-precision arrays. </p>
+\]</span><p>where <span>\(M\)</span>, <span>\(\Omega\)</span> and <span>\(\tilde{\omega}\)</span> are precomputed complex double-precision arrays. In this report, we focus on the evaluation of this expression (the GPP kernel), which is a 
+major bottleneck in the application.</p>
 <h2 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h2>
-<p>The fact that the denominator in the above queation depends on <span>\(n'\)</span>, <span>\(G\)</span> and <span>\(G'\)</span> means it is difficult to write the matrix-reduction using standard 
-math-libaries. The standard code is implemented in FORTRAN-90 with MPI+OpenMP, with care given to ensure a vectorizable inner loop. MPI parallelism is 
-general used to parallelize over <span>\(n\)</span>, <span>\(n'\)</span>, while OpenMP parallelizes the <span>\(G'\)</span> loop and the <span>\(G\)</span> loop is left for vectorization. Significant data re-use of 
-the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require 3 <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. Initial 
-roofline plots for KNL Xeon Processors are shown below. </p>
+<p>The fact that the denominator in the above equation depends on <span>\(n'\)</span>, <span>\(G\)</span> and <span>\(G'\)</span> means it is difficult to write the matrix-reduction using standard 
+math-libaries. The baseline code is implemented in FORTRAN-90 utilizing an MPI+OpenMP parallel approach, with care given to ensure a vectorizable inner loop. MPI parallelism is 
+generally used to parallelize over <span>\(n\)</span> and <span>\(n'\)</span>, while OpenMP parallelizes the <span>\(G'\)</span> loop and the <span>\(G\)</span> loop is left for vectorization. Significant data re-use of 
+the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require three <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. Initial 
+roofline plots for KNL Xeon processors are shown below. </p>
 <p><center><img src="gwroofline.png" width=600></center></p>
-<p>The gap between the code performance and the ceiling can be explained by two factors: 1. the code lacks multiply-add balance 2. the divide instruction has a 
+<p>The gap between the code performance and the ceiling can be explained via two factors: 1. the code lacks multiply-add symmetry and 2. the divide instruction has a 
 multi-cycle latency. </p>
                 
                   
@@ -1060,7 +1061,7 @@ multi-cycle latency. </p>
       
     </div>
     
-      <script src="../../assets/javascripts/application-6940329b9f.js"></script>
+      <script src="../../assets/javascripts/application-c35428f87f.js"></script>
       
       
       <script>app.initialize({url:{base:"../.."}})</script>
