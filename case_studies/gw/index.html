@@ -913,12 +913,12 @@ conjunction with Density Functional Theory (DFT) applications like Quantum ESPRE
 materials. In BerkeleyGW, the electronic energies are computed as a solution to the so-called Dyson equation:</p>
 <span>\[
 \left[ -\frac{1}{2}\nabla^2+V_{\rm loc}+\Sigma(E_{n}) \right] \phi_{n}=E_{n}\phi_{n}.
-\]</span><p>Which is similar in form to the DFT Kohn-Sham equations with the addition of the energy-dependent Self-Energy operator, <span>\(<span>\(\Sigma\)</span>\)</span>.</p>
+\]</span><p>Which is similar in form to the DFT Kohn-Sham equations with the addition of the energy-dependent Self-Energy operator <span>\(\Sigma\)</span>.</p>
 <p>BerkeleyGW contains many similar computational bottlenecks of DFT applications including a significant amount of time spent in dense linear algebra. 
 Additionally, similarly to quantum chemistry packages, there are a number of tensor-contractions that cannot be performed in library calls. One such 
 occurence is the evaluation of the electron "Self-Energy" within the common General Plasmon Pole approximation:</p>
 <span>\[
-&amp;\Sigma_{n}=
+\Sigma_{n}=
 \sum_{n'}\sum_{{\bf GG}'}
 M^{*}_{n'n}(-{\bf G})M_{n'n}(-{\bf G}')\frac{\Omega^2_{{\bf GG}'}}
 {\tilde{\omega}_{{\bf GG}'}
