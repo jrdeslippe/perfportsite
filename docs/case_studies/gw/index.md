@@ -39,4 +39,7 @@ general used to parallelize over $n$, $n'$, while OpenMP parallelizes the $G'$ l
 the arrays is possible if many values of $E$ are required. At minimum, we require 3 $E$ values; which leads to an arithmetic intensity of > 1. Initial 
 roofline plots for KNL Xeon Processors are shown below. 
 
-<center><img src="images/gwroofline.png" width=400></center>
+<center><img src="gwroofline.png" width=600></center>
+
+The gap between the code performance and the ceiling can be explained by two factors: 1. the code lacks multiply-add balance 2. the divide instruction has a 
+multi-cycle latency. 
