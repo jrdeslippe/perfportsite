@@ -21,7 +21,8 @@ markdown_extensions:
   - markdown_include.include:
       base_path: docs
 theme: 'material'
-theme_dir: 'theme/material/'
+#theme_dir: 'theme/material/'
+site_favicon: favicon.ico
 extra:
   palette:
     primary: 'green'
