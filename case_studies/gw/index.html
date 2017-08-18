@@ -638,9 +638,43 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Overview
+      </label>
+    
     <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
       Overview
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#science-description" title="Science Description" class="md-nav__link">
+    Science Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -893,6 +927,27 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#science-description" title="Science Description" class="md-nav__link">
+    Science Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation" title="Implementation" class="md-nav__link">
+    Implementation
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -905,6 +960,7 @@
                 
                 
                 <h1 id="overview-of-berkeleygw-case-study">Overview of BerkeleyGW Case Study<a class="headerlink" href="#overview-of-berkeleygw-case-study" title="Permanent link">&para;</a></h1>
+<h2 id="science-description">Science Description<a class="headerlink" href="#science-description" title="Permanent link">&para;</a></h2>
 <p>BerkeleyGW is a material science application that predicts the excited-state properties of a wide range of materials from molecules and nanostuctures to 
 crystals including systems with defects and complex interfaces. The excited-state properties of materials (properties associated with electrons in states 
 above the lowest energy configuration) are important for a number of important energy application including material design of batteries, 
@@ -925,7 +981,14 @@ M^{*}_{n'n}(-{\bf G})M_{n'n}(-{\bf G}')\frac{\Omega^2_{{\bf GG}'}}
 \left(E\,{-}\,E_{n'}{-}
 \tilde{\omega}_{{\bf GG}'}\right)}
 v{\left({\bf G}'\right)}
-\]</span>
+\]</span><p>where <span>\(M\)</span>, <span>\(\Omega\)</span> and <span>\(\tilde{\omega}\)</span> are precomputed complex double-precision arrays. </p>
+<h2 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h2>
+<p>The fact that the denominator in the above queation depends on <span>\(n'\)</span>, <span>\(G\)</span> and <span>\(G'\)</span> means it is difficult to write the matrix-reduction using standard 
+math-libaries. The standard code is implemented in FORTRAN-90 with MPI+OpenMP, with care given to ensure a vectorizable inner loop. MPI parallelism is 
+general used to parallelize over <span>\(n\)</span>, <span>\(n'\)</span>, while OpenMP parallelizes the <span>\(G'\)</span> loop and the <span>\(G\)</span> loop is left for vectorization. Significant data re-use of 
+the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require 3 <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. Initial 
+roofline plots for KNL Xeon Processors are shown below. </p>
+<p><center><img src="images/gwroofline.png" width=400></center></p>
                 
                   
                 
