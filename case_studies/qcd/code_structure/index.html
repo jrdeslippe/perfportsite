@@ -608,10 +608,106 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      BGW
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        BGW
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
-      GW Kernels
+    <a href="../../gw/" title="Overview" class="md-nav__link">
+      Overview
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/code_structure/" title="Code structure" class="md-nav__link">
+      Code structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2-3" type="checkbox" id="nav-3-4-2-3">
+    
+    <label class="md-nav__link" for="nav-3-4-2-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-2-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/openmp_implementation/" title="OpenMP 4.x" class="md-nav__link">
+      OpenMP 4.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -866,11 +962,11 @@
                 <h1 id="code-structure">Code Structure<a class="headerlink" href="#code-structure" title="Permanent link">&para;</a></h1>
 <p>Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:</p>
 <ul>
-<li>stream-in the relevant spinors (or block of spinors in case of multiple right hand sides) from memory</li>
-<li>project 4-spinors to 2-spinors</li>
-<li>read relevant gauge links and apply the dslash to those vectors</li>
-<li>inject 2-spinors into 4-spinors</li>
-<li>stream-out the solution vectors to memory</li>
+<li>stream-in the relevant neighboring spinor (or block of spinors in case of multiple right hand sides) from memory</li>
+<li>project the 4-spinor to a 2-spinor</li>
+<li>read relevant gauge link and multiply it or or its hermitian adjoint with the projected spinor </li>
+<li>reconstruct the 4-spinor from the resulting 2-spinor and accumulate to the sum over directions</li>
+<li>stream-out the resulting summed vector to memory</li>
 </ul>
 <p>In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.</p>
 <h2 id="data-primitives">Data Primitives<a class="headerlink" href="#data-primitives" title="Permanent link">&para;</a></h2>
@@ -878,19 +974,23 @@
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
 <span class="k">class</span> <span class="nc">CBSpinor</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span> 
-    <span class="p">...</span>
+  <span class="p">...</span>
 <span class="k">private</span><span class="o">:</span>
-    <span class="c1">// dims are: site, color, spin</span>
-    <span class="n">spin_container</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">[</span><span class="n">site</span><span class="p">,</span><span class="n">color</span><span class="p">,</span><span class="n">spin</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+  <span class="c1">// dims are: site, color, spin. </span>
+  <span class="c1">// the * means that the number of sites is not decided at</span>
+  <span class="c1">// compile time, but at initialization</span>
+  <span class="n">spin_container</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">spin</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="o">&gt;</span> 
 <span class="k">class</span> <span class="nc">CBGaugeField</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-    <span class="p">...</span>
+  <span class="p">...</span>
 <span class="k">private</span><span class="o">:</span>
-    <span class="c1">// dims are: site, direction, color, color</span>
-    <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">[</span><span class="n">site</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+  <span class="c1">// dims are: site, direction, color, color</span>
+  <span class="c1">// The * means that the number of sites is not decided at </span>
+  <span class="c1">// compile time, but at initialization</span>
+  <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">*</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 
@@ -898,31 +998,35 @@
 <h2 id="wilson-operator">Wilson Operator<a class="headerlink" href="#wilson-operator" title="Permanent link">&para;</a></h2>
 <p>At this point in time, the dslash testcode is not multi-node ready, so we will focus solely on on-node parallelism for the moment. Our goal is to achieve this by threading over lattice sites and applying SIMD/SIMT parallelism over multiple right hand sides. In theory, one could achieve vectorization for single right hand side vectors also by using an array or structure of array data layout but we will not consider this technique here. We will nevertheless compare our single right hand side performance we achieved with our performance portable implementations with those of optimized libraries which feature such improvements.</p>
 <p>Our dslash class is implemented as follow:</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">isign</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">target_cb</span><span class="o">&gt;&gt;</span>
 <span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
-    <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
-                  <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
-                  <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">,</span>
-                  <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> 
-    <span class="p">{</span>
-        <span class="c1">// Threaded loop over sites</span>
-        <span class="n">parallel_for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">num_sites</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-            <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">res_sum_</span><span class="p">;</span>
-            <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">mult_proj_res</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
+                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
+                <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">// Threaded loop over sites</span>
+    <span class="n">parallel_for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">num_sites</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
 
-            <span class="c1">//go for directions +T</span>
-            <span class="c1">//stream-in from +T direction and project to 2-spinor</span>
-            <span class="n">project_dir</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s_in</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">T_PLUS</span><span class="p">);</span>
-            <span class="c1">//multiply with gauge link</span>
-            <span class="n">mult_adj_u_halfspinor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_in</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">T_PLUS</span><span class="p">],</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">mult_proj_res</span><span class="p">);</span>
-            <span class="c1">//reconstruct and add to result</span>
-            <span class="n">reconstruct_dir</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="n">ST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mult_proj_res</span><span class="p">,</span> <span class="n">res_sum</span><span class="p">);</span>
+      <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">res_sum</span><span class="p">;</span>
+      <span class="n">CBThreadSpinor</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span> <span class="n">proj_res</span><span class="p">,</span> <span class="n">mult_proj_res</span><span class="p">;</span>
 
-            <span class="c1">//go for direction -T</span>
-            <span class="p">...</span>
-        <span class="p">}</span>
+      <span class="n">Zero</span><span class="p">(</span><span class="n">res_sum</span><span class="p">);</span>
+
+      <span class="c1">// go for direction -T</span>
+      <span class="n">ProjectDir3</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="p">,</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s_in</span><span class="p">,</span> <span class="n">proj_res</span><span class="p">,</span><span class="n">NeighborTMinus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">));</span>
+      <span class="n">mult_adj_u_halfspinor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_in_src_cb</span><span class="p">,</span><span class="n">proj_res</span><span class="p">,</span><span class="n">mult_proj_res</span><span class="p">,</span><span class="n">NeighborTMinus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">),</span><span class="mi">3</span><span class="p">);</span>
+      <span class="n">Recons23Dir3</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mult_proj_res</span><span class="p">,</span><span class="n">res_sum</span><span class="p">);</span>
+
+      <span class="c1">// go for direction +T</span>
+      <span class="n">ProjectDir3</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="p">,</span><span class="o">-</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s_in</span><span class="p">,</span><span class="n">proj_res</span><span class="p">,</span><span class="n">NeighborTPlus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">));</span>
+      <span class="n">mult_u_halfspinor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_in_target_cb</span><span class="p">,</span><span class="n">proj_res</span><span class="p">,</span><span class="n">mult_proj_res</span><span class="p">,</span><span class="n">site</span><span class="p">,</span><span class="n">NeighborTPlus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">),</span><span class="mi">3</span><span class="p">);</span>
+      <span class="n">Recons23Dir3</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="o">-</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mult_proj_res</span><span class="p">,</span> <span class="n">res_sum</span><span class="p">);</span>
+
+      <span class="c1">// go for other directions: -Z, +Z, -Y, +Y, -X, +X</span>
+      <span class="p">...</span>
     <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 

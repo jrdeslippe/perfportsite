@@ -16,7 +16,7 @@
     
     
       
-        <title>GW Kernels - Performance Portability</title>
+        <title>Overview - Performance Portability</title>
       
     
     
@@ -76,15 +76,15 @@
             
               
                 <span class="md-header-nav__parent">
-                  Performance Portability
-                </span>
-              
-                <span class="md-header-nav__parent">
                   Case Studies
                 </span>
               
+                <span class="md-header-nav__parent">
+                  BGW
+                </span>
+              
             
-            GW Kernels
+            Overview
           
         </span>
       </div>
@@ -610,15 +610,115 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2" checked>
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      BGW
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        BGW
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
     
-    <a href="./" title="GW Kernels" class="md-nav__link md-nav__link--active">
-      GW Kernels
+    
+    <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
+      Overview
     </a>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="code_structure/" title="Code structure" class="md-nav__link">
+      Code structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2-3" type="checkbox" id="nav-3-4-2-3">
+    
+    <label class="md-nav__link" for="nav-3-4-2-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-2-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="openmp_implementation/" title="OpenMP 4.x" class="md-nav__link">
+      OpenMP 4.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -790,6 +890,8 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
 </nav>
                   </div>
@@ -802,9 +904,28 @@
               
                 
                 
-                  <h1>GW Kernels</h1>
-                
-                <p>Jack and Rahul to write next week</p>
+                <h1 id="overview-of-berkeleygw-case-study">Overview of BerkeleyGW Case Study<a class="headerlink" href="#overview-of-berkeleygw-case-study" title="Permanent link">&para;</a></h1>
+<p>BerkeleyGW is a material science application that predicts the excited-state properties of a wide range of materials from molecules and nanostuctures to 
+crystals including systems with defects and complex interfaces. The excited-state properties of materials (properties associated with electrons in states 
+above the lowest energy configuration) are important for a number of important energy application including material design of batteries, 
+semiconductors, quantum computing devices, photovoltaics and emitting devices among other applications. The BerkeleyGW application is commonly used in 
+conjunction with Density Functional Theory (DFT) applications like Quantum ESPRESSO, PARATEC, ABINIT which compute accurately the ground-state properties of 
+materials. In BerkeleyGW, the electronic energies are computed as a solution to the so-called Dyson equation:</p>
+<span>\[
+\left[ -\frac{1}{2}\nabla^2+V_{\rm loc}+\Sigma(E_{n}) \right] \phi_{n}=E_{n}\phi_{n}.
+\]</span><p>Which is similar in form to the DFT Kohn-Sham equations with the addition of the energy-dependent Self-Energy operator, <span>\(<span>\(\Sigma\)</span>\)</span>.</p>
+<p>BerkeleyGW contains many similar computational bottlenecks of DFT applications including a significant amount of time spent in dense linear algebra. 
+Additionally, similarly to quantum chemistry packages, there are a number of tensor-contractions that cannot be performed in library calls. One such 
+occurence is the evaluation of the electron "Self-Energy" within the common General Plasmon Pole approximation:</p>
+<span>\[
+&amp;\Sigma_{n}=
+\sum_{n'}\sum_{{\bf GG}'}
+M^{*}_{n'n}(-{\bf G})M_{n'n}(-{\bf G}')\frac{\Omega^2_{{\bf GG}'}}
+{\tilde{\omega}_{{\bf GG}'}
+\left(E\,{-}\,E_{n'}{-}
+\tilde{\omega}_{{\bf GG}'}\right)}
+v{\left({\bf G}'\right)}
+\]</span>
                 
                   
                 
@@ -838,13 +959,13 @@
           </a>
         
         
-          <a href="../qcd/overview/" title="Overview" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="code_structure/" title="Code structure" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Overview
+                Code structure
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

@@ -673,10 +673,106 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      BGW
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        BGW
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../../case_studies/gw/" title="GW Kernels" class="md-nav__link">
-      GW Kernels
+    <a href="../../../case_studies/gw/" title="Overview" class="md-nav__link">
+      Overview
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../case_studies/gw/code_structure/" title="Code structure" class="md-nav__link">
+      Code structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2-3" type="checkbox" id="nav-3-4-2-3">
+    
+    <label class="md-nav__link" for="nav-3-4-2-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-2-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../case_studies/gw/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../case_studies/gw/openmp_implementation/" title="OpenMP 4.x" class="md-nav__link">
+      OpenMP 4.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../../case_studies/gw/summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -924,8 +1020,10 @@ data. The following snippet shows matrix-vector multiplication using Kokkos
 views and a "reduction" execution policy. It is taken from the Kokkos <a href="https://github.com/kokkos/kokkos-tutorials/tree/master/GTC2017/Exercises/02">GTC2017
 tutorial
 #2</a>.</p>
-<div class="codehilite"><pre><span></span>  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span>  <span class="n">x</span><span class="p">(</span> <span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="mi">128</span> <span class="p">);</span> <span class="c1">// a vector of length 128</span>
-  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">**&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span> <span class="p">);</span> <span class="c1">// a matrix of size 128^2</span>
+<div class="codehilite"><pre><span></span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">128</span><span class="p">;</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">M</span><span class="o">=</span><span class="mi">128</span><span class="p">;</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span>  <span class="n">x</span><span class="p">(</span> <span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="n">M</span> <span class="p">);</span> <span class="c1">// a vector of length N</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span>  <span class="n">y</span><span class="p">(</span> <span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="n">N</span> <span class="p">);</span> <span class="c1">// a vector of length M</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">**&gt;</span> <span class="n">A</span><span class="p">(</span> <span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span> <span class="p">);</span> <span class="c1">// a matrix of size  NxM</span>
 
   <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span> <span class="n">N</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">update</span> <span class="p">)</span> <span class="p">{</span>
     <span class="kt">double</span> <span class="n">temp2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>

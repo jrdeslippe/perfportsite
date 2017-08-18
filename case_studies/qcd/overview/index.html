@@ -608,10 +608,106 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      BGW
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        BGW
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
-      GW Kernels
+    <a href="../../gw/" title="Overview" class="md-nav__link">
+      Overview
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/code_structure/" title="Code structure" class="md-nav__link">
+      Code structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2-3" type="checkbox" id="nav-3-4-2-3">
+    
+    <label class="md-nav__link" for="nav-3-4-2-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-2-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/openmp_implementation/" title="OpenMP 4.x" class="md-nav__link">
+      OpenMP 4.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -928,18 +1024,21 @@ It is thus importanto to find out whether the Wilson operator can be implemented
 <h2 id="implementation">Implementation<a class="headerlink" href="#implementation" title="Permanent link">&para;</a></h2>
 <p>In this section we will briefly discuss architecture-independent implementation details of the Wilson operator. </p>
 <h3 id="multiple-right-hand-sides">Multiple Right Hand Sides<a class="headerlink" href="#multiple-right-hand-sides" title="Permanent link">&para;</a></h3>
-<p>An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side (MRHS) vectors simulatenously.
-This case is also relevant to many lattice QCD applications so that we have implemented this optimization in our small test case. </p>
+<p>An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side (MRHS) vectors simulatenously. Working on a number of right hand sides which fits SIMD registers, is also a quick and easy way to explore effects of vectorization in an implementation.
+Further, this case is also relevant to many lattice QCD applications -- in some cases O(10<sup>5</sup>)-O(10<sup>6</sup>) systems may need to be solved with the same gauge configuration as input. For all these reasons, we have also implemented this version of the operator in our small test case. </p>
 <h3 id="arithmetic-intensity">Arithmetic Intensity<a class="headerlink" href="#arithmetic-intensity" title="Permanent link">&para;</a></h3>
-<p>The arithmetic intensity for the Wilson operator can be computed as follows:</p>
+<p>The arithmetic intensity per lattice site for the Wilson operator can be computed as follows:</p>
 <span>\[
 \frac{\#\mathrm{Flops}}{\#\mathrm{Bytes}} = \frac{1320}{8G + (9-R+r)S},
-\]</span><p>where <span>\(G\)</span> is the size of a gauge link, <span>\(S\)</span> the size of a spinor, <span>\(R\)</span> the nearest neighbor spinor reuse factor and <span>\(r=0\)</span> if streaming stores are used and <span>\(r=1\)</span> otherwise (read-for-write). The constant factors account for the fact that in 4 dimensions, each lattice site has 8 neighbors and thus 8 links and spinors needs to be read from memory and one spinor needs to be written. If no streaming stores are used, the output spinor needs to be read into cache first and thus the total number of spinors transferred per computed site will be 10 in this case. Whereas the spinor always consists of 12 complex numbers (3 color and 4 spin components), the gauge links G can be in theory compressed to 8 real numbers by using properties of <a href="https://en.wikipedia.org/wiki/Lie_algebra">Lie algebras</a> along with the generators of <span>\(SU(3)\)</span>. However, this is very expensive so that usually a less aggressive form of compression is used by simply dropping one row or column of the gauge link and reconstruct it on the fly when needed. This format is called <em>12-compression</em> and widely used in modern Wilson operator implementations. In our simple test case however, we do not use this kind of compression and thus the expected arithmetic intensity is between <span>\(0.86\)</span> <span>\((R=0,\,r=1,\,G=18)\)</span> and <span>\(1.72\)</span> <span>\((R=7,\,r=0,\,G=18)\)</span> for single precision.</p>
-<p>We have applied two optimizations to our Wilson dslash test code</p>
+\]</span><p>where <span>\(G\)</span> is the size of a gauge link, <span>\(S\)</span> the size of a spinor, <span>\(R\)</span> the nearest neighbor spinor reuse factor (assuming that caches which are closer to the processor than the level of memory where the data resides are infinitely fast) and <span>\(r=0\)</span> if streaming stores are used and <span>\(r=1\)</span> otherwise (read-for-write). The constant factors account for the fact that in 4 dimensions, each lattice site has 8 neighbors and thus 8 links and spinors needs to be read from memory and one spinor needs to be written. If streaming stores are not used, the output spinor needs to be read into cache first and thus the total number of spinors transferred per computed site will be 10 in this case. Whereas the spinor always consists of 12 complex numbers (3 color and 4 spin components), the gauge links G can be in theory compressed to 8 real numbers by using properties of <a href="https://en.wikipedia.org/wiki/Lie_algebra">Lie algebras</a> along with the generators of <span>\(SU(3)\)</span>. However, this can require trigonometric functions whose performance may be strongly hardware dependent, so that usually a less aggressive form of compression is used by simply dropping one row or column of the gauge link and reconstruct it on the fly when needed. This format is called <em>12-compression</em> and widely used in modern Wilson operator implementations. In our simple test case however, we do not use this kind of compression and thus the expected arithmetic intensity is between <span>\(0.86\)</span> <span>\((R=0,\,r=1,\,G=18)\)</span> and <span>\(1.72\)</span> <span>\((R=7,\,r=0,\,G=18)\)</span> for single precision.</p>
+<p>We have applied one additional common optimization to our code known as the spin-projection trick:</p>
 <ul>
-<li>we replace the Wilson operator with it's <a href="https://en.wikipedia.org/wiki/Schur_complement">Schur complement</a>, i.e. we use <span>\(M_{oo} = m - /\!\!\!\!D_{oe} m^{-1} /\!\!\!\!D_{eo}\)</span> instead of applying <span>\(/\!\!\!\!D\)</span> directly. Here, the indices <span>\(oo\)</span>, <span>\(oe\)</span> and <span>\(eo\)</span> indicate that the respective operators only couple odd-odd, odd-even or even-odd sites respectively. With this optimization, the modified problem can essentially be solved on a volume half as big as the original problem and the solution easily be reconstructed for the other half.</li>
-<li>we use properties of the Dirac matrices to project the 4-spinors to two pairs of linear dependent 2-spinors before applying the dslash, saving 50% of the required flops.</li>
-<li>we solve for multiple right hand side vectors simultaneously to increase the arithmetic intensity. This optimizations amounts to multiplying the number of flops as well as the number of reads and stores by the number of right hand sides <span>\(N\)</span>. Since all these vectors should ideally be kept in cache, the effective reuse factor <span>\(R\)</span> will drop with increasing <span>\(N\)</span>. In our testcase we vectorize using SIMD or SIMT over these right hand side vectors, so <span>\(N\)</span> should ideally be an integer multiple of the vector/warp size. These two aspects have to be taken into account when optimizing the performance.</li>
+<li>
+<p>The terms <span>\(( 1 \pm \gamma_\mu)\)</span> in the spin-indices act as a projector in spin, and applying them to an input vector reduces the number of independent spin-degrees of freedom in the result from 4 to 2 (with the remaining two being related to the 2 indpendent ones through trivial operations such as - sign, or multiplication by complex <span>\(i\)</span>, or similar). Hence, because multipliation in spin by the projectors and in color by the gauge-link matrices commute, one typically first projects an input 4-spinor to a 2-component object known as a <em>half spinor</em>. The 3x3 gauge link matrix is then multiplied to the 3-color vector object for each of the two spin components. Finally the remaining 2 spin components are <em>reconstructed</em> by applying the necessary trivial transformation. Spin projection depends on direction <span>\(\mu\)</span>, but not on the lattice site indices. </p>
+</li>
+<li>
+<p>In order to be able to utilize vector registers on architectures like Intel Xeon Phi Knight's Landing, we attempt to vectorize over the multiple-right sources in a 'multiple-right-hand side' application (MRHS) of the operator</p>
+</li>
 </ul>
                 
                   
@@ -959,7 +1058,7 @@ This case is also relevant to many lattice QCD applications so that we have impl
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../gw/" title="GW Kernels" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../gw/summary/" title="Summary" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -968,7 +1067,7 @@ This case is also relevant to many lattice QCD applications so that we have impl
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                GW Kernels
+                Summary
               </span>
             </div>
           </a>

@@ -608,10 +608,106 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2" type="checkbox" id="nav-3-4-2">
+    
+    <label class="md-nav__link" for="nav-3-4-2">
+      BGW
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-3-4-2">
+        BGW
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../../gw/" title="GW Kernels" class="md-nav__link">
-      GW Kernels
+    <a href="../../gw/" title="Overview" class="md-nav__link">
+      Overview
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/code_structure/" title="Code structure" class="md-nav__link">
+      Code structure
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-4-2-3" type="checkbox" id="nav-3-4-2-3">
+    
+    <label class="md-nav__link" for="nav-3-4-2-3">
+      Implementations
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="4">
+      <label class="md-nav__title" for="nav-3-4-2-3">
+        Implementations
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/kokkos_implementation/" title="Kokkos" class="md-nav__link">
+      Kokkos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/openmp_implementation/" title="OpenMP 4.x" class="md-nav__link">
+      OpenMP 4.x
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../gw/summary/" title="Summary" class="md-nav__link">
+      Summary
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -930,17 +1026,17 @@
 <p>In the <a href="../code_structure/#wilson_operator">Wilson operator class</a>, all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
-    <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
-                  <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
-                  <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">,</span>
-                  <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> 
-    <span class="p">{</span>
-        <span class="c1">// Threaded loop over sites</span>
-        <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="p">...</span>
-            <span class="p">});</span>
-    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
+                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
+                <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">,</span>
+                <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> 
+  <span class="p">{</span>
+    <span class="c1">// Threaded loop over sites</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="p">...</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 
@@ -960,20 +1056,24 @@
 <p>Vectorization in Kokkos is achieved by a two-level <a href="../../../perfport/frameworks/kokkos/#nested-parallelism">nested parallelism</a>, where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spwans threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type <code>TST</code> needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span> 
 <span class="k">struct</span> <span class="n">CPUSIMDComplex</span> <span class="p">{</span>
-    <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-    <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">lane</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">_data</span><span class="p">[</span><span class="n">lane</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="p">...</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+
+  <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">lane</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_data</span><span class="p">[</span><span class="n">lane</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
 <span class="p">};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span> 
 <span class="k">struct</span> <span class="n">GPUSIMDComplex</span> <span class="p">{</span>
-    <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">;</span>
-    <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">lane</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">_data</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="p">...</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">;</span>
+
+  <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">lane</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">_data</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="p">...</span>
 <span class="p">};</span>
 </pre></div>
 
@@ -983,13 +1083,14 @@
 We therefore provided a template  specialization for the <code>CPUSIMDComplex</code> datatype which we implemented by explicitly using AVX512 intrinsics. For example, the datatype then becomes</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;&gt;</span>
 <span class="k">struct</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">explicit</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{}</span>
+  <span class="k">explicit</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{}</span>
 
-    <span class="k">union</span> <span class="p">{</span>
-        <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
-        <span class="n">__m512</span> <span class="n">_vdata</span><span class="p">;</span>
-    <span class="p">};</span>
-    <span class="p">...</span>
+  <span class="k">union</span> <span class="p">{</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+    <span class="n">__m512</span> <span class="n">_vdata</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="p">...</span>
 <span class="p">};</span>
 </pre></div>
 
