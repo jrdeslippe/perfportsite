@@ -8,7 +8,7 @@ and different engineers often provide different definitions or measurement techn
 Measuring 'portability' itself is somewhat more well defined. One can, in principle, measure the 
 total lines of code used in common across different architectures vs. the amount of code intended 
 for a single architecture via ``IFDEF`` pre-processing statements, separate routines and the like. A code with 0% 
-architecture specfic code being completely portable and a code with a 100% architecture specific 
+architecture specific code being completely portable and a code with a 100% architecture specific 
 code being essentially made up of multiple applications for each architecture. 
 
 One subtlety that this approach hides is that it is possible that shared source-code requires more lines than source-code intended for a single architecture 
@@ -34,11 +34,11 @@ However, this is a poor measure of application performance (and a particularly p
 couple reasons:
 
 * The application or algorithm may be fundamentally limited by an aspect of the HPC system other than the compute capability (which is limited to the number 
-of cores/theads, clock-speed and vector/instruction-sets)
+of cores/threads, clock-speed and vector/instruction-sets)
 
 * The application or algorithm may be fundamentally limited by *different* aspects of the system on different HPC system. 
 
-As an example, an implemenation of an algorithm that is limited by memory bandwidth may be achieving the best performance it theoretially can on systems 
+As an example, an implementation of an algorithm that is limited by memory bandwidth may be achieving the best performance it theoretically can on systems 
 with different architectures but could be achieving widely varying percentage of peaks FLOPS on the different systems. 
 
 Instead we advocate for one of two approaches for defining performance against expected or optimal performance on the system for an algorithm:
@@ -61,7 +61,7 @@ limited by many different aspects of an HPC system.
 
 The roofline performance model and extensions to the roofline model attempt to take these different possibilities into account. In the 
 roofline approach, one defines various 
-theoretial performance ceilings for an algorithm or implementation based on its properties. In the simplest model, one may classify an algorithm based on 
+theoretical performance ceilings for an algorithm or implementation based on its properties. In the simplest model, one may classify an algorithm based on 
 its DRAM arithmetic-intensity - the ratio of the FLOPs performed vs the data moved from main-memory (DRAM) to the processor over the course of 
 execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
 model on KNL for applications as a function of their DRAM arithmetic-intensity:
@@ -72,7 +72,7 @@ Here the blue line represents the maximum performance that can be achieved on a 
 (HBM) with a given
 DRAM-AI (the x-axis value). For low
 values of DRAM-AI, the performance is limited by the diagonal ceiling, meaning that memory-bandwidth is the limiting hardware feature. The location of the 
-diagonalline are typically computed empiracally from the available bandwidth reported by, for example, stream triad like kernels.
+diagonal lines are typically computed empirically from the available bandwidth reported by, for example, stream triad like kernels.
 
 For high values of DRAM-AI,
 memory bandwidth no longer limits performance and one can, in principle, achieve the max compute performance on the system. However, for such cases we 
@@ -92,7 +92,7 @@ level.
 
 In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed. Many codes use strided or indirect-addressed 
 (scatter/gather) patterns where memory latency may be limiting resource. In such cases, it is possible to quickly craft a few line benchmark to compute the 
-relevant ceiling. We should some example ceiling parametersfor different access patterns determined empirically in the following tables:
+relevant ceiling. We should some example ceiling parameters for different access patterns determined empirically in the following tables:
 
 For polynomial access pattern: x[i] = (x[i]+c0):
 
