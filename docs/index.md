@@ -21,7 +21,7 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 | Location | OLCF     |
 | Architecture | CPU + NVIDIA GPU |
 | Scale | 18,688 Nodes |
-| Picture | <img src="images/titan.opt.jpg" width=200> |
+|  | <img src="images/titan.opt.jpg" width=200> |
 
 
 | System   | Cori    |
@@ -30,14 +30,14 @@ systems with two-distinct "pre-exascale" like architectures that we discuss in d
 | Architecture | Xeon-Phi |
 | Scale | 9688 Nodes |
 | Notes | SSD Burst-Buffer IO layer |
-| Picture | <img src="images/cori.opt.jpg" width=200> |
+|  | <img src="images/cori.opt.jpg" width=200> |
 
 | System   | Theta    |
 |----------|----------|
 | Location | ALCF     |
 | Architecture | Xeon-Phi |
 | Scale | 3624 Nodes |
-| Picture | <img src="images/theta.opt.jpg" width=200> |
+|  | <img src="images/theta.opt.jpg" width=200> |
 
 The two processor architectures deployed on these systems are the CPU+GPU hybrid architecture on Titan and the "self-hosted" Xeon-Phi processors 
 (code named "Knights Landing"). These two architectures, while seemingly quite different at first appearance, have a number of similarities that we believe 
@@ -54,7 +54,8 @@ supports both architectures.
 This website is intended to be a living/growing documentation hub and guide for applications teams targetting systems at multiple DOE office of science 
 facilities. In the below pages, we 
 discuss in detail the differences between the systems, the software environment and job-submission process. We discuss how to define and measure performacne 
-portability and we provide recommendations and case studies for the most promising performance-portability pogramming approaches.
+portability and we provide recommendations and case studies for the most promising performance-portability pogramming approaches. A 
+[summary](http://performanceportability.org/perfport/summary/) of the high level findings and recommendations will be maintained.
 
 As an additional valuable resource, the Centers of Excellence from DOE facilities in both the Office of Science and the National Nuclear Security Agency 
 (NNSA) have coordinated an annual meeting with a detailed report of findings available [here](https://asc.llnl.gov/DOE-COE-Mtg-2016)).
