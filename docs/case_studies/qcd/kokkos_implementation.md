@@ -181,7 +181,7 @@ In the above, the GPU Threads in the $X$ drection are created, when we call ```K
 parameters into template parameters. Finally, the member data of the ```DslashFunctor``` are initialized by copy.
 
 Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a ```SiteTable``` class with
-member functions like ```NeighborTMinus(site,target_cb)``` to give the linear site indices of the neighbors. The instance of this site table is called ```_neigh_table``` in the ```DslashFunctor```. Our implementation is such that ```SiteTable``` either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture.
+member functions like ```NeighborTMinus(site,target_cb)``` to give the linear site indices of the neighbors. The instance of this site table is the ```_neigh_table``` member in the ```KokkosDslash``` class and is used to initialize the ```neigh_table``` member of the ```DslashFunctor```. Our implementation is such that ```SiteTable``` either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture.
 
 ## Complex Numbers and C++
 We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as 
@@ -243,8 +243,7 @@ void ComplexCopy(T1<T,N>& result, const T2<T,N>& source)
 }
 ```
 
-Suppose that ```T1``` is ```SIMDComplex``` and ```T2``` is also SIMDComplex. Then this code will copy all the actual elements
-of ```source``` into ```result```, as one would need to do on CPUs. However, now on the GPU,  if ```result``` is of type ```GPUSIMDComplex``` and the ```ExecutionPolicy``` set up the warp threads in the X-direction, this code should instead reduce to:
+Suppose that ```T1``` is ```SIMDComplex``` and ```T2``` is also ```SIMDComplex``` as one would have on a CPU. Then the ```Kokkos::parallel_for``` will expand into a loop, possibly decorated with ```#pragma ivdep``` and this code will copy all the actual elements of ```source``` into ```result```. However, on the GPU,  if ```result``` is of type ```GPUSIMDComplex``` and the ```ExecutionPolicy``` set up the warp threads in the X-direction, this code should instead reduce to:
 
 ```C++
 {
@@ -351,4 +350,4 @@ It exhibits that about 55% of all instructions are floating point instructions, 
 
 ![instruction decomposition for Kokkos Wilson dslash kernel](images/kokkos_dslash_instruction_count.png)
 
-This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. We are still investigating, whether the extra integer operations arise from our own integer computations or from those of Kokkos, indexing into views. If it is the latter, we may be able to further reduce these by using Kokkos' subview mechanism. Excessive integer operations can hurt performance also on KNL, where integer operations are not vectorized, and indeed on KNL best performance is typically seen when the ```SiteTable``` is operated in lookup table mode.
+This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. We are still investigating, whether the extra integer operations arise from our own integer computations or from those of Kokkos indexing into views. If it is the latter, we may be able to further reduce these by using Kokkos' subview mechanism. Excessive integer operations can hurt performance also on KNL, where integer operations are not vectorized, and indeed on KNL best performance is typically seen when the ```SiteTable``` is operated in lookup table mode.
