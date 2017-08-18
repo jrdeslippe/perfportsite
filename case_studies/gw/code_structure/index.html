@@ -985,7 +985,8 @@
 <span class="n">enddo</span> 
 </pre></div>
 
-<p>where in the prouction we block the <code>ig</code> loop around the <code>iw</code> loop in order to gain data reuse. However, the inner 'ig' loop is left appropriately long to 
+<p>where, in the prouction code, we block the <code>ig</code> loop around the <code>iw</code> loop in order to gain data reuse. However, the inner 'ig' loop is left appropriately 
+long to 
 get efficient vector performance - typically block sizes of around 256 are used, which is many vector lengths on a KNL processor.</p>
 <h2 id="portability-considerations">Portability considerations<a class="headerlink" href="#portability-considerations" title="Permanent link">&para;</a></h2>
 <p>There are essentially three hot-arrays in this code, for convenience named array1, array2, array3 corresponding to the three complex-double precision arrays 
