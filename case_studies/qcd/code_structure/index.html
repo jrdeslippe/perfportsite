@@ -969,17 +969,28 @@
 <li>stream-out the resulting summed vector to memory</li>
 </ul>
 <p>In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.</p>
+<p>As is common in Lattice codes we attribute a color (checkerboard) to each lattice site, depending on whether
+the 4-dimensional coordinates sum to an even number or an odd number. The color is also referred to as a checkerboard
+index (cb), or parity. In the traditional 2-coloring scheme (red-black or even-odd) each checkerboard of the lattice 
+contains half of the total number of lattice sites. In a nearest neighbor operator such as dslash, output spinors on sites of one
+checkerboard color (target_cb) will need neighboring input spinors only from sites of the other checkerboard color (source_cb),
+and hence all the sites of a given checkerboard can be conveniently computed in parallel, with no write conflicts.
+Gauge fields are usually stored as the forward pointing links in the 4 forward directions. The backward pointing links at a site
+are the hermitian conjugates of the forward pointing links of the site's back neighbors in each direction (which will have the
+opposite parity from the original site). Hence even for applying Dslash to sites of only one parity, the gauge fields from both
+parities need to be read.</p>
 <h2 id="data-primitives">Data Primitives<a class="headerlink" href="#data-primitives" title="Permanent link">&para;</a></h2>
 <p>For facilitating this workflow, we define spinor and gauge link classes (in C++-like pseudocode):</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
+<div class="codehilite"><pre><span></span><span class="c1">// num_sites is the number of lattice sites on a single checkerboard</span>
+<span class="c1">// color of the lattice (half the total number of lattice sites)</span>
+<span class="c1">//</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
 <span class="k">class</span> <span class="nc">CBSpinor</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span> 
   <span class="p">...</span>
 <span class="k">private</span><span class="o">:</span>
   <span class="c1">// dims are: site, color, spin. </span>
-  <span class="c1">// the * means that the number of sites is not decided at</span>
-  <span class="c1">// compile time, but at initialization</span>
-  <span class="n">spin_container</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">spin</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+  <span class="n">spin_container</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">[</span><span class="n">num_sites</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="n">nspin</span><span class="p">],</span><span class="n">nspin</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="o">&gt;</span> 
@@ -988,9 +999,7 @@
   <span class="p">...</span>
 <span class="k">private</span><span class="o">:</span>
   <span class="c1">// dims are: site, direction, color, color</span>
-  <span class="c1">// The * means that the number of sites is not decided at </span>
-  <span class="c1">// compile time, but at initialization</span>
-  <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">*</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">[</span><span class="n">num_sites</span><span class="p">][</span><span class="mi">4</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 
@@ -1002,7 +1011,8 @@
 <span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
   <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
-                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
+                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in_src_cb</span><span class="p">,</span>
+                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in_target_cb</span><span class="p">,</span>
                 <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">)</span>
   <span class="p">{</span>
     <span class="c1">// Threaded loop over sites</span>

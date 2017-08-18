@@ -1042,42 +1042,43 @@ migrate all data in a loop back and forth between host and device:</p>
 
 <p>We also modified some existing macros in BoxLib which characterize loop-level
 parallelism. In these directives we implemented the <code>target</code> construct, e.g.,:</p>
-<div class="codehilite"><pre><span></span><span class="cp">#define ForAllThisCPencilAdd(T,b,ns,nc,red)                             \</span>
-<span class="cp">{                                                                       \</span>
-<span class="cp">    BL_ASSERT(contains(b));                                             \</span>
-<span class="cp">    BL_ASSERT((ns) &gt;= 0 &amp;&amp; (ns) + (nc) &lt;= nComp());                     \</span>
-<span class="cp">    const int *_th_plo = loVect();                                      \</span>
-<span class="cp">    const int *_th_plen = length();                                     \</span>
-<span class="cp">    const int *_b_lo = (b).loVect();                                    \</span>
-<span class="cp">    IntVect b_length = (b).size();                                      \</span>
-<span class="cp">    const int *_b_len = b_length.getVect();                             \</span>
-<span class="cp">    const T* _th_p = dptr;                                              \</span>
-<span class="cp">    const int _ns = (ns);                                               \</span>
-<span class="cp">    const int _nc = (nc);                                               \</span>
-<span class="cp">    T redR = (red);                                                     \</span>
-<span class="cp">    _Pragma(&quot;omp target update to(_th_p[_ns*_th_plen[2]:(_ns+_nc)*_th_plen[2]])&quot;) \</span>
-<span class="cp">    _Pragma(&quot;omp target data map(tofrom: redR) map(to: _nc, _ns, _th_plo[0:3], _th_plen[0:3], _b_len[0:3], _b_lo[0:3])&quot;) \</span>
-<span class="cp">    _Pragma(&quot;omp target if(1)&quot;)                                         \</span>
-<span class="cp">    {                                                                   \</span>
-<span class="cp">    _Pragma(&quot;omp teams distribute parallel for collapse(3) reduction(+:redR)&quot;) \</span>
-<span class="cp">    for(int _n = _ns; _n &lt; _ns+_nc; ++_n) {                             \</span>
-<span class="cp">        for(int _k = 0; _k &lt; _b_len[2]; ++_k) {                         \</span>
-<span class="cp">            for(int _j = 0; _j &lt; _b_len[1]; ++_j) {                     \</span>
-<span class="cp">                int nR = _n; nR += 0;                                   \</span>
-<span class="cp">                const int jR = _j + _b_lo[1];                           \</span>
-<span class="cp">                const int kR = _k + _b_lo[2];                           \</span>
-<span class="cp">                const T *_th_pp = _th_p                                 \</span>
-<span class="cp">                    + ((_b_lo[0] - _th_plo[0])                          \</span>
-<span class="cp">                       + _th_plen[0]*(                                  \</span>
-<span class="cp">                           (jR - _th_plo[1])                            \</span>
-<span class="cp">                           + _th_plen[1]*(                              \</span>
-<span class="cp">                               (kR - _th_plo[2])                        \</span>
-<span class="cp">                               + _n * _th_plen[2])));                   \</span>
-<span class="cp">                for(int _i = 0; _i &lt; _b_len[0]; ++_i){                  \</span>
-<span class="cp">                    const int iR = _i + _b_lo[0];                       \</span>
-<span class="cp">                    const T &amp;thisR = _th_pp[_i];</span>
+<div class="codehilite"><pre><span></span><span class="cp">#define ForAllThisCPencilAdd(T,b,ns,nc,red)  \</span>
+<span class="cp">{                                                                     \</span>
+<span class="cp">  BL_ASSERT(contains(b));                                             \</span>
+<span class="cp">  BL_ASSERT((ns) &gt;= 0 &amp;&amp; (ns) + (nc) &lt;= nComp());                     \</span>
+<span class="cp">  const int *_th_plo = loVect();                                      \</span>
+<span class="cp">  const int *_th_plen = length();                                     \</span>
+<span class="cp">  const int *_b_lo = (b).loVect();                                    \</span>
+<span class="cp">  IntVect b_length = (b).size();                                      \</span>
+<span class="cp">  const int *_b_len = b_length.getVect();                             \</span>
+<span class="cp">  const T* _th_p = dptr;                                              \</span>
+<span class="cp">  const int _ns = (ns);                                               \</span>
+<span class="cp">  const int _nc = (nc);                                               \</span>
+<span class="cp">  T redR = (red);                                                     \</span>
+<span class="cp">  _Pragma(&quot;omp target update to(_th_p[_ns*_th_plen[2]:(_ns+_nc)*_th_plen[2]])&quot;) \</span>
+<span class="cp">  _Pragma(&quot;omp target data map(tofrom: redR) map(to: _nc, _ns, _th_plo[0:3], _th_plen[0:3], _b_len[0:3], _b_lo[0:3])&quot;) \</span>
+<span class="cp">  _Pragma(&quot;omp target if(1)&quot;)                                         \</span>
+<span class="cp">  {                                                                   \</span>
+<span class="cp">  _Pragma(&quot;omp teams distribute parallel for collapse(3) reduction(+:redR)&quot;) \</span>
+<span class="cp">  for(int _n = _ns; _n &lt; _ns+_nc; ++_n) {                             \</span>
+<span class="cp">    for(int _k = 0; _k &lt; _b_len[2]; ++_k) {                           \</span>
+<span class="cp">      for(int _j = 0; _j &lt; _b_len[1]; ++_j) {                         \</span>
+<span class="cp">        int nR = _n; nR += 0;                                         \</span>
+<span class="cp">        const int jR = _j + _b_lo[1];                                 \</span>
+<span class="cp">        const int kR = _k + _b_lo[2];                                 \</span>
+<span class="cp">        const T *_th_pp =  _th_p                                      \</span>
+<span class="cp">                + ((_b_lo[0] - _th_plo[0])                            \</span>
+<span class="cp">                   + _th_plen[0]*(                                    \</span>
+<span class="cp">                       (jR - _th_plo[1])                              \</span>
+<span class="cp">                       + _th_plen[1]*(                                \</span>
+<span class="cp">                           (kR - _th_plo[2])                          \</span>
+<span class="cp">                           + _n * _th_plen[2])));                     \</span>
+<span class="cp">        for(int _i = 0; _i &lt; _b_len[0]; ++_i){                        \</span>
+<span class="cp">          const int iR = _i + _b_lo[0];                               \</span>
+<span class="cp">          const T &amp;thisR = _th_pp[_i];</span>
 </pre></div>
 
+<p>Note that we are using the "_Pragma" construct which allows using <code>#pragma</code> statements in C-macros.</p>
 <p>After this, one can add the <code>target teams distribute parallel for</code> construct to
 many loops, moving to the device only the data which has changed since the
 previous time the loop was executed. This can be done with the <code>update</code>
@@ -1193,6 +1194,10 @@ reported to Cray as bug #189702. CCE 8.6.1 was</p>
 <li>
 <p>CCE 8.6.1 fails to link BoxLib at all (without <code>target</code> constructs), with g++
   tuple errors. This has been reported to Cray as bug #189760.</p>
+</li>
+<li>
+<p>IBM XLC 13.1 fails to link multiple compilation units together when more than one include the same header file and that header file contains a <code>target</code> region. Fixed in 14.0 but that
+  triggered an internal compilation error. Reported and acknowledged as bug #147007.</p>
 </li>
 </ul>
                 

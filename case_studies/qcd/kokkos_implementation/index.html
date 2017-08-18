@@ -1003,44 +1003,172 @@
                 
                 <h1 id="kokkos-implementation">Kokkos Implementation<a class="headerlink" href="#kokkos-implementation" title="Permanent link">&para;</a></h1>
 <p>In Kokkos, it is advised to use the <code>Kokkos::View</code> datatype as our data container. Therefore, the <a href="../code_structure/#Data_Primitives">spinor and gaugefield classes</a> become</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span><span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span> 
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nspin</span><span class="o">&gt;</span>
 <span class="k">class</span> <span class="nc">CBSpinor</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span> 
-    <span class="p">...</span>
-<span class="k">private</span><span class="o">:</span>
+    <span class="c1">// Define a type handle for the Kokkos View in this class (a Trait)</span>
     <span class="c1">// dims are: site, color, spin</span>
-    <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">nspin</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">DataType</span> <span class="o">=</span>  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">nspin</span><span class="p">],</span><span class="n">Layout</span><span class="p">,</span><span class="n">MemorySpace</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="c1">// Get the actual Kokkos views...</span>
+    <span class="k">const</span> <span class="n">DataType</span><span class="o">&amp;</span> <span class="n">GetData</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_data</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">DataType</span><span class="o">&amp;</span> <span class="n">GetData</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_data</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">DataType</span> <span class="n">_data</span><span class="p">;</span>
 <span class="p">};</span>
+
+<span class="c1">// Convenient Name for the View inside a 4 spinor</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">ST</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">SpinorView</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;::</span><span class="n">DataType</span><span class="p">;</span> 
 
 <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="o">&gt;</span> 
 <span class="k">class</span> <span class="nc">CBGaugeField</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-    <span class="p">...</span>
+    <span class="c1">// Define a type handle for the Kokkos View in this class (a Trait)</span>
+    <span class="c1">// dims are: site, direction, color, color  </span>
+    <span class="k">using</span> <span class="n">DataType</span> <span class="o">=</span>  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">*</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span><span class="n">GaugeLayout</span><span class="p">,</span><span class="n">MemorySpace</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="c1">// Get the actual Kokkos views...</span>
+    <span class="k">const</span> <span class="n">DataType</span><span class="o">&amp;</span> <span class="n">GetData</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_data</span><span class="p">;</span> <span class="p">}</span>
+    <span class="n">DataType</span><span class="o">&amp;</span> <span class="n">GetData</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_data</span><span class="p">;</span> <span class="p">}</span>
 <span class="k">private</span><span class="o">:</span>
-    <span class="c1">// dims are: site, direction, color, color</span>
-    <span class="n">gauge_container</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">*</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">DataType</span> <span class="n">_data</span><span class="p">;</span>      
 <span class="p">};</span>
+
+<span class="c1">// A Handle for the View part of the Gauge Field</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">GaugeView</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;::</span><span class="n">DataType</span><span class="p">;</span>
 </pre></div>
 
-<p>Note that the site index dimension is a runtime dimension (denoted by <code>*</code>) whereas the other dimensions - color and spin - are fixed (denoted by <code>[const]</code>). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code.</p>
-<p>In the <a href="../code_structure/#wilson_operator">Wilson operator class</a>, all what we need to do is to insert the kokkos parallel dispatcher. Hence it becomes</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">Dslash</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="kt">void</span> <span class="k">operator</span><span class="p">(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span><span class="p">,</span>
-                <span class="k">const</span> <span class="n">CBGaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in</span><span class="p">,</span>
-                <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span><span class="p">,</span>
-                <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> 
-  <span class="p">{</span>
-    <span class="c1">// Threaded loop over sites</span>
-    <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-      <span class="p">...</span>
+<p>In each container class, we defined a <code>DataType</code> to be an appropriate <code>Kokkos::View</code> for that object.
+Note that in the Views the site index dimension is a runtime dimension (denoted by <code>*</code>) whereas the other dimensions - color and spin - are fixed (denoted by <code>[const]</code>). Explicitly stating this is recommended by the kokkos developers because it should help the compiler to optimize the code.</p>
+<p>Here <code>Layout</code>, <code>GaugeLayout</code> and <code>MemorySpace</code> are policies we set at compile time in 
+a single header file, based on architecture e.g. for KNL one would have:</p>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">ExecSpace</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span><span class="o">::</span><span class="n">execution_space</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">MemorySpace</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span><span class="o">::</span><span class="n">memory_space</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">Layout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span> 
+<span class="k">using</span> <span class="n">GaugeLayout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">NeighLayout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">ThreadExecPolicy</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">TeamPolicy</span><span class="o">&lt;</span><span class="n">ExecSpace</span><span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+
+<p>whereas the appropriate settings for Single Right Hand Side Dslash for GPUs were:
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">ExecSpace</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span><span class="o">::</span><span class="n">execution_space</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">MemorySpace</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span><span class="o">::</span><span class="n">memory_space</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">Layout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">GaugeLayout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">NeighLayout</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span><span class="o">::</span><span class="n">array_layout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">ThreadExecPolicy</span> <span class="o">=</span>  <span class="n">Kokkos</span><span class="o">::</span><span class="n">TeamPolicy</span><span class="o">&lt;</span><span class="n">ExecSpace</span><span class="p">,</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">LaunchBounds</span><span class="o">&lt;</span><span class="mi">128</span><span class="p">,</span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+</pre></div>
+Finally we note that when a VectorType is used (see below) the setting for <code>Layout</code>, <code>GaugeLayout</code>, and <code>NeighLayout</code>
+was <code>Kokkos::LayoutRight</code> for both CPU and GPU.</p>
+<p>Care needs to be taken whether one passes by value or reference, as in an environment involving GPUs
+one cannot pass references to data on the host to the GPU (unless one uses Unified Virtual Memory -- UVM).
+Attempting to do so can lead to a run-time error. Also, we have found that one should not execute Kokkos
+parallel regions in the class constructor. Kokkos Views are small objects with a pointer potentially to memory
+in the appropriate <code>MemorySpace</code>. They are cheap to copy, and it help avoiding programming errors if we can
+pass the views directly to our kernels, rather than passing the wrapper <code>CBSpinor</code> objects. Hence we define
+accessors: <code>GetData()</code> for both our wrapper classes, and we also define the shorthand type aliases <code>SpinorView</code> and
+<code>GaugeView</code> for the Kokkos views as used in spinors or gauge fields respectively.</p>
+<p>It is common in lattice QCD to apply Dslash for both checkerboards and parities, and these are usually given
+as run-time parameters to a DSlash operator. In order to give the compiler maximum information, and to avoid
+unnecessary register spilling on GPUs we wanted to make these parameters essentially compile time. Hence we defined 
+a functor class <code>DslashFunctor</code> whose <code>operator()</code> implements the Dslash as discussed in <a href="../code_structure/#wilson_operator">Wilson operator class</a>.</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">isign</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">target_cb</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">DslashFunctor</span> <span class="p">{</span> 
+  <span class="n">SpinorView</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">&gt;</span> <span class="n">s_in</span><span class="p">;</span>          <span class="c1">// These are the Kokkos::Views</span>
+  <span class="n">GaugeView</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;</span> <span class="n">g_in_src_cb</span><span class="p">;</span>
+  <span class="n">GaugeView</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;</span> <span class="n">g_in_target_cb</span><span class="p">;</span>
+  <span class="n">SpinorView</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">&gt;</span> <span class="n">s_out</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">num_sites</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">sites_per_team</span><span class="p">;</span>
+  <span class="n">SiteTable</span> <span class="n">neigh_table</span><span class="p">;</span>
+
+  <span class="n">KOKKOS_FORCEINLINE_FUNCTION</span>
+  <span class="kt">void</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">TeamHandle</span><span class="o">&amp;</span> <span class="n">team</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">start_idx</span> <span class="o">=</span> <span class="n">team</span><span class="p">.</span><span class="n">league_rank</span><span class="p">()</span><span class="o">*</span><span class="n">sites_per_team</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">end_idx</span> <span class="o">=</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="n">sites_per_team</span>  <span class="o">&lt;</span> <span class="n">num_sites</span> <span class="o">?</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="nl">sites_per_team</span> <span class="p">:</span> <span class="n">num_sites</span><span class="p">;</span>
+
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">TeamThreadRange</span><span class="p">(</span><span class="n">team</span><span class="p">,</span><span class="n">start_idx</span><span class="p">,</span><span class="n">end_idx</span><span class="p">),[</span><span class="o">=</span><span class="p">](</span><span class="k">const</span> <span class="kt">int</span> <span class="n">site</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="c1">// Body as per the previous pseudocode</span>
+      <span class="n">SpinorSiteView</span><span class="o">&lt;</span><span class="n">TST</span><span class="o">&gt;</span> <span class="n">res_sum</span><span class="p">;</span>
+      <span class="n">HalfSpinorSiteView</span><span class="o">&lt;</span><span class="n">TST</span><span class="o">&gt;</span> <span class="n">proj_res</span><span class="p">;</span>
+      <span class="n">HalfSpinorSiteView</span><span class="o">&lt;</span><span class="n">TST</span><span class="o">&gt;</span> <span class="n">mult_proj_res</span><span class="p">;</span>
+
+      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">color</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">color</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">color</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">spin</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">spin</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">ComplexZero</span><span class="p">(</span><span class="n">res_sum</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="n">spin</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="c1">// T - minus</span>
+      <span class="n">KokkosProjectDir3</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="p">,</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s_in</span><span class="p">,</span> <span class="n">proj_res</span><span class="p">,</span>
+                             <span class="n">neigh_table</span><span class="p">.</span><span class="n">NeighborTMinus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">));</span>
+      <span class="n">mult_adj_u_halfspinor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">TST</span><span class="o">&gt;</span><span class="p">(</span><span class="n">g_in_src_cb</span><span class="p">,</span><span class="n">proj_res</span><span class="p">,</span><span class="n">mult_proj_res</span><span class="p">,</span>
+                             <span class="n">neigh_table</span><span class="p">.</span><span class="n">NeighborTMinus</span><span class="p">(</span><span class="n">site</span><span class="p">,</span><span class="n">target_cb</span><span class="p">),</span><span class="mi">3</span><span class="p">);</span>
+      <span class="n">KokkosRecons23Dir3</span><span class="o">&lt;</span><span class="n">TST</span><span class="p">,</span><span class="n">isign</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mult_proj_res</span><span class="p">,</span><span class="n">res_sum</span><span class="p">);</span>
+
+      <span class="c1">// ... other directions....</span>
     <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 
-<p>Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a neighbor class which either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture. </p>
+<p>and one can see that the functor operates directly on <code>Kokkos::View</code> data members and that
+apart from the ``site``` other indexing parameters such as target_cb are compile time through templates.</p>
+<p>To still allow choices of <code>target_cb</code> and <code>isign</code> (whether to apply Dslash or its hermitian conjugate)
+the top-level <code>Dslash</code> class looks like:</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">GT</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ST</span><span class="p">,</span> <span class="k">typename</span> <span class="n">TST</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">KokkosDslash</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">spinor_in</span><span class="p">,</span>
+                  <span class="k">const</span> <span class="n">GaugeField</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">gauge_in</span><span class="p">,</span>   <span class="c1">// contains CBGaugeField for both cb-s</span>
+                  <span class="n">CBSpinor</span><span class="o">&lt;</span><span class="n">ST</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;&amp;</span> <span class="n">spinor_out</span><span class="p">,</span>
+                  <span class="kt">int</span> <span class="n">plus_minus</span><span class="p">)</span> <span class="k">const</span>
+  <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">source_cb</span> <span class="o">=</span> <span class="n">spinor_in</span><span class="p">.</span><span class="n">GetCB</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">target_cb</span> <span class="o">=</span> <span class="p">(</span><span class="n">source_cb</span> <span class="o">==</span> <span class="n">EVEN</span><span class="p">)</span> <span class="o">?</span> <span class="nl">ODD</span> <span class="p">:</span> <span class="n">EVEN</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">SpinorView</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">&gt;&amp;</span> <span class="n">s_in</span> <span class="o">=</span> <span class="n">spinor_in</span><span class="p">.</span><span class="n">GetData</span><span class="p">();</span>
+    <span class="k">const</span> <span class="n">GaugeView</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span> <span class="n">g_in_src_cb</span> <span class="o">=</span> <span class="p">(</span><span class="n">gauge_in</span><span class="p">(</span><span class="n">source_cb</span><span class="p">)).</span><span class="n">GetData</span><span class="p">();</span>
+    <span class="k">const</span> <span class="n">GaugeView</span><span class="o">&lt;</span><span class="n">GT</span><span class="o">&gt;&amp;</span>  <span class="n">g_in_target_cb</span> <span class="o">=</span> <span class="p">(</span><span class="n">gauge_in</span><span class="p">(</span><span class="n">target_cb</span><span class="p">)).</span><span class="n">GetData</span><span class="p">();</span>
+    <span class="n">SpinorView</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">&gt;&amp;</span> <span class="n">s_out</span> <span class="o">=</span> <span class="n">spinor_out_out</span><span class="p">.</span><span class="n">GetData</span><span class="p">();</span>
+
+    <span class="p">...</span>
+
+    <span class="c1">// Create a Team policy, and inform it of the Vector Length</span>
+    <span class="n">ThreadExecPolicy</span> <span class="n">policy</span><span class="p">(</span><span class="n">num_sites</span><span class="o">/</span><span class="n">_sites_per_team</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">AUTO</span><span class="p">(),</span><span class="n">Veclen</span><span class="o">&lt;</span><span class="n">ST</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">);</span>
+
+    <span class="c1">// Ugly if-else to turn plus_minus &amp; target_cb into </span>
+    <span class="c1">// constant template arguments</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">plus_minus</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">target_cb</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Instantiat appropriate functor and construct</span>
+        <span class="c1">// All view initializations will be done by copy</span>
+        <span class="c1">// the values of plus_minus (1) and target_cb (0)</span>
+        <span class="c1">// are made explicit and compile time in the template</span>
+        <span class="c1">// arguments</span>
+        <span class="n">DslashFunctor</span><span class="o">&lt;</span><span class="n">GT</span><span class="p">,</span><span class="n">ST</span><span class="p">,</span><span class="n">TST</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="p">{</span><span class="n">s_in</span><span class="p">,</span> <span class="n">g_in_src_cb</span><span class="p">,</span> <span class="n">g_in_target_cb</span><span class="p">,</span> <span class="n">s_out</span><span class="p">,</span><span class="n">num_sites</span><span class="p">,</span> <span class="n">_sites_per_team</span><span class="p">,</span><span class="n">_neigh_table</span><span class="p">};</span>
+
+          <span class="c1">// Dispatch the thread Teams                     </span>
+          <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span> <span class="c1">// Outer Lambda </span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="p">...</span> <span class="c1">// Instantiate DslashFunctor for target_cb=1 &amp; Dispatch        </span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span> 
+      <span class="c1">// plus_minus == -1 case, target_cb=0,1 cases</span>
+      <span class="p">...</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>In the above, the GPU Threads in the <span>\(X\)</span> drection are created, when we call <code>Kokkos::parallel_for</code> with the <code>ThreadExecPolicy</code>, to which we have given a vector length through the <code>Veclen&lt;ST&gt;::veclen</code> type trait. The nested <code>if-else</code> clauses turn run-time
+parameters into template parameters. Finally, the member data of the <code>DslashFunctor</code> are initialized by copy.</p>
+<p>Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a <code>SiteTable</code> class with
+member functions like <code>NeighborTMinus(site,target_cb)</code> to give the linear site indices of the neighbors. The instance of this site table is the <code>_neigh_table</code> member in the <code>KokkosDslash</code> class and is used to initialize the <code>neigh_table</code> member of the <code>DslashFunctor</code>. Our implementation is such that <code>SiteTable</code> either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly (a choice made at configuration &amp; compile time using <code>#ifdef</code>). In our performance measurements we use the implementation which gives the best performance for a given architecture.</p>
 <h2 id="complex-numbers-and-c">Complex Numbers and C++<a class="headerlink" href="#complex-numbers-and-c" title="Permanent link">&para;</a></h2>
 <p>We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as </p>
 <div class="codehilite"><pre><span></span><span class="n">c</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
@@ -1077,7 +1205,28 @@
 <span class="p">};</span>
 </pre></div>
 
-<p>The latter construct might look confusing first, because the access operator ignores the <code>lane</code> parameter. This is because the SIMT threading is implicit in Kokkos and each SIMT thread is holding it's own data <code>_data</code>. Nevertheless, it is useful to implement the access operator that way to preserve a common, portable style throughout the rest of the code.</p>
+<p>The latter construct might look confusing first, because the access operator ignores the <code>lane</code> parameter. This is because the SIMT threading is implicit in Kokkos and each SIMT thread is holding it's own data <code>_data</code>. Nevertheless, it is useful to implement the access operator that way to preserve a common, portable style throughout the rest of the code. An example of manipulating these types
+in a unified way with templates is given below, for the <code>ComplexCopy</code> operation:</p>
+<div class="codehilite"><pre><span></span><span class="c1">// T1 must support indexing with operator()</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> 
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">T1</span><span class="p">,</span> 
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">T2</span><span class="o">&gt;</span>
+<span class="n">KOKKOS_FORCEINLINE_FUNCTION</span>
+<span class="kt">void</span> <span class="n">ComplexCopy</span><span class="p">(</span><span class="n">T1</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;&amp;</span> <span class="n">result</span><span class="p">,</span> <span class="k">const</span> <span class="n">T2</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;&amp;</span> <span class="n">source</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_for</span><span class="p">(</span><span class="n">VectorPolicy</span><span class="p">(</span><span class="n">N</span><span class="p">),[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">result</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">source</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>      
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Suppose that <code>T1</code> is <code>SIMDComplex</code> and <code>T2</code> is also <code>SIMDComplex</code> as one would have on a CPU. Then the <code>Kokkos::parallel_for</code> will expand into a loop, possibly decorated with <code>#pragma ivdep</code> and this code will copy all the actual elements of <code>source</code> into <code>result</code>. However, on the GPU,  if <code>result</code> is of type <code>GPUSIMDComplex</code> and the <code>ExecutionPolicy</code> set up the warp threads in the X-direction, this code should instead reduce to:</p>
+<p><div class="codehilite"><pre><span></span><span class="p">{</span>
+  <span class="n">result</span><span class="p">.</span><span class="n">_data</span>  <span class="o">=</span> <span class="n">source</span><span class="p">(</span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+in other words the routine is capable also of splitting the <code>SIMDComplex</code> into its lanes for the threads in the X-direction 
+(and vice versa if <code>source</code> and <code>destination</code> are interchanged).</p>
 <h3 id="specialization-for-cpu">Specialization for CPU<a class="headerlink" href="#specialization-for-cpu" title="Permanent link">&para;</a></h3>
 <p>In theory, these two types are sufficient for ensuring proper vectorization on both CPU and GPU. In our experiments however, we found that neither Intel nor GNU compiler could vectorize the complex operations inside the spinors properly, leading to a very poor performance. This is not a problem of Kokkos itself, it is merely the inability of compilers to efficiently vectorized complex algebra.
 We therefore provided a template  specialization for the <code>CPUSIMDComplex</code> datatype which we implemented by explicitly using AVX512 intrinsics. For example, the datatype then becomes</p>
@@ -1099,13 +1248,18 @@ We therefore provided a template  specialization for the <code>CPUSIMDComplex</c
 <span class="kt">void</span> <span class="n">ComplexCMadd</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">CPUSIMDComplex</span><span class="p">,</span><span class="n">CPUSIMDComplex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;&amp;</span> <span class="n">res</span><span class="p">,</span>
                                                          <span class="k">const</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span>
                                                          <span class="k">const</span> <span class="n">CPUSIMDComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="mi">8</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
+<span class="p">{</span> 
+  <span class="c1">// Broadcast real and imaginary parts of &#39;a&#39; into vector registers</span>
   <span class="n">__m512</span> <span class="n">avec_re</span> <span class="o">=</span> <span class="n">_mm512_set1_ps</span><span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">real</span><span class="p">()</span> <span class="p">);</span>
   <span class="n">__m512</span> <span class="n">avec_im</span> <span class="o">=</span> <span class="n">_mm512_set1_ps</span><span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">imag</span><span class="p">()</span> <span class="p">);</span>
 
+  <span class="c1">// A vector of alternating +/- 1s;</span>
   <span class="n">__m512</span> <span class="n">sgnvec</span> <span class="o">=</span> <span class="n">_mm512_set_ps</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+
+  <span class="c1">// A permutation of b&#39;s real and imaginary parts, with the sign vector multiplied in.</span>
   <span class="n">__m512</span> <span class="n">perm_b</span> <span class="o">=</span> <span class="n">_mm512_mul_ps</span><span class="p">(</span><span class="n">sgnvec</span><span class="p">,</span><span class="n">_mm512_shuffle_ps</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">_vdata</span><span class="p">,</span><span class="n">b</span><span class="p">.</span><span class="n">_vdata</span><span class="p">,</span><span class="mh">0xb1</span><span class="p">));</span>
 
+  <span class="c1">// 2 FMAs.</span>
   <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span> <span class="o">=</span> <span class="n">_mm512_fmadd_ps</span><span class="p">(</span> <span class="n">avec_re</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">_vdata</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span><span class="p">);</span>
   <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span> <span class="o">=</span> <span class="n">_mm512_fmadd_ps</span><span class="p">(</span> <span class="n">avec_im</span><span class="p">,</span><span class="n">perm_b</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="n">_vdata</span><span class="p">);</span>
 <span class="p">}</span>
@@ -1119,30 +1273,30 @@ We therefore provided a template  specialization for the <code>CPUSIMDComplex</c
 To improve that situation, we decide to write our own complex class which we derived from the CUDA <code>float2</code> datatype (this is for single precision, one could use <code>double2</code> for double precision). By doing so, we make sure that the data member has correct alignment properties and thus helps the compiler to issue optimized store and load iterations. The implementation of this class is sketched below.</p>
 <div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;&gt;</span>
 <span class="k">class</span> <span class="nc">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">float2</span> <span class="p">{</span> 
-  <span class="k">public</span><span class="o">:</span>
-    <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
-      <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+  <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">;</span>
+  <span class="p">}</span>
 
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T2</span><span class="o">&gt;</span>
-    <span class="k">explicit</span>  <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">T1</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="n">T2</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
-      <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
-    <span class="p">}</span>
+  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T2</span><span class="o">&gt;</span>
+  <span class="k">explicit</span>  <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">T1</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="n">T2</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+  <span class="p">}</span>
 
-    <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
-    <span class="p">}</span>
+  <span class="k">explicit</span> <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">re</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">im</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+  <span class="p">}</span>
 
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="o">&gt;</span>
-    <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="n">T1</span><span class="o">&gt;&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-      <span class="n">y</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
-      <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
+  <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T1</span><span class="o">&gt;</span>
+  <span class="n">KOKKOS_INLINE_FUNCTION</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">GPUComplex</span><span class="o">&lt;</span><span class="n">T1</span><span class="o">&gt;&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+  <span class="p">}</span>
 
-    <span class="p">...</span>
+  <span class="p">...</span>
 <span class="p">};</span>
 </pre></div>
 
@@ -1154,7 +1308,7 @@ Using this class got rid of all uncoalesced data access issues even in CUDA 8. T
 <p><img alt="instruction decomposition for QUDA Wilson dslash kernel" src="../images/quda_dslash_instruction_count.png" /></p>
 <p>It exhibits that about 55% of all instructions are floating point instructions, there is basically no flow control and only about 28% integer arithmetic. For the Kokkos kernel <code>nvprof</code> shows the following picture.</p>
 <p><img alt="instruction decomposition for Kokkos Wilson dslash kernel" src="../images/kokkos_dslash_instruction_count.png" /></p>
-<p>This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. Since we are not doing significant amounts of index calculations in our kernel bodies (i.e. inside Kokkos functors), it means that Kokkos is inserting that, probably for indexing into the views. This can hurt performance especially on older GPU architectures and also on KNL, where integer operations are not vectorized. Currently, we do not see an easy workaround as this behaviour is buried inside the Kokkos framework.</p>
+<p>This shows that our floating point instruction ratio is only 28%, whereas integer and control flow counts are notably higher, namely 38% and 15% respectively. We are still investigating, whether the extra integer operations arise from our own integer computations or from those of Kokkos indexing into views. If it is the latter, we may be able to further reduce these by using Kokkos' subview mechanism. Excessive integer operations can hurt performance also on KNL, where integer operations are not vectorized, and indeed on KNL best performance is typically seen when the <code>SiteTable</code> is operated in lookup table mode.</p>
                 
                   
                 

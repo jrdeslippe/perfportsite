@@ -445,6 +445,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compiler-support" title="Compiler Support" class="md-nav__link">
+    Compiler Support
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -998,6 +1005,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compiler-support" title="Compiler Support" class="md-nav__link">
+    Compiler Support
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -1254,6 +1268,44 @@ executing the loop.</p>
 <li>Sensitive to compiler support/maturity</li>
 <li>Evolving standards</li>
 </ul>
+<h2 id="compiler-support">Compiler Support<a class="headerlink" href="#compiler-support" title="Permanent link">&para;</a></h2>
+<p>The following table summarizes the OpenMP compiler support.</p>
+<table>
+<thead>
+<tr>
+<th>Compiler</th>
+<th>Language Support</th>
+<th>Architecture Support</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GNU</td>
+<td>C/C++ (&gt;6.1), Fortran (&gt;7.2)</td>
+<td>Range of CPUs, nvidia GPUs</td>
+<td>performance problems on CPU (<a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859">bug #80859</a>), compilation problems with <code>enter data</code> and <code>exit data</code> constructs (<a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896">bug #81896</a>)</td>
+</tr>
+<tr>
+<td>Intel</td>
+<td>C/C++, Fortran (&gt;17.0)</td>
+<td>x86-64 CPUs</td>
+<td>generated code in target region can be wrong, working on a testcase to demonstrate that problem</td>
+</tr>
+<tr>
+<td>Cray</td>
+<td>C/C++, Fortran (&gt;8.5)</td>
+<td>x86-64 CPUs, nvidia GPUs</td>
+<td>failure at link time when host-offloading is used (bug #189760)</td>
+</tr>
+<tr>
+<td>IBM</td>
+<td>C/C++ (&gt;13.1.5), Fortran (&gt;15.1.5)</td>
+<td>Power CPUs, nvidia GPUs</td>
+<td>multiple-definitions link error when <code>target</code> region is contained in header file which is included by multiple compilation units (bug #147007)</td>
+</tr>
+</tbody>
+</table>
                 
                   
                 
