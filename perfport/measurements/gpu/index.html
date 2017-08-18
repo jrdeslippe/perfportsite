@@ -320,15 +320,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-use-nvprof-to-collect-the-time-spent-in-the-kernel-you-are-interested-in" title="1. Use NVProf to collect the time spent in the kernel you are interested in" class="md-nav__link">
-    1. Use NVProf to collect the time spent in the kernel you are interested in
+  <a href="#1-use-nvprof-to-collect-the-time-spent" title="1. Use NVProf to collect the time spent" class="md-nav__link">
+    1. Use NVProf to collect the time spent
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-use-the-metric-summary-mode" title="2. Use the metric summary mode" class="md-nav__link">
-    2. Use the metric summary mode
+  <a href="#2-use-the-nvprof-metric-summary-mode" title="2. Use the NVProf metric summary mode" class="md-nav__link">
+    2. Use the NVProf metric summary mode
   </a>
   
 </li>
@@ -923,15 +923,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-use-nvprof-to-collect-the-time-spent-in-the-kernel-you-are-interested-in" title="1. Use NVProf to collect the time spent in the kernel you are interested in" class="md-nav__link">
-    1. Use NVProf to collect the time spent in the kernel you are interested in
+  <a href="#1-use-nvprof-to-collect-the-time-spent" title="1. Use NVProf to collect the time spent" class="md-nav__link">
+    1. Use NVProf to collect the time spent
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-use-the-metric-summary-mode" title="2. Use the metric summary mode" class="md-nav__link">
-    2. Use the metric summary mode
+  <a href="#2-use-the-nvprof-metric-summary-mode" title="2. Use the NVProf metric summary mode" class="md-nav__link">
+    2. Use the NVProf metric summary mode
   </a>
   
 </li>
@@ -962,14 +962,15 @@
 <li>The runtime in seconds</li>
 </ol>
 <p>These can be collected with NVProf using the following steps:</p>
-<h2 id="1-use-nvprof-to-collect-the-time-spent-in-the-kernel-you-are-interested-in">1. Use NVProf to collect the time spent in the kernel you are interested in<a class="headerlink" href="#1-use-nvprof-to-collect-the-time-spent-in-the-kernel-you-are-interested-in" title="Permanent link">&para;</a></h2>
+<h2 id="1-use-nvprof-to-collect-the-time-spent">1. Use NVProf to collect the time spent<a class="headerlink" href="#1-use-nvprof-to-collect-the-time-spent" title="Permanent link">&para;</a></h2>
+<p>You can use NVProf to collect time spent in a kernel you are interested in by executing something like the following:</p>
 <div class="codehilite"><pre><span></span>command: nvprof --print-gpu-trace ./build/bin/hpgmg-fv <span class="m">6</span> <span class="m">8</span>
 output: 
 Time<span class="o">(</span>%<span class="o">)</span>      Time     Calls    Avg           Min                Max           Name
  <span class="m">51</span>.96%  <span class="m">2</span>.52256s   <span class="m">1764</span>  <span class="m">1</span>.4300ms  <span class="m">1</span>.4099ms  <span class="m">1</span>.4479ms      void smooth_kernel&lt;<span class="nv">int</span><span class="o">=</span><span class="m">7</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>, <span class="nv">int</span><span class="o">=</span><span class="m">4</span>, <span class="nv">int</span><span class="o">=</span><span class="m">16</span>&gt;<span class="o">(</span>level_type, int, int, double, double, int, double*, double*<span class="o">)</span>
 </pre></div>
 
-<h2 id="2-use-the-metric-summary-mode">2. Use the metric summary mode<a class="headerlink" href="#2-use-the-metric-summary-mode" title="Permanent link">&para;</a></h2>
+<h2 id="2-use-the-nvprof-metric-summary-mode">2. Use the NVProf metric summary mode<a class="headerlink" href="#2-use-the-nvprof-metric-summary-mode" title="Permanent link">&para;</a></h2>
 <p>You can use this mode and specify the target kernel to collect information such as:</p>
 <ul>
 <li>Floating point ops</li>
