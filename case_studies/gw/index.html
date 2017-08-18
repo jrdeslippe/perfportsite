@@ -987,8 +987,8 @@ major bottleneck in the application.</p>
 <p>The fact that the denominator in the above equation depends on <span>\(n'\)</span>, <span>\(G\)</span> and <span>\(G'\)</span> means it is difficult to write the matrix-reduction using standard 
 math-libaries. The baseline code is implemented in FORTRAN-90 utilizing an MPI+OpenMP parallel approach, with care given to ensure a vectorizable inner loop. MPI parallelism is 
 generally used to parallelize over <span>\(n\)</span> and <span>\(n'\)</span>, while OpenMP parallelizes the <span>\(G'\)</span> loop and the <span>\(G\)</span> loop is left for vectorization. Significant data re-use of 
-the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require three <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. Initial 
-roofline plots for KNL Xeon processors are shown below. </p>
+the arrays is possible if many values of <span>\(E\)</span> are required. At minimum, we require three <span>\(E\)</span> values; which leads to an arithmetic intensity of &gt; 1. An initial 
+roofline plot for KNL Xeon processors are shown below. </p>
 <p><center><img src="gwroofline.png" width=600></center></p>
 <p>The gap between the code performance and the ceiling can be explained via two factors: 1. the code lacks multiply-add symmetry and 2. the divide instruction has a 
 multi-cycle latency. </p>
