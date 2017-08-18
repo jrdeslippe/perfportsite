@@ -177,11 +177,11 @@ public:
 };
 ```
 
-In the above, the GPU Threads in the $X$ drection are created, when we call ```Kokko::parallel_for``` with the ```ThreadExecPolicy```, to which we have given a vector length through the ```Veclen<ST>::veclen``` type trait. The nested ```if-else``` clauses turn run-time
+In the above, the GPU Threads in the $X$ drection are created, when we call ```Kokkos::parallel_for``` with the ```ThreadExecPolicy```, to which we have given a vector length through the ```Veclen<ST>::veclen``` type trait. The nested ```if-else``` clauses turn run-time
 parameters into template parameters. Finally, the member data of the ```DslashFunctor``` are initialized by copy.
 
 Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a ```SiteTable``` class with
-member functions like ```NeighborTMinus(site,target_cb)``` to give the linear site indices of the neighbors. The instance of this site table is the ```_neigh_table``` member in the ```KokkosDslash``` class and is used to initialize the ```neigh_table``` member of the ```DslashFunctor```. Our implementation is such that ```SiteTable``` either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture.
+member functions like ```NeighborTMinus(site,target_cb)``` to give the linear site indices of the neighbors. The instance of this site table is the ```_neigh_table``` member in the ```KokkosDslash``` class and is used to initialize the ```neigh_table``` member of the ```DslashFunctor```. Our implementation is such that ```SiteTable``` either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly (a choice made at configuration & compile time using ```#ifdef```). In our performance measurements we use the implementation which gives the best performance for a given architecture.
 
 ## Complex Numbers and C++
 We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as 
