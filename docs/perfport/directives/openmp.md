@@ -270,7 +270,7 @@ executing the loop.
 * Sensitive to compiler support/maturity
 * Evolving standards
 
-## Summary
+## Compiler Support
 
 The following table summarizes the OpenMP compiler support.
 
