@@ -269,3 +269,12 @@ executing the loop.
 
 * Sensitive to compiler support/maturity
 * Evolving standards
+
+## Summary
+
+The following table summarizes the OpenMP compiler support.
+
+| Compiler | Language Support | Architecture Support | Notes | 
+|----------|------------------|----------------------|-------|
+|    GNU   | C/C++ (>6.1), Fortran (>7.2) | Range of CPUs, nvidia GPUs   | performance problems on CPU ([bug #80859](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859)), problems with ```enter data``` constructs ([bug #81896](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896)) |
+| Intel    | C/C++, Fortran (>17.0)   | x86-64 CPUs | generated target code can be wrong, depending on optimization level |
