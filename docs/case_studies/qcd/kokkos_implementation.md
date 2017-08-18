@@ -139,43 +139,41 @@ public:
                   CBSpinor<ST,4>& spinor_out,
                   int plus_minus) const
   {
-     int source_cb = spinor_in.GetCB();
-     int target_cb = (source_cb == EVEN) ? ODD : EVEN;
-     const SpinorView<ST>& s_in = spinor_in.GetData();
-     const GaugeView<GT>& g_in_src_cb = (gauge_in(source_cb)).GetData();
-     const GaugeView<GT>&  g_in_target_cb = (gauge_in(target_cb)).GetData();
-     SpinorView<ST>& s_out = spinor_out_out.GetData();
+    int source_cb = spinor_in.GetCB();
+    int target_cb = (source_cb == EVEN) ? ODD : EVEN;
+    const SpinorView<ST>& s_in = spinor_in.GetData();
+    const GaugeView<GT>& g_in_src_cb = (gauge_in(source_cb)).GetData();
+    const GaugeView<GT>&  g_in_target_cb = (gauge_in(target_cb)).GetData();
+    SpinorView<ST>& s_out = spinor_out_out.GetData();
 
-     ...
+    ...
 
-     // Create a Team policy, and inform it of the Vector Length
-     ThreadExecPolicy policy(num_sites/_sites_per_team,
-				Kokkos::AUTO(),Veclen<ST>::value);
+    // Create a Team policy, and inform it of the Vector Length
+    ThreadExecPolicy policy(num_sites/_sites_per_team, Kokkos::AUTO(),Veclen<ST>::value);
 
-     // Ugly if-else to turn plus_minus & target_cb into 
-     // constant template arguments
-     if( plus_minus == 1 ) {
-        if (target_cb == 0 ) {
-          // Instantiat appropriate functor and construct
-          // All view initializations will be done by copy
-	  // the values of plus_minus (1) and target_cb (0)
-          // are made explicit and compile time in the template
-	  // arguments
-          DslashFunctor<GT,ST,TST,1,0> f = {s_in, g_in_src_cb, g_in_target_cb, 
-                                 s_out,num_sites, _sites_per_team,_neigh_table};
-
-	  // Dispatch the thread Teams				       
+    // Ugly if-else to turn plus_minus & target_cb into 
+    // constant template arguments
+    if( plus_minus == 1 ) {
+      if (target_cb == 0 ) {
+        // Instantiat appropriate functor and construct
+        // All view initializations will be done by copy
+        // the values of plus_minus (1) and target_cb (0)
+        // are made explicit and compile time in the template
+        // arguments
+        DslashFunctor<GT,ST,TST,1,0> f = {s_in, g_in_src_cb, g_in_target_cb, s_out,num_sites, _sites_per_team,_neigh_table};
+        
+	      // Dispatch the thread Teams				       
           Kokkos::parallel_for(policy, f); // Outer Lambda 
-        }
-        else {
-           ... // Instantiat DslashFunctor for target_cb=1 & Dispatch        
-        }
-     } 
-     else { 
-          // plus_minus == -1 case, target_cb=0,1 cases
-         ...
-     }
-  }   
+      }
+      else {
+        ... // Instantiate DslashFunctor for target_cb=1 & Dispatch        
+      }
+    }
+    else { 
+      // plus_minus == -1 case, target_cb=0,1 cases
+      ...
+    }
+  }
 };
 ```
 
@@ -311,30 +309,30 @@ To improve that situation, we decide to write our own complex class which we der
 ```C++
 template<>
 class GPUComplex<float> : public float2 { 
-  public:
-    explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>() {
-      x = 0.;
-      y = 0.;
-    }
+public:
+  explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>() {
+    x = 0.;
+    y = 0.;
+  }
 
-    template<typename T1, typename T2>
-    explicit  KOKKOS_INLINE_FUNCTION GPUComplex<float>(const T1& re, const T2& im) {
-      x = re;
-      y = im;
-    }
+  template<typename T1, typename T2>
+  explicit  KOKKOS_INLINE_FUNCTION GPUComplex<float>(const T1& re, const T2& im) {
+    x = re;
+    y = im;
+  }
     
-    explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>(const float& re, const float& im) {
-      x = re; y = im;
-    }
+  explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>(const float& re, const float& im) {
+    x = re; y = im;
+  }
     
-    template<typename T1>
-    KOKKOS_INLINE_FUNCTION GPUComplex<float>& operator=(const GPUComplex<T1>& src) {
-      x = src.x;
-      y = src.y;
-      return *this;
-    }
-    
-    ...
+  template<typename T1>
+  KOKKOS_INLINE_FUNCTION GPUComplex<float>& operator=(const GPUComplex<T1>& src) {
+    x = src.x;
+    y = src.y;
+    return *this;
+  }
+
+  ...
 };
 ```
 
