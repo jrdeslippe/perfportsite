@@ -1,16 +1,18 @@
-# Using SDE and VTUNE to calculate roofline data
+# Using SDE and VTUNE to calculate performance data
 
-NERSC has extensive documentation and examples for collecting AI and FLOPs using the Intel SDE and VTune 
+NERSC has extensive documentation and examples for collecting Arithmetic Intensity (AI) and FLOPs using the Intel SDE and VTune 
 tools. You can find instructions for this 
 [here](http://www.nersc.gov/users/application-performance/measuring-arithmetic-intensity/).
 
-# Using vector advisor to automate roofline collection
+# Using Vector Advisor to automate roofline data collection
+
+In addition to VTune and SDE, Intel provides a useful tool exploring performance of an application against expectations called Intel Vector Advisor. The tool can automate the collection and presentation of roofline model data. The following guide describes how this is done:
 
 ##Compiling
 
 * Compile code with the -g flag. 
 
-* Optimizations flags can (should) be included. 
+* Optimizations flags can (and should) be included. 
 
 * Using the -dynamic flag for dynamic linking is recommended.
 
@@ -20,16 +22,23 @@ tools. You can find instructions for this
 
 * To access the binaries, load the advisor module using module load advisor.
 
+* Always run vector advisor out of the Lustre filesystems at NERSC and ALCF. Runs out of GPFS filesystems are known to fail.
+
 * Since version 2017/update 2 the roofline is a standard feature and does not require setting any additional environment variables. 
 
 * To collect roofline data, Advisor needs to do two collection runs, survey and tripcounts. Survey is a quick pass with no noticeable overhead that is used 
 to count the application run time. Tripcounts has significant overhead.
-srun <srun options> advixe-cl -collect survey -project-dir <same data directory> -- <executable>
-srun <srun options> advixe-cl -collect tripcounts -flops-and-masks -project-dir <same data directory> -- <executable>
 
-*There are a number of additional flags that can be used to speed up the collection
--no-stack-stitching 
--no-auto-finalize can be used to skip the expensive data finalization step. This is recommended on KNL systems where the cores of the compute nodes are less 
+```
+srun <srun options> advixe-cl -collect survey -project-dir <same data directory> -- <executable>
+```
+```
+srun <srun options> advixe-cl -collect tripcounts -flops-and-masks -project-dir <same data directory> -- <executable>
+```
+
+There are a number of additional flags that can be used to speed up the collection including 
+`-no-stack-stitching` and
+`-no-auto-finalize` which can be used to skip the expensive data finalization step. This is recommended on KNL systems where the cores of the compute nodes are less 
 powerful than the cores of the login nodes. When the results are opened in the GUI, they will be finalized on the node running the GUI.
 
 ##Using the GUI
@@ -53,8 +62,8 @@ vectorization, flop rate, arithmetic intensity, etc.
 
 <center><img src="/perfport/measurements/advisor4.png" width=500></center>
 
-Clink on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
+Click on the Roofline bar on the left to switch to the roofline view. This view shows the measured rooflines of the system and the loops of the application 
 in the cache-aware roofline.
 
-*While the above documents how to use Intel Advisor to gather L1-roofline data, you can contact NERSC 
-consultants at consult@nersc.gov for information on experimental DRAM roofline capbilities.
+*By default, the documentation above describes how to use Intel Advisor to gather L1-roofline data (that is where the AI is defined based on L1 data traffic), you can contact NERSC 
+consultants at consult@nersc.gov for information on experimental DRAM roofline capabilities.
