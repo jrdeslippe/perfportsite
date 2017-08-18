@@ -274,7 +274,9 @@ executing the loop.
 
 The following table summarizes the OpenMP compiler support.
 
-| Compiler | Language Support | Architecture Support | Notes | 
+| Compiler | Language Support | Architecture Support | Notes |
 |----------|------------------|----------------------|-------|
-|    GNU   | C/C++ (>6.1), Fortran (>7.2) | Range of CPUs, nvidia GPUs   | performance problems on CPU ([bug #80859](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859)), problems with ```enter data``` constructs ([bug #81896](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896)) |
-| Intel    | C/C++, Fortran (>17.0)   | x86-64 CPUs | generated target code can be wrong, depending on optimization level |
+|    GNU   | C/C++ (>6.1), Fortran (>7.2) | Range of CPUs, nvidia GPUs   | performance problems on CPU ([bug #80859](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859)), compilation problems with ```enter data``` and ```exit data``` constructs ([bug #81896](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896)) |
+| Intel    | C/C++, Fortran (>17.0)   | x86-64 CPUs | generated code in target region can be wrong, working on a testcase to demonstrate that problem |
+| Cray     | C/C++, Fortran (>8.5)    | x86-64 CPUs, nvidia GPUs    | failure at link time when host-offloading is used (bug #189760) |
+| IBM    | C/C++ (>13.1.5), Fortran (>15.1.5) | Power CPUs, nvidia GPUs | multiple-definitions link error when ```target``` region is contained in header file which is included by multiple compilation units (bug #147007) |

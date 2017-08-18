@@ -215,3 +215,6 @@ reported to Cray as bug #189702. CCE 8.6.1 was
 
 * CCE 8.6.1 fails to link BoxLib at all (without `target` constructs), with g++
   tuple errors. This has been reported to Cray as bug #189760.
+  
+* IBM XLC 13.1 fails to link multiple compilation units together when more than one include the same header file and that header file contains a ```target``` region. Fixed in 14.0 but that
+  triggered an internal compilation error. Reported and acknowledged as bug #147007.
