@@ -61,41 +61,43 @@ We also modified some existing macros in BoxLib which characterize loop-level
 parallelism. In these directives we implemented the `target` construct, e.g.,:
 
 ```C++
-#define ForAllThisCPencilAdd(T,b,ns,nc,red)                             \
-{                                                                       \
-    BL_ASSERT(contains(b));                                             \
-    BL_ASSERT((ns) >= 0 && (ns) + (nc) <= nComp());                     \
-    const int *_th_plo = loVect();                                      \
-    const int *_th_plen = length();                                     \
-    const int *_b_lo = (b).loVect();                                    \
-    IntVect b_length = (b).size();                                      \
-    const int *_b_len = b_length.getVect();                             \
-    const T* _th_p = dptr;                                              \
-    const int _ns = (ns);                                               \
-    const int _nc = (nc);                                               \
-    T redR = (red);                                                     \
-    _Pragma("omp target update to(_th_p[_ns*_th_plen[2]:(_ns+_nc)*_th_plen[2]])") \
-    _Pragma("omp target data map(tofrom: redR) map(to: _nc, _ns, _th_plo[0:3], _th_plen[0:3], _b_len[0:3], _b_lo[0:3])") \
-    _Pragma("omp target if(1)")                                         \
-    {                                                                   \
-    _Pragma("omp teams distribute parallel for collapse(3) reduction(+:redR)") \
-    for(int _n = _ns; _n < _ns+_nc; ++_n) {                             \
-        for(int _k = 0; _k < _b_len[2]; ++_k) {                         \
-            for(int _j = 0; _j < _b_len[1]; ++_j) {                     \
-                int nR = _n; nR += 0;                                   \
-                const int jR = _j + _b_lo[1];                           \
-                const int kR = _k + _b_lo[2];                           \
-                const T *_th_pp = _th_p                                 \
-                    + ((_b_lo[0] - _th_plo[0])                          \
-                       + _th_plen[0]*(                                  \
-                           (jR - _th_plo[1])                            \
-                           + _th_plen[1]*(                              \
-                               (kR - _th_plo[2])                        \
-                               + _n * _th_plen[2])));                   \
-                for(int _i = 0; _i < _b_len[0]; ++_i){                  \
-                    const int iR = _i + _b_lo[0];                       \
-                    const T &thisR = _th_pp[_i];
+#define ForAllThisCPencilAdd(T,b,ns,nc,red)  \
+{                                                                     \
+  BL_ASSERT(contains(b));                                             \
+  BL_ASSERT((ns) >= 0 && (ns) + (nc) <= nComp());                     \
+  const int *_th_plo = loVect();                                      \
+  const int *_th_plen = length();                                     \
+  const int *_b_lo = (b).loVect();                                    \
+  IntVect b_length = (b).size();                                      \
+  const int *_b_len = b_length.getVect();                             \
+  const T* _th_p = dptr;                                              \
+  const int _ns = (ns);                                               \
+  const int _nc = (nc);                                               \
+  T redR = (red);                                                     \
+  _Pragma("omp target update to(_th_p[_ns*_th_plen[2]:(_ns+_nc)*_th_plen[2]])") \
+  _Pragma("omp target data map(tofrom: redR) map(to: _nc, _ns, _th_plo[0:3], _th_plen[0:3], _b_len[0:3], _b_lo[0:3])") \
+  _Pragma("omp target if(1)")                                         \
+  {                                                                   \
+  _Pragma("omp teams distribute parallel for collapse(3) reduction(+:redR)") \
+  for(int _n = _ns; _n < _ns+_nc; ++_n) {                             \
+    for(int _k = 0; _k < _b_len[2]; ++_k) {                           \
+      for(int _j = 0; _j < _b_len[1]; ++_j) {                         \
+        int nR = _n; nR += 0;                                         \
+        const int jR = _j + _b_lo[1];                                 \
+        const int kR = _k + _b_lo[2];                                 \
+        const T *_th_pp =  _th_p                                      \
+                + ((_b_lo[0] - _th_plo[0])                            \
+                   + _th_plen[0]*(                                    \
+                       (jR - _th_plo[1])                              \
+                       + _th_plen[1]*(                                \
+                           (kR - _th_plo[2])                          \
+                           + _n * _th_plen[2])));                     \
+        for(int _i = 0; _i < _b_len[0]; ++_i){                        \
+          const int iR = _i + _b_lo[0];                               \
+          const T &thisR = _th_pp[_i];
 ```
+
+Note that we are using the "_Pragma" construct which allows using ```#pragma``` statements in C-macros.
 
 After this, one can add the `target teams distribute parallel for` construct to
 many loops, moving to the device only the data which has changed since the
