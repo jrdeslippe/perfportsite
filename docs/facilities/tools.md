@@ -133,19 +133,11 @@ has quick start information for using HPCToolkit on Theta. In the `aprun`
 command in your job script, you insert `hpcstruct` before your executable
 program name.
 
-####Intel Advisor & VTune Amplifier
+####Intel VTune Amplifier
 
-James Tullos' [quick start
-presentation](https://www.alcf.anl.gov/files/Tullos-Using_Intel_VTune_Amplifier_XE_on_Knights_Landing_1.1.pdf)
-covers usage of Advisor as well as VTune Amplifier. To run the VTune Amplifier
-command line on theta, insert the `amplxe-cl` command before your executable
-in the `aprun` command in your job script. For example, to look at hotspots:
-
-```bash
-...
-aprun ... amplxe-cl -collect advanced-hotspots -- myExecutable ....
-....
-```
+ALCF's [documentation](http://www.alcf.anl.gov/user-guides/vtune-xc40) has
+basic steps to use VTune on Theta, with an example run script. It also
+explains how to selectively profile a subset of all MPI ranks.
 
 ####Tuning and Analysis Utilities (TAU)
 
