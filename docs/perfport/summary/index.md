@@ -15,7 +15,7 @@ workload and from the outcome of recent DOE performance portability workshops.
 
 ## Developing a Performance Portability Strategy 
 
-We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different philosophies can exist for exploiting these similarities. 
+We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different strategies can exist for exploiting these similarities. 
 
 ### Threads and Vectors
 
@@ -37,11 +37,11 @@ independent. On current GPU architectures, (e.g. the K20X found in Titan) typica
 significantly, there is a signficant reduction in performance. In addition, optimal performance is typically achieved when the threads in the warp are 
 operating on contiguous data. 
 
-How do you use these different types of parallelism in order to enable portable programming? We identify three particular approaches, each with advantages and disadvantages. It is important when beginning to develop a performance portability strategy to consider which of these approaches best maps to your application.
+How do you use these different types of parallelism in order to enable portable programming? We identify three particular strategies, each with advantages and disadvantages. It is important when beginning to develop a performance portability plan to consider which of these strategies best maps to your application.
 
-#### Approach 1
+#### Strategy 1
 
-The first approach to performance portability is to equate all SIMT threads on a GPU with SMT threads on CPU or a KNL. This has the advantage of allowing 
+The first strategy to performance portability is to equate all SIMT threads on a GPU with SMT threads on CPU or a KNL. This has the advantage of allowing 
 the programmer to fully express the SIMT parallelism, but it does lead to a couple of challenges:
 
 1. SMT threads typically operate on independent regions of data (e.g. the programmer typically breaks an array into the biggest contiguous chunks possible 
@@ -53,23 +53,23 @@ instead of viewing them like vector lanes.
 2. Another level of parallelism on the KNL (the vector parallelism) is then left on the table to exploit some other way (e.g. through the compiler, possibly
 with the aid of hints).
 
-This approach is generally taken in most applications using Kokkos for performance portability. Kokkos ``views`` handle coalescing,
+This strategy is generally taken in most applications using Kokkos for performance portability. Kokkos ``views`` handle coalescing,
 but vector parallelism on the CPU or KNL is often left up to the compiler (with mixed results). As we see in the QCD case-study, the 
 developers may need to intervene (and potentially add new layers of parallelism to the code, e.g. multiple right hand sides) to make sure their code 
 can effetively use the wide AVX512 units on the KNL. 
 
-#### Approach 2 
+#### Strategy 2 
 
-The second approach is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
+The second strategy is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
 This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a signficant drawback: 
 
 * Because SIMD parallelism on the CPU/KNL is typically more restrictive and less flexible to express (requiring statements like `OMP SIMD` on relatively 
 straightfoward loops), the programmer loses a lot of the flexibility the GPU architecture allows. 
 
-This is generally the approach taken by OpenMP for performance portability in the current implementation. We see in the case studies that to use OpenMP to 
-offload work to the GPU, one currently typically needs an `OMP SIMD` directive (when it is supported by the compiler at all). 
+This is generally the strategy taken by applications using OpenMP for performance portability in its current implementation. We see in the case studies that to use OpenMP to 
+offload work to the GPU, one currently needs an `OMP SIMD` directive (when compiler support exists at all). 
 
-#### A mixed approach?
+#### A Mixed Strategy
 
 One may, in principle, use the concepts of "teams" to map groups of SIMT threads on a GPU (e.g., on separate SMs) to different SMTs on a CPU and leave 
 additional 
