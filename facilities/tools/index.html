@@ -277,8 +277,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#intel-advisor-vtune-amplifier" title="Intel Advisor &amp; VTune Amplifier" class="md-nav__link">
-    Intel Advisor &amp; VTune Amplifier
+  <a href="#intel-vtune-amplifier_1" title="Intel VTune Amplifier" class="md-nav__link">
+    Intel VTune Amplifier
   </a>
   
 </li>
@@ -1047,8 +1047,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#intel-advisor-vtune-amplifier" title="Intel Advisor &amp; VTune Amplifier" class="md-nav__link">
-    Intel Advisor &amp; VTune Amplifier
+  <a href="#intel-vtune-amplifier_1" title="Intel VTune Amplifier" class="md-nav__link">
+    Intel VTune Amplifier
   </a>
   
 </li>
@@ -1190,17 +1190,10 @@ changed it here is a command to switch to the Cray environment:</p>
 has quick start information for using HPCToolkit on Theta. In the <code>aprun</code>
 command in your job script, you insert <code>hpcstruct</code> before your executable
 program name.</p>
-<h4 id="intel-advisor-vtune-amplifier">Intel Advisor &amp; VTune Amplifier<a class="headerlink" href="#intel-advisor-vtune-amplifier" title="Permanent link">&para;</a></h4>
-<p>James Tullos' <a href="https://www.alcf.anl.gov/files/Tullos-Using_Intel_VTune_Amplifier_XE_on_Knights_Landing_1.1.pdf">quick start
-presentation</a>
-covers usage of Advisor as well as VTune Amplifier. To run the VTune Amplifier
-command line on theta, insert the <code>amplxe-cl</code> command before your executable
-in the <code>aprun</code> command in your job script. For example, to look at hotspots:</p>
-<div class="codehilite"><pre><span></span>...
-aprun ... amplxe-cl -collect advanced-hotspots -- myExecutable ....
-....
-</pre></div>
-
+<h4 id="intel-vtune-amplifier_1">Intel VTune Amplifier<a class="headerlink" href="#intel-vtune-amplifier_1" title="Permanent link">&para;</a></h4>
+<p>ALCF's <a href="http://www.alcf.anl.gov/user-guides/vtune-xc40">documentation</a> has
+basic steps to use VTune on Theta, with an example run script. It also
+explains how to selectively profile a subset of all MPI ranks.</p>
 <h4 id="tuning-and-analysis-utilities-tau">Tuning and Analysis Utilities (TAU)<a class="headerlink" href="#tuning-and-analysis-utilities-tau" title="Permanent link">&para;</a></h4>
 <p>For all TAU usage modes, you should first load the TAU module:</p>
 <div class="codehilite"><pre><span></span>module load tau

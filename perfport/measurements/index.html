@@ -1075,18 +1075,67 @@ level.</p>
 (scatter/gather) patterns where memory latency may be limiting resource. In such cases, it is possible to quickly craft a few line benchmark to compute the 
 relevant ceiling. We should some example ceiling parameters for different access patterns determined empirically in the following tables:</p>
 <p>For polynomial access pattern: x[i] = (x[i]+c0):</p>
-<p>| System                | DRAM  | L2     | L1     | GEMM   |
-|-----------------------| ------|--------|-----------------|
-| Titan (Kepler)        | 161 GB/s  | 559 GB/s   | -      | 1226 GB/s  |
-| Summit Dev (4 Pascal) | 1930 GB/s | 6507 GB/s  | -      | 17095 GB/s |
-| Cori (KNL)            | 413 GB/s  | 1965 GB/s  | 6443 GB/s  | 2450 GB/s  |</p>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>DRAM</th>
+<th>L2</th>
+<th>L1</th>
+<th>GEMM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Titan (Kepler)</td>
+<td>161 GB/s</td>
+<td>559 GB/s</td>
+<td>-</td>
+<td>1226 GB/s</td>
+</tr>
+<tr>
+<td>Summit Dev (4 Pascal)</td>
+<td>1930 GB/s</td>
+<td>6507 GB/s</td>
+<td>-</td>
+<td>17095 GB/s</td>
+</tr>
+<tr>
+<td>Cori (KNL)</td>
+<td>413 GB/s</td>
+<td>1965 GB/s</td>
+<td>6443 GB/s</td>
+<td>2450 GB/s</td>
+</tr>
+</tbody>
+</table>
 <p>For non-contiguous accesses on KNL as an example:</p>
-<p>| Access Pattern  |  KNL Effective Bandwidth (Cache Mode) |
-|----------|----------|---------|
-| Dot Product | 219 GB/s |
-| Stride 2 Dot Product | 96 GB/s | 
-| Stride 100 Dot Product | 31 GB/s |
-| Stride 10000 Dot Product | 20 GB/s | </p>
+<table>
+<thead>
+<tr>
+<th>Access Pattern</th>
+<th>KNL Effective Bandwidth (Cache Mode)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dot Product</td>
+<td>219 GB/s</td>
+</tr>
+<tr>
+<td>Stride 2 Dot Product</td>
+<td>96 GB/s</td>
+</tr>
+<tr>
+<td>Stride 100 Dot Product</td>
+<td>31 GB/s</td>
+</tr>
+<tr>
+<td>Stride 10000 Dot Product</td>
+<td>20 GB/s</td>
+</tr>
+</tbody>
+</table>
 <p>Finally, one may additional define an AI value and roofline-ceiling for algorithms with data coming from off-node due to internode 
 communication. The relevant bandwidth here is the injection bandwidth of the node:</p>
 <table>
