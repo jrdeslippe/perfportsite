@@ -47,6 +47,15 @@ To port the application for an accelerator using OpenMP4.5x we use the target cl
 The target implementation has following structure:
 
 ```C++
+#pragma omp declare target
+void flagOCC_solver(double , std::complex<double>* , int , int , std::complex<double>* , std::complex<double>* , std::complex<double>* , std::complex<double>& , std::complex<double>& , int , int , int , int , int );
+
+void reduce_achstemp(int , int , int*, int , std::complex<double>* , std::complex<double>* , std::complex<double>* , std::complex<double>& ,  int* , int , double* );
+
+void ssxt_scht_solver(double , int , int , int , std::complex<double> , std::complex<double> , std::complex<double> , std::complex<double> , std::complex<double> , std::complex<double> , std::complex<double> , std::complex<double>& , std::complex<double>& , std::complex<double> );
+#pragma omp end declare target
+
+
 #pragma omp target map(to:array2[0:ncouls], vcoul[0:ngpown]) map(from: achtemp_threadArr_vla[0:numberThreads*3])
 {
     ...
@@ -71,6 +80,7 @@ The target implementation has following structure:
             ach[iw] += (*ach_threadArr_vla)[i][iw];
 
 ```
+Function accessed from inside the ```target``` directive need to be declared inside the ```#pragma omp declare target ``` and ```#pragma omp end declare target```.
 For intel compilers we need the flag ```-qopenmp-offload=host``` and in case of GCC with for the NVIDIA GPUs we need the ```-foffload=nvptx-none``` flag during compilation.
 
 * ```#pragma omp target ``` - offload the code block on the device
