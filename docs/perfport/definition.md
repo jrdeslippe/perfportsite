@@ -14,7 +14,7 @@ parallelism features in the following table:
 |------|------------|---------------|-------|--------------|
 | Cori (KNL)  | 96 GB | 16 GB | 68 | 8 | 
 | Theta (KNL)  | 192 GB | 16 GB | 64 | 8 |
-| Titan (K20X) | | 6 GB | 14 SMs, 896 CUDA cores | 32 |
+| Titan (K20X) | 32GB (Opteron) | 6 GB |  CPU - 8 Bulldozer modules; GPU -  14 SMs | 32 |
 
 where DP stands for Double Precision and SM stands for Streaming Multiprocessor. 
 
