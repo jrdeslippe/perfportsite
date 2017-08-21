@@ -3,16 +3,16 @@
 In Kokkos, it is advised to use the ```Kokkos::View``` datatype as our data container. Therefore, the [spinor and gaugefield classes](./code_structure.md#Data_Primitives) become
 
 ```C++
-template<typename ST,int nspin> 
+template<typename ST,int nspin>
 class CBSpinor {
-public: 
+public:
     ...
 private:
     // dims are: site, color, spin
     Kokkos::View<ST*[3][nspin]> data;
 };
 
-template<typename GT> 
+template<typename GT>
 class CBGaugeField {
 public:
     ...
@@ -33,7 +33,7 @@ public:
   void operator(const CBSpinor<ST,4>& s_in,
                 const CBGaugeField<GT>& g_in,
                 CBSpinor<ST,4>& s_out,
-                int plus_minus) 
+                int plus_minus)
   {
     // Threaded loop over sites
     Kokkos::parallel_for(num_sites, KOKKOS_LAMBDA(int i) {
@@ -43,21 +43,21 @@ public:
 };
 ```
 
-Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a neighbor class which either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture. 
+Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a neighbor class which either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly. In our performance measurements we use the implementation which gives the best performance for a given architecture.
 
 ## Complex Numbers and C++
-We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as 
+We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as
 
 ```C++
 c += a * b
-``` 
+```
 
-when ```a```, ```b``` and ```c``` are complex numbers. Naively, this expression could be expanded into 
+when ```a```, ```b``` and ```c``` are complex numbers. Naively, this expression could be expanded into
 
 ```C++
 re(c) += re(a) * re(b) - im(a) * im(b)
 im(c) += re(a) * im(b) + im(a) * re(b)
-``` 
+```
 
 where ```re(.), im(.)``` denote the real and imaginary part of its argument respectively. This expresson can nicely be packed into a total of four FMA operations per line. However, in the simplified form above which is usually used in context of operator overloading, the compier would have to evaluate the right hand side first and then sum the result into ```c```. This is much less efficient since in that case, only two FMA as well as two multiplications and additions could be used. One has to keep that in mind when doing complex algebra in C++. In many cases it is better to inline code and avoid otherwise useful operator overloading techniques for complex algebra.
 
@@ -65,25 +65,25 @@ where ```re(.), im(.)``` denote the real and imaginary part of its argument resp
 Vectorization in Kokkos is achieved by a two-level [nested parallelism](../../perfport/frameworks/kokkos.md#nested-parallelism), where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spwans threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type ```TST``` needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively
 
 ```C++
-template<typename T,N> 
+template<typename T,N>
 struct CPUSIMDComplex {
   Kokkos::complex<T> _data[N];
-    
+
   T& operator()(int lane) {
     return _data[lane];
   }
-  
+
   ...
 };
 
-template<typename T,N> 
+template<typename T,N>
 struct GPUSIMDComplex {
   Kokkos::complex<T> _data;
-    
+
   T& operator()(int lane) {
     return _data;
   }
-  
+
   ...
 };
 ```
@@ -99,12 +99,12 @@ We therefore provided a template  specialization for the ```CPUSIMDComplex``` da
 template<>
 struct CPUSIMDComplex<float,8> {
   explicit CPUSIMDComplex<float,8>() {}
-    
+
   union {
     Kokkos::complex<float> _data[8];
     __m512 _vdata;
   };
-  
+
   ...
 };
 ```
@@ -140,7 +140,7 @@ To improve that situation, we decide to write our own complex class which we der
 
 ```C++
 template<>
-class GPUComplex<float> : public float2 { 
+class GPUComplex<float> : public float2 {
   public:
     explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>() {
       x = 0.;
@@ -152,26 +152,26 @@ class GPUComplex<float> : public float2 {
       x = re;
       y = im;
     }
-    
+
     explicit KOKKOS_INLINE_FUNCTION GPUComplex<float>(const float& re, const float& im) {
       x = re; y = im;
     }
-    
+
     template<typename T1>
     KOKKOS_INLINE_FUNCTION GPUComplex<float>& operator=(const GPUComplex<T1>& src) {
       x = src.x;
       y = src.y;
       return *this;
     }
-    
+
     ...
 };
 ```
 
-The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts. 
-Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the ```nvprof``` output in which the corresponding sections are not marked as hotspots any more. 
+The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts.
+Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the ```nvprof``` output in which the corresponding sections are not marked as hotspots any more.
 
-Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency. 
+Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency.
 
 # Index Computations
 
