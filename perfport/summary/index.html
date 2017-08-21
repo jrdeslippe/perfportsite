@@ -1075,7 +1075,7 @@ workload and from the outcome of recent DOE performance portability workshops.</
 <tr>
 <td align="center">Libraries</td>
 <td align="center">Highly portable, not dependent on compiler implementations.</td>
-<td align="center">Many GPU libraries (e.g. CUFFT) are C only (requiring explicit interafces to use in FORTRAN) and don't have common interfaces. In many cases libraries don't exist for problem.</td>
+<td align="center">Many GPU libraries (e.g. CUFFT) are C only (requiring explicit interafces to use in FORTRAN) and don't have common interfaces. May lock-in data layout. In many cases libraries don't exist for problem.</td>
 </tr>
 <tr>
 <td align="center">OpenMP 4.5</td>
@@ -1126,7 +1126,7 @@ operating on contiguous data. </p>
 </ul>
 <p>How do you use these different types of parallelism in order to enable portable programming? We identify three particular strategies, each with advantages and disadvantages. It is important when beginning to develop a performance portability plan to consider which of these strategies best maps to your application.</p>
 <h4 id="strategy-1">Strategy 1<a class="headerlink" href="#strategy-1" title="Permanent link">&para;</a></h4>
-<p>The first strategy to performance portability is to equate all SIMT threads on a GPU with SMT threads on CPU or a KNL. This has the advantage of allowing 
+<p>The first strategy to performance portability is to equate SIMT threads on a GPU with SMT threads on CPU or a KNL. This has the advantage of allowing 
 the programmer to fully express the SIMT parallelism, but it does lead to a couple of challenges:</p>
 <ol>
 <li>
@@ -1141,10 +1141,9 @@ instead of viewing them like vector lanes. </p>
 with the aid of hints).</p>
 </li>
 </ol>
-<p>This strategy is generally taken in most applications using Kokkos for performance portability. Kokkos <code>views</code> handle coalescing,
-but vector parallelism on the CPU or KNL is often left up to the compiler (with mixed results). As we see in the QCD case-study, the 
-developers may need to intervene (and potentially add new layers of parallelism to the code, e.g. multiple right hand sides) to make sure their code 
-can effetively use the wide AVX512 units on the KNL. </p>
+<p>This strategy is likely most appropriate if additional vector parallelism can be easily exploited by the compiler on the KNL, if vectorization doesn't 
+affect performance or if one intends to manually intervene to ensure vector parallelism is exploited on the KNL. Frameworks like Kokkos (with the concept of 
+"views") can help portabily handle the coalescing issue. </p>
 <h4 id="strategy-2">Strategy 2<a class="headerlink" href="#strategy-2" title="Permanent link">&para;</a></h4>
 <p>The second strategy is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
 This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a signficant drawback: </p>
@@ -1155,12 +1154,17 @@ straightfoward loops), the programmer loses a lot of the flexibility the GPU arc
 <p>This is generally the strategy taken by applications using OpenMP for performance portability in its current implementation. We see in the case studies that to use OpenMP to 
 offload work to the GPU, one currently needs an <code>OMP SIMD</code> directive (when compiler support exists at all). </p>
 <h4 id="a-mixed-strategy">A Mixed Strategy<a class="headerlink" href="#a-mixed-strategy" title="Permanent link">&para;</a></h4>
-<p>One may, in principle, use the concepts of "teams" to map groups of SIMT threads on a GPU (e.g., on separate SMs) to different SMTs on a CPU and leave 
+<p>One may, in principle, define layers of parallelism to map groups of SIMT threads on a GPU (e.g., on separate SMs) to different SMTs on a CPU and leave 
 additional 
 parallelism available to map to CPU vector lanes. Some of the performant models have support for this type of mapping. Kokkos for example supports this concept and can then insert <code>OMP SIMD</code> 
 pragmas on top of the innermost parallelizable loops when executing on a KNL or CPU. In practice, CPU performance will still ultimately depend on the 
 compilers ability to generate 
-efficient vector code, meaning the parallel code here is limited to relatively simple vectorizable loops compared to what the SIMT model alone can, in theory, support.</p>
+efficient vector code, meaning the vector/(inner SIMT) code here is limited to relatively simple vectorizable loops compared to what the SIMT model alone 
+can, in 
+theory, support. For example, Kokkos <code>views</code> handle coalescing,
+but vector parallelism on the CPU or KNL is left up to the compiler (with mixed results). As we see in the QCD case-study, the 
+developers may need to intervene (and potentially add new layers of parallelism to the code, e.g. multiple right hand sides) to make sure their code 
+can effetively use the wide AVX512 units on the KNL. </p>
 <h3 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h3>
 <p>As we mention above, the KNL and GPU architectures both have high-bandwidth, on-device memory as well as lower bandwidth access to traditional DDR on the 
 node. With support of unified virtual memory (UVM) on recent GPUs, both kinds of memory spaces can be accessed from all the components 
