@@ -733,12 +733,52 @@
     Performance Comparisons
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cori-intel-compilers" title="Cori (Intel compilers)" class="md-nav__link">
+    Cori (Intel compilers)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summitdev-gcc-compilers" title="SummitDev (GCC compilers)" class="md-nav__link">
+    SummitDev (GCC compilers)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#lessons-learned" title="Lessons Learned" class="md-nav__link">
     Lessons Learned
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c-vs-fortran-performance-with-complex-numbers" title="C++ vs Fortran performance with complex numbers" class="md-nav__link">
+    C++ vs Fortran performance with complex numbers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-complex-number-reduction" title="C++ complex number reduction" class="md-nav__link">
+    C++ complex number reduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -935,12 +975,52 @@
     Performance Comparisons
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cori-intel-compilers" title="Cori (Intel compilers)" class="md-nav__link">
+    Cori (Intel compilers)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summitdev-gcc-compilers" title="SummitDev (GCC compilers)" class="md-nav__link">
+    SummitDev (GCC compilers)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
   <a href="#lessons-learned" title="Lessons Learned" class="md-nav__link">
     Lessons Learned
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c-vs-fortran-performance-with-complex-numbers" title="C++ vs Fortran performance with complex numbers" class="md-nav__link">
+    C++ vs Fortran performance with complex numbers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-complex-number-reduction" title="C++ complex number reduction" class="md-nav__link">
+    C++ complex number reduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -961,9 +1041,123 @@
                 
                 <h1 id="berkeleygw-case-study-summary">BerkeleyGW Case Study Summary<a class="headerlink" href="#berkeleygw-case-study-summary" title="Permanent link">&para;</a></h1>
 <h2 id="performance-comparisons">Performance Comparisons<a class="headerlink" href="#performance-comparisons" title="Permanent link">&para;</a></h2>
-<p>Coming Soon</p>
+<h3 id="cori-intel-compilers">Cori (Intel compilers)<a class="headerlink" href="#cori-intel-compilers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">Approach</th>
+<th align="center">Architecture</th>
+<th align="right">Execution time (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Fortran (sequential)</td>
+<td align="center">KNL</td>
+<td align="right">973.5</td>
+</tr>
+<tr>
+<td align="center">C++     (sequential)</td>
+<td align="center">KNL</td>
+<td align="right">1193.9</td>
+</tr>
+<tr>
+<td align="center">Fortran (OpenMP 3.0)</td>
+<td align="center">KNL</td>
+<td align="right">12.7</td>
+</tr>
+<tr>
+<td align="center">Fortran (OpenMP 4.5)</td>
+<td align="center">KNL</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="center">C++     (OpenMP 3.0)</td>
+<td align="center">KNL</td>
+<td align="right">12.8</td>
+</tr>
+<tr>
+<td align="center">C++     (OpenMP 4.5)</td>
+<td align="center">KNL</td>
+<td align="right">16.4</td>
+</tr>
+<tr>
+<td align="center">Kokkos  (OpenMP)</td>
+<td align="center">KNL</td>
+<td align="right">34.2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="summitdev-gcc-compilers">SummitDev (GCC compilers)<a class="headerlink" href="#summitdev-gcc-compilers" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th align="center">Approach</th>
+<th align="center">Architecture</th>
+<th align="right">Execution time (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Fortran (sequential)</td>
+<td align="center">PowerPC</td>
+<td align="right">935.9</td>
+</tr>
+<tr>
+<td align="center">C++     (sequential)</td>
+<td align="center">PowerPC</td>
+<td align="right">12363.5</td>
+</tr>
+<tr>
+<td align="center">Fortran (OpenMP 3.0)</td>
+<td align="center">PowerPC</td>
+<td align="right">41</td>
+</tr>
+<tr>
+<td align="center">Fortran (OpenMP 4.5)</td>
+<td align="center">PowerPC</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="center">C++     (OpenMP 3.0)</td>
+<td align="center">PowerPC</td>
+<td align="right">70.2</td>
+</tr>
+<tr>
+<td align="center">C++     (OpenMP 4.5)</td>
+<td align="center">PowerPC</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td align="center">Kokkos  (OpenMP)</td>
+<td align="center">PowerPC</td>
+<td align="right">17.03</td>
+</tr>
+<tr>
+<td align="center">Kokkos  (CudaUVM)</td>
+<td align="center">Pascal</td>
+<td align="right">3.93</td>
+</tr>
+<tr>
+<td align="center">Kokkos  (Cuda)</td>
+<td align="center">Pascal</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
 <h2 id="lessons-learned">Lessons Learned<a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h2>
-<p>Coming Soon</p>
+<h3 id="c-vs-fortran-performance-with-complex-numbers">C++ vs Fortran performance with complex numbers<a class="headerlink" href="#c-vs-fortran-performance-with-complex-numbers" title="Permanent link">&para;</a></h3>
+<p>Fortran natively supports complex numbers which is a huge advantage when it comes to the performance compared to C++.
+The sequential version of C++ is 1.5x times slower compared to its fortran counterpart.
+We are sure that it is the performance of complex numbers that gives this boost in the fortran code as when the same set of operations are repeated with datatypes such as a float or double both codes
+give the same performance.</p>
+<h3 id="c-complex-number-reduction">C++ complex number reduction<a class="headerlink" href="#c-complex-number-reduction" title="Permanent link">&para;</a></h3>
+<p>OpenMP does not support the reduction of complex numbers in C/C++.
+There are two ways to achieve the desired result,
+* Reduce the real and imaginary complex numbers separately.
+* Update the results local to each thread parallely and then accumulate the results later after the loop.</p>
+<p>The first method is both inelegant and performs worse than the second version.
+In the second method we can also vectorize the step of accumulating the results from threads.</p>
                 
                   
                 

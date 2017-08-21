@@ -1143,7 +1143,7 @@ with the aid of hints).</p>
 </ol>
 <p>This strategy is likely most appropriate if additional vector parallelism can be easily exploited by the compiler on the KNL, if vectorization doesn't 
 affect performance or if one intends to manually intervene to ensure vector parallelism is exploited on the KNL. Frameworks like Kokkos (with the concept of 
-"views") can help portabily handle the coalescing issue. </p>
+"views") can help handle the coalescing issue in a portable way. </p>
 <h4 id="strategy-2">Strategy 2<a class="headerlink" href="#strategy-2" title="Permanent link">&para;</a></h4>
 <p>The second strategy is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
 This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a signficant drawback: </p>

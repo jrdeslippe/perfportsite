@@ -904,7 +904,80 @@
                 
                   <h1>OpenMP 4.x</h1>
                 
-                <p>Coming Soon</p>
+                <p>The original code C++ code structure is as follows :</p>
+<p><div class="codehilite"><pre><span></span><span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">igp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">igp</span><span class="o">&lt;</span><span class="n">ngpown</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iw</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">iw</span><span class="o">++</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">ig</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ig</span> <span class="o">&lt;</span> <span class="n">ncouls</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+            <span class="p">...</span>
+            <span class="n">scht</span> <span class="o">+=</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">achtemp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sch_array</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">*</span> <span class="n">vcoul</span><span class="p">[</span><span class="n">igp</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+There are 3 nested loops and nearly 97% of the computation happens in the innermost loop.
+The outermost loop is distributed among the threads for parallel execution and involves a reduction.
+The innermost loop is vectorized.
+Since OpenMP does not support reduction over complex variables, we update them inside individual threads and then accumulate the final result at the end.
+The OpenMP 3.0 follows the following structure</p>
+<div class="codehilite"><pre><span></span><span class="cp">#pragma omp parallel for shared(wxt, array1, vcoul[0:ngpown])  firstprivate(...) schedule(dynamic) private(tid)</span>
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">igp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">igp</span><span class="o">&lt;</span><span class="n">ngpown</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iw</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">iw</span><span class="o">++</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">ig</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ig</span> <span class="o">&lt;</span> <span class="n">ncouls</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+            <span class="p">...</span>
+            <span class="n">scht</span> <span class="o">+=</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="p">(</span><span class="o">*</span><span class="n">ach_threadArr_vla</span><span class="p">)[</span><span class="n">tid</span><span class="p">][</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sch_array</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">*</span> <span class="n">vcoul</span><span class="p">[</span><span class="n">igp</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">#pragma omp simd</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span><span class="o">=</span><span class="n">nstart</span><span class="p">;</span> <span class="n">iw</span><span class="o">&lt;</span><span class="n">nend</span><span class="p">;</span> <span class="o">++</span><span class="n">iw</span><span class="p">)</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numThreads</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">achtemp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="n">achtemp_threadArr_vla</span><span class="p">)[</span><span class="n">i</span><span class="p">][</span><span class="n">iw</span><span class="p">];</span>
+</pre></div>
+
+<p>To port the application for an accelerator using OpenMP4.5x we use the target clause to offload the computation.
+The target implementation has following structure:</p>
+<p><div class="codehilite"><pre><span></span><span class="cp">#pragma omp target map(to:array2[0:ncouls], vcoul[0:ngpown]) map(from: achtemp_threadArr_vla[0:numberThreads*3])</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="cp">#pragma omp teams distribute parallel for shared(wxt, array1, vcoul)  firstprivate(...) schedule(dynamic) private(tid)</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">igp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">igp</span><span class="o">&lt;</span><span class="n">ngpown</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iw</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">iw</span><span class="o">++</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">ig</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ig</span> <span class="o">&lt;</span> <span class="n">ncouls</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+                <span class="p">...</span>
+                <span class="n">scht</span> <span class="o">+=</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="p">(</span><span class="o">*</span><span class="n">ach_threadArr_vla</span><span class="p">)[</span><span class="n">tid</span><span class="p">][</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">scht</span> <span class="o">*</span> <span class="n">vcoul</span><span class="p">[</span><span class="n">igp</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">#pragma omp simd</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span><span class="o">=</span><span class="n">nstart</span><span class="p">;</span> <span class="n">iw</span><span class="o">&lt;</span><span class="n">nend</span><span class="p">;</span> <span class="o">++</span><span class="n">iw</span><span class="p">)</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numThreads</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ach</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="n">ach_threadArr_vla</span><span class="p">)[</span><span class="n">i</span><span class="p">][</span><span class="n">iw</span><span class="p">];</span>
+</pre></div>
+For intel compilers we need the flag <code>-qopenmp-offload=host</code> and in case of GCC with for the NVIDIA GPUs we need the <code>-foffload=nvptx-none</code> flag during compilation.</p>
+<ul>
+<li><code>#pragma omp target</code> - offload the code block on the device</li>
+<li><code>map(to:var, arr[0:N])</code> - copy the data on to the device</li>
+<li><code>map(from:var, arr[0:N])</code>- copy data from the device</li>
+<li><code>#pragma omp teams</code> - Create thread teams</li>
+<li><code>distribute</code> - distribute the iterations of the loop over thread teams</li>
+<li><code>parallel for</code> - parallelize the iterations over the threads inside thread teams</li>
+</ul>
                 
                   
                 

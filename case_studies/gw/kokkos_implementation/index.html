@@ -680,10 +680,39 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Kokkos
+      </label>
     
     <a href="./" title="Kokkos" class="md-nav__link md-nav__link--active">
       Kokkos
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kokkosopenmp-implementation" title="Kokkos+OpenMP implementation" class="md-nav__link">
+    Kokkos+OpenMP implementation
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -890,6 +919,22 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kokkosopenmp-implementation" title="Kokkos+OpenMP implementation" class="md-nav__link">
+    Kokkos+OpenMP implementation
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -902,9 +947,138 @@
               
                 
                 
-                  <h1>Kokkos</h1>
-                
-                <p>Coming Soon</p>
+                <h2 id="complex-numbers-in-kokkos">Complex Numbers in Kokkos<a class="headerlink" href="#complex-numbers-in-kokkos" title="Permanent link">&para;</a></h2>
+<p>Kokkos has its own implementation of complex numbers.
+The framework supports most of the opertaions involving complex numbers but there are a few that are not yet available.
+For example the power of a complex number is not defined and a few others such as multipliying, adding or subtracting a double to/from a complex number are yet to be implemented.
+We can however define our own implementation and annotate the function with <code>KOKKOS_INLINE_FUNCTION</code> to achieve the result.</p>
+<div class="codehilite"><pre><span></span><span class="n">KOKKOS_INLINE_FUNCTION</span>
+<span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">kokkos_square</span><span class="p">(</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">compl_num</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">real</span><span class="p">(</span><span class="n">compl_num</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="n">im</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">imag</span><span class="p">(</span><span class="n">compl_num</span><span class="p">);</span>
+
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">re</span><span class="o">*</span><span class="n">re</span> <span class="o">-</span> <span class="n">im</span><span class="o">*</span><span class="n">im</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">re</span><span class="o">*</span><span class="n">im</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>In Kokkos it is advised to use a <code>Kokkos::View</code> datatype inorder to store modify the data inside a Kokkos construct.
+We follow the below shown technique to create a vector and matrix type of<code>views</code> with the appropriate execution and memory spaces.</p>
+<p><div class="codehilite"><pre><span></span><span class="cp">#define CUDASPACE 0</span>
+<span class="cp">#define OPENMPSPACE 0</span>
+<span class="cp">#define CUDAUVM 1</span>
+<span class="cp">#define SERIAL 0</span>
+<span class="cp">#define THREADS 0</span>
+
+<span class="cp">#if OPENMPSPACE</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span>   <span class="n">ExecSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">OpenMP</span>        <span class="n">MemSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutRight</span>  <span class="n">Layout</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if CUDASPACE</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span>     <span class="n">ExecSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">CudaSpace</span>     <span class="n">MemSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutLeft</span>   <span class="n">Layout</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if SERIAL</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Serial</span>   <span class="n">ExecSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">HostSpace</span>     <span class="n">MemSpace</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if THREADS</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Threads</span>  <span class="n">ExecSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">HostSpace</span>     <span class="n">MemSpace</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if CUDAUVM</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Cuda</span>     <span class="n">ExecSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">CudaUVMSpace</span>  <span class="n">MemSpace</span><span class="p">;</span>
+        <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutLeft</span>   <span class="n">Layout</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">RangePolicy</span><span class="o">&lt;</span><span class="n">ExecSpace</span><span class="o">&gt;</span>  <span class="n">range_policy</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">MemSpace</span><span class="o">&gt;</span>   <span class="n">ViewScalarTypeComplex</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;*</span><span class="p">,</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">MemSpace</span><span class="o">&gt;</span>   <span class="n">ViewVectorTypeComplex</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;**</span><span class="p">,</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">MemSpace</span><span class="o">&gt;</span>  <span class="n">ViewMatrixTypeComplex</span><span class="p">;</span>
+
+<span class="p">};</span>
+
+<span class="n">ViewMatrixTypeComplex</span> <span class="nf">array1</span><span class="p">(</span><span class="s">&quot;array1&quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span><span class="n">M</span><span class="p">);</span>
+<span class="n">ViewMatrixTypeComplex</span> <span class="nf">array2</span><span class="p">(</span><span class="s">&quot;array2&quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span><span class="n">M</span><span class="p">);</span>
+<span class="n">ViewVectorTypeComplex</span> <span class="n">vcoul</span><span class="p">(</span><span class="s">&quot;vcoul&quot;</span><span class="p">,</span> <span class="n">ngpown</span><span class="p">)</span>
+</pre></div>
+As shown in the code structure section, there is a reduction being performed over a vector of complex numbers <code>achtemp</code>
+In the OpenMP version of the code we reduce these values inside individual thread-local arrays and then later accumulate the results.
+But since Kokkos allows user defined reduction, we create a structure with an array of 3 complex numbers and overload the += operator for this structure.
+We then perform a <code>Kokkos::parallel_reduce</code> on the structure.</p>
+<h3 id="kokkosopenmp-implementation">Kokkos+OpenMP implementation<a class="headerlink" href="#kokkosopenmp-implementation" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">achtempStruct</span>
+<span class="p">{</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">value</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="n">KOKKOS_INLINE_FUNCTION</span>
+    <span class="kt">void</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">achtempStruct</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="n">KOKKOS_INLINE_FUNCTION</span>
+    <span class="kt">void</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">achtempStruct</span> <span class="k">const</span> <span class="k">volatile</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">volatile</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span>  <span class="n">achtemp</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="n">achStruct</span> <span class="n">achtempVar</span> <span class="o">=</span> <span class="p">{{</span><span class="n">achtemp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">achtemp</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">achtemp</span><span class="p">[</span><span class="mi">2</span><span class="p">]}};</span>
+
+<span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span><span class="n">ngpown</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span> <span class="p">(</span><span class="kt">int</span> <span class="n">my_igp</span><span class="p">,</span> <span class="n">achtempStruct</span><span class="o">&amp;</span> <span class="n">achUpdate</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iw</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">iw</span><span class="o">++</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">ig</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ig</span> <span class="o">&lt;</span> <span class="n">ncouls</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+            <span class="p">...</span>
+            <span class="n">scht</span> <span class="o">+=</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">achUpdate</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">vcoul</span><span class="p">(</span><span class="n">igp</span><span class="p">)</span> <span class="o">*</span> <span class="n">sch_array</span><span class="p">[</span><span class="n">iw</span><span class="p">];</span>
+    <span class="p">}</span>
+
+<span class="p">},</span><span class="n">achtempVar</span><span class="p">);</span>
+</pre></div>
+
+<h1 id="initial-observation">INITIAL OBSERVATION<a class="headerlink" href="#initial-observation" title="Permanent link">&para;</a></h1>
+<p>In this section, we will describe some of the initial hurdles faced while porting the gw-kernel using Kokkos.
+Not shown in the code structure is the outermost loop of the computation (shown below), which iterates over the number of bands.
+If we update the achtemp as a view inside the Kokkos construct, we loose its value when the outer loop starts the new iteration.
+hence we have to store it in a separate structure in order to save its value for the next iteration.</p>
+<p><div class="codehilite"><pre><span></span><span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">n1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n1</span><span class="o">&lt;</span><span class="n">number_bands</span><span class="p">;</span> <span class="o">++</span><span class="n">n1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">parallel_reduce</span><span class="p">(</span><span class="n">ngpown</span><span class="p">,</span> <span class="n">KOKKOS_LAMBDA</span> <span class="p">(</span><span class="kt">int</span> <span class="n">my_igp</span><span class="p">,</span> <span class="n">achtempStruct</span><span class="o">&amp;</span> <span class="n">achUpdate</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iw</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">iw</span><span class="o">++</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">ig</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">ig</span> <span class="o">&lt;</span> <span class="n">ncouls</span><span class="p">;</span> <span class="n">ig</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">delw</span> <span class="o">=</span> <span class="n">array2</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wxt</span><span class="p">(</span><span class="n">iw</span><span class="p">,</span><span class="n">np</span><span class="p">)</span> <span class="o">-</span> <span class="n">array1</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">))</span>
+                <span class="p">...</span>
+                <span class="n">scht</span> <span class="o">+=</span> <span class="p">...</span> <span class="o">*</span> <span class="n">delw</span> <span class="o">*</span> <span class="n">array3</span><span class="p">(</span><span class="n">ig</span><span class="p">,</span><span class="n">igp</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="n">achUpdate</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">vcoul</span><span class="p">(</span><span class="n">igp</span><span class="p">)</span> <span class="o">*</span> <span class="n">sch_array</span><span class="p">[</span><span class="n">iw</span><span class="p">];</span>
+        <span class="p">}</span>
+
+    <span class="p">},</span><span class="n">achtempVar</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">iw</span><span class="o">=</span><span class="n">nstart</span><span class="p">;</span> <span class="n">iw</span><span class="o">&lt;</span><span class="n">nend</span><span class="p">;</span> <span class="o">++</span><span class="n">iw</span><span class="p">)</span>
+        <span class="n">achtemp</span><span class="p">[</span><span class="n">iw</span><span class="p">]</span> <span class="o">+=</span> <span class="n">achtempVar</span><span class="p">.</span><span class="n">value</span><span class="p">[</span><span class="n">iw</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+As shown in the above code snippet, we save the value of achtempVar in achtemp, else we loose it's value of  from iteration i to i+1.</p>
                 
                   
                 
