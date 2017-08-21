@@ -18,7 +18,7 @@ fielding systems with two-distinct "pre-exascale" architectures that we discuss 
 | System   | Titan    |
 |----------|----------|
 | Location | OLCF     |
-| Architecture | CPU + NVIDIA GPU |
+| Architecture | CPU + GPU |
 | Scale | 18,688 Nodes |
 |  | <img src="images/titan.opt.jpg" width=200> |
 
