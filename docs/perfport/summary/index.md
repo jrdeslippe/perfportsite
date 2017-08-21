@@ -55,7 +55,7 @@ with the aid of hints).
 
 This strategy is likely most appropriate if additional vector parallelism can be easily exploited by the compiler on the KNL, if vectorization doesn't 
 affect performance or if one intends to manually intervene to ensure vector parallelism is exploited on the KNL. Frameworks like Kokkos (with the concept of 
-"views") can help portabily handle the coalescing issue. 
+"views") can help handle the coalescing issue in a portable way. 
 
 #### Strategy 2 
 
