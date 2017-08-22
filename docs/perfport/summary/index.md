@@ -119,7 +119,7 @@ In general, we have the following recommendations for pursuing performance porta
 OpenACC is another possible path, and might be approriate if you need to interoperate with a limited amount of GPU-specific code (e.g. a small amount of CUDA
 that is used in a particularly performance-sensitive piece of code). However, the default level of maturity for OpenACC on the non-GPU platforms is an open question. 
 
-3. If you have an existing code that *is* written in C++, evaluate whether Kokkos or OpenMP 4.5 can support your application with minimal code differences, 
+3. If you have an existing code that *is* written in C++, evaluate whether Kokkos, or Raja and OpenMP 4.5 (more incremental) can support your application with minimal code differences, 
 considering the above discussion on strategy and the pros and cons for each approach. 
 
 4. Reach out to your DOE SC facility with use cases and deficiencies in these options so that we can actively push for changes in the upcoming 
