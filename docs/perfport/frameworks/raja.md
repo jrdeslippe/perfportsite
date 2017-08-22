@@ -60,6 +60,7 @@ checkSolution(C, N);
 
 * Provide good portability through the use of platform-dependent back-ends
 * Promote good programming practices
+* Allows incremental changes/improvements to an applications
 
 ### Challenges
 
