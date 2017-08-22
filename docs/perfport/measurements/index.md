@@ -98,9 +98,9 @@ For polynomial access pattern: x[i] = (x[i]+c0):
 
 | System                | DRAM      | L2         | L1         | GEMM   |
 |-----------------------| ----------|------------|------------|---------|
-| Titan (Kepler)        | 161 GB/s  | 559 GB/s   | -          | 1226 GB/s  |
-| Summit Dev (4 Pascal) | 1930 GB/s | 6507 GB/s  | -          | 17095 GB/s |
-| Cori (KNL)            | 413 GB/s  | 1965 GB/s  | 6443 GB/s  | 2450 GB/s  |
+| Titan (Kepler)        | 161 GB/s  | 559 GB/s   | -          | 1226 GF/s  |
+| Summit Dev (4 Pascal) | 1930 GB/s | 6507 GB/s  | -          | 17095 GF/s |
+| Cori (KNL)            | 413 GB/s  | 1965 GB/s  | 6443 GB/s  | 2450 GF/s  |
 
 For non-contiguous accesses on KNL as an example:
 
