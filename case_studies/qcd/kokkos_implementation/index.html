@@ -1170,11 +1170,11 @@ parameters into template parameters. Finally, the member data of the <code>Dslas
 <p>Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a <code>SiteTable</code> class with
 member functions like <code>NeighborTMinus(site,target_cb)</code> to give the linear site indices of the neighbors. The instance of this site table is the <code>_neigh_table</code> member in the <code>KokkosDslash</code> class and is used to initialize the <code>neigh_table</code> member of the <code>DslashFunctor</code>. Our implementation is such that <code>SiteTable</code> either holds a pre-computed neighbor table or computes the site neighbor for a given direction on the fly (a choice made at configuration &amp; compile time using <code>#ifdef</code>). In our performance measurements we use the implementation which gives the best performance for a given architecture.</p>
 <h2 id="complex-numbers-and-c">Complex Numbers and C++<a class="headerlink" href="#complex-numbers-and-c" title="Permanent link">&para;</a></h2>
-<p>We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as </p>
+<p>We want to emphasize a subtle performance pitfall when it comes to complex numbers in C++. The language standards inhibit the compiler to efficiently optimize operations such as</p>
 <div class="codehilite"><pre><span></span><span class="n">c</span> <span class="o">+=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
 </pre></div>
 
-<p>when <code>a</code>, <code>b</code> and <code>c</code> are complex numbers. Naively, this expression could be expanded into </p>
+<p>when <code>a</code>, <code>b</code> and <code>c</code> are complex numbers. Naively, this expression could be expanded into</p>
 <div class="codehilite"><pre><span></span><span class="n">re</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+=</span> <span class="n">re</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">re</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">im</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">im</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="n">im</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+=</span> <span class="n">re</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">im</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">im</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">re</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 </pre></div>
@@ -1182,7 +1182,7 @@ member functions like <code>NeighborTMinus(site,target_cb)</code> to give the li
 <p>where <code>re(.), im(.)</code> denote the real and imaginary part of its argument respectively. This expresson can nicely be packed into a total of four FMA operations per line. However, in the simplified form above which is usually used in context of operator overloading, the compier would have to evaluate the right hand side first and then sum the result into <code>c</code>. This is much less efficient since in that case, only two FMA as well as two multiplications and additions could be used. One has to keep that in mind when doing complex algebra in C++. In many cases it is better to inline code and avoid otherwise useful operator overloading techniques for complex algebra.</p>
 <h2 id="ensuring-vectorization">Ensuring Vectorization<a class="headerlink" href="#ensuring-vectorization" title="Permanent link">&para;</a></h2>
 <p>Vectorization in Kokkos is achieved by a two-level <a href="../../../perfport/frameworks/kokkos/#nested-parallelism">nested parallelism</a>, where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spwans threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type <code>TST</code> needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span> 
+<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span>
 <span class="k">struct</span> <span class="n">CPUSIMDComplex</span> <span class="p">{</span>
   <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
 
@@ -1193,7 +1193,7 @@ member functions like <code>NeighborTMinus(site,target_cb)</code> to give the li
   <span class="p">...</span>
 <span class="p">};</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span> 
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span>
 <span class="k">struct</span> <span class="n">GPUSIMDComplex</span> <span class="p">{</span>
   <span class="n">Kokkos</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">_data</span><span class="p">;</span>
 
@@ -1300,9 +1300,9 @@ To improve that situation, we decide to write our own complex class which we der
 <span class="p">};</span>
 </pre></div>
 
-<p>The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts. 
-Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the <code>nvprof</code> output in which the corresponding sections are not marked as hotspots any more. </p>
-<p>Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency. </p>
+<p>The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts.
+Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the <code>nvprof</code> output in which the corresponding sections are not marked as hotspots any more.</p>
+<p>Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency.</p>
 <h1 id="index-computations">Index Computations<a class="headerlink" href="#index-computations" title="Permanent link">&para;</a></h1>
 <p>Investigating this issue with <code>nvprof</code> indicates that performance might be impacted by significant integer calculation overhead. For example, the first screenshot below shows the instruction decomposition for the Wilson operator from the optimized <a href="https://github.com/lattice/quda">QUDA library</a>.</p>
 <p><img alt="instruction decomposition for QUDA Wilson dslash kernel" src="../images/quda_dslash_instruction_count.png" /></p>
