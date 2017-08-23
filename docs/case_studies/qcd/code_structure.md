@@ -10,19 +10,34 @@ Our testcode is written in C++ and designed completely from scratch. We use type
 
 In multi-node implementations the application step would be separated into bulk- and boundary application and the former interleaved with boundary communication.
 
+As is common in Lattice codes we attribute a color (checkerboard) to each lattice site, depending on whether
+the 4-dimensional coordinates sum to an even number or an odd number. The color is also referred to as a checkerboard
+index (cb), or parity. In the traditional 2-coloring scheme (red-black or even-odd) each checkerboard of the lattice 
+contains half of the total number of lattice sites. In a nearest neighbor operator such as dslash, output spinors on sites of one
+checkerboard color (target_cb) will need neighboring input spinors only from sites of the other checkerboard color (source_cb),
+and hence all the sites of a given checkerboard can be conveniently computed in parallel, with no write conflicts.
+Gauge fields are usually stored as the forward pointing links in the 4 forward directions. The backward pointing links at a site
+are the hermitian conjugates of the forward pointing links of the site's back neighbors in each direction (which will have the
+opposite parity from the original site). Hence even for applying Dslash to sites of only one parity, the gauge fields from both
+parities need to be read.
+
+
+
 ## Data Primitives
 For facilitating this workflow, we define spinor and gauge link classes (in C++-like pseudocode):
 
 ```C++
+
+// num_sites is the number of lattice sites on a single checkerboard
+// color of the lattice (half the total number of lattice sites)
+//
 template<typename ST,int nspin> 
 class CBSpinor {
 public: 
   ...
 private:
   // dims are: site, color, spin. 
-  // the * means that the number of sites is not decided at
-  // compile time, but at initialization
-  spin_container<ST*[3][spin]> data;
+  spin_container<ST[num_sites][3][nspin],nspin> data;
 };
 
 template<typename GT> 
@@ -31,9 +46,7 @@ public:
   ...
 private:
   // dims are: site, direction, color, color
-  // The * means that the number of sites is not decided at 
-  // compile time, but at initialization
-  gauge_container<GT*[4][3][3]>;
+  gauge_container<GT[num_sites][4][3][3]>;
 };
 ```
 
@@ -51,7 +64,8 @@ template<typename GT, typename ST, typename TST, const int isign, const int targ
 class Dslash {
 public:
   void operator(const CBSpinor<ST,4>& s_in,
-                const CBGaugeField<GT>& g_in,
+                const CBGaugeField<GT>& g_in_src_cb,
+                const CBGaugeField<GT>& g_in_target_cb,
                 CBSpinor<ST,4>& s_out)
   {
     // Threaded loop over sites
@@ -78,6 +92,7 @@ public:
   }
 };
 ```
+
 
 Here, the type ```TST``` denotes a thread-spinor-type which belongs to the ```CBThreadSpinor``` class. It is important to make the distinction between ```CBSpinor``` and ```CBThreadSpinor``` because, depending on the performance portability framework used, this type has to be different on CPU or GPU. What we would like to achieve ultimately is displayed in the picture below:
 

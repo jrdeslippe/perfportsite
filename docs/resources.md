@@ -22,7 +22,7 @@
 
     * [OLCF Center for Accelerated Application Readiness (CAAR)](http://www.olcf.ornl.gov/CAAR/)
 
-    * [OLCF CAAR and performance portability publicaitons](http://www.olcf.ornl.gov/CAAR/pubs/)
+    * [OLCF CAAR and performance portability publications](http://www.olcf.ornl.gov/CAAR/pubs/)
 
 
 * ALCF
