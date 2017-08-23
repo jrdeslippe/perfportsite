@@ -21,8 +21,8 @@
 | Fortran (OpenMP 4.5) | PowerPC |  |
 | C++     (OpenMP 3.0) | PowerPC | 70.2 |
 | C++     (OpenMP 4.5) | PowerPC |  |
-| Kokkos  (OpenMP)     | PowerPC | 17.03  |
-| Kokkos  (CudaUVM)    | Pascal  | 3.93 |
+| Kokkos  (OpenMP)     | PowerPC | 867.03  |
+| Kokkos  (CudaUVM)    | Pascal  | 58.93 |
 | Kokkos  (Cuda)       | Pascal  | |
 
 ## Lessons Learned
