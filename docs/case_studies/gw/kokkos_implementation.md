@@ -1,7 +1,7 @@
 ## Complex Numbers in Kokkos
 Kokkos has its own implementation of complex numbers.
-The framework supports most of the opertaions involving complex numbers but there are a few that are not yet available.
-For example the power of a complex number is not defined and a few others such as multipliying, adding or subtracting a double to/from a complex number are yet to be implemented.
+The framework supports most of the operations involving complex numbers but there are a few that are not yet available.
+For example the power of a complex number is not defined and a few others such as multiplying, adding or subtracting a double to/from a complex number are yet to be implemented.
 We can however define our own implementation and annotate the function with ```KOKKOS_INLINE_FUNCTION``` to achieve the result.
 
 ```C++

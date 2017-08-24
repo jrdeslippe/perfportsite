@@ -71,7 +71,7 @@ The target implementation has following structure:
             ach[iw] += (*ach_threadArr_vla)[i][iw];
 
 ```
-For intel compilers we need the flag ```-qopenmp-offload=host``` and in case of GCC with for the NVIDIA GPUs we need the ```-foffload=nvptx-none``` flag during compilation.
+For Intel compilers we need the flag ```-qopenmp-offload=host``` and in case of GCC with for the NVIDIA GPUs we need the ```-foffload=nvptx-none``` flag during compilation.
 
 * ```#pragma omp target ``` - offload the code block on the device
 * ``` map(to:var, arr[0:N]) ``` - copy the data on to the device
@@ -163,7 +163,7 @@ void ssxt_scht_solver(double , int , int , int , std::complex<double> , std::com
 
 ```
 Function accessed from inside the ```target``` directive need to be declared inside the ```#pragma omp declare target ``` and ```#pragma omp end declare target```.
-For intel compilers we need the flag ```-qopenmp-offload=host``` and in case of GCC with for the NVIDIA GPUs we need the ```-foffload=nvptx-none``` flag during compilation.
+For Intel compilers we need the flag ```-qopenmp-offload=host``` and in case of GCC with for the NVIDIA GPUs we need the ```-foffload=nvptx-none``` flag during compilation.
 
 * ```#pragma omp target ``` - offload the code block on the device
 * ``` map(to:var, arr[0:N]) ``` - copy the data on to the device

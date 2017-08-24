@@ -14,7 +14,7 @@ short-range forces, and the calculation of long-range
 forces. The integration step is generally the quickest part
 of the calculation, and as it has some memory-intensive
 aspects, is often calculated using the CPU, in
-implementations using heterogenous architectures. The
+implementations using heterogeneous architectures. The
 long-range force calculation, in most implementations,
 involves an Ewald sum. This requires the use of Fourier transform
 methods, which are fast for smaller systems, but do not

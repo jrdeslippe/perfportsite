@@ -1,6 +1,6 @@
 # Code structure
 
-## Orignal code structure
+## Original code structure
 
 The inner loops of the FORTRAN-90 code have the following form. 
 
@@ -28,7 +28,7 @@ do igp = 1, ngpown
 enddo 
 ```
 
-where, in the prouction code, we block the `ig` loop around the `iw` loop in order to gain data reuse. However, the inner 'ig' loop is left appropriately 
+where, in the production code, we block the `ig` loop around the `iw` loop in order to gain data reuse. However, the inner 'ig' loop is left appropriately 
 long to 
 get efficient vector performance - typically block sizes of around 256 are used, which is many vector lengths on a KNL processor.
 

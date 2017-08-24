@@ -7,7 +7,7 @@ workload and from the outcome of recent DOE performance portability workshops.
 
 |Approach|Benefits|Challenges|
 |:------------:|:-------------------:|:------------:|
-|Libraries  | Highly portable, not dependent on compiler implementations. | Many GPU libraries (e.g. CUFFT) are C only (requiring explicit interafces to use in FORTRAN) and don't have common interfaces. May lock-in data layout. In many cases libraries don't exist for problem. |
+|Libraries  | Highly portable, not dependent on compiler implementations. | Many GPU libraries (e.g. CUFFT) are C only (requiring explicit interfaces to use in FORTRAN) and don't have common interfaces. May lock-in data layout. In many cases libraries don't exist for problem. |
 |OpenMP 4.5 | Standardized. Support for C, C++, FORTRAN and others. Simple to get started. | Limited expressibility (particularly on GPUs). Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems. |
 |OpenACC    | Standardized. Support for C, C++, FORTRAN. | Limited support in compilers, especially free compilers (e.g. GNU).  |
 |Kokkos     | Allows significant expressibility (particularly on GPUs.) | Only supports C++. Vector parallelism often left-out on CPUs. |
@@ -19,7 +19,7 @@ We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot
 
 ### Threads and Vectors
 
-One of the main challenges in providing a performance portability layer between KNL and GPU architectures is that vector parallelism on GPUs is expresed as 
+One of the main challenges in providing a performance portability layer between KNL and GPU architectures is that vector parallelism on GPUs is expressed as 
 SIMT (Single Instruction Multiple Threads) whereas a CPU contains both SMT (Simultaneous Multi-Threading) across cores/threads and SIMD (Single Instruction 
 Multiple Data) across the lanes of the VPU (Vector Processing Unit). One of the challenges to be grappled with in using a performance portable approach 
 is that SIMT parallelism lies somewhere in between SMT and SIMD parallelism in terms of expressibility, flexibility, and performance limitations:
@@ -34,7 +34,7 @@ costs.
 * *SIMT*: SIMT shares some qualities of SMT in the sense that each thread (running on what is referred to as a "core" on a GPU) has its own registers, and 
 work for each thread can be expressed in a "scalar" way. However, like SIMD and unlike SMT, the threads are not completely 
 independent. On current GPU architectures, (e.g. the K20X found in Titan) typically 32 threads form a warp in which the same instruction is being executed each cycle. Thus, if the work between threads diverges 
-significantly, there is a signficant reduction in performance. In addition, optimal performance is typically achieved when the threads in the warp are 
+significantly, there is a significant reduction in performance. In addition, optimal performance is typically achieved when the threads in the warp are 
 operating on contiguous data. 
 
 How do you use these different types of parallelism in order to enable portable programming? We identify three particular strategies, each with advantages and disadvantages. It is important when beginning to develop a performance portability plan to consider which of these strategies best maps to your application.
@@ -60,10 +60,10 @@ affect performance or if one intends to manually intervene to ensure vector para
 #### Strategy 2 
 
 The second strategy is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
-This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a signficant drawback: 
+This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a significant drawback: 
 
 * Because SIMD parallelism on the CPU/KNL is typically more restrictive and less flexible to express (requiring statements like `OMP SIMD` on relatively 
-straightfoward loops), the programmer loses a lot of the flexibility the GPU architecture allows. 
+straightforward loops), the programmer loses a lot of the flexibility the GPU architecture allows. 
 
 This is generally the strategy taken by applications using OpenMP for performance portability in its current implementation. We see in the case studies that to use OpenMP to 
 offload work to the GPU, one currently needs an `OMP SIMD` directive (when compiler support exists at all). 
@@ -80,7 +80,7 @@ can, in
 theory, support. For example, Kokkos ``views`` handle coalescing,
 but vector parallelism on the CPU or KNL is left up to the compiler (with mixed results). As we see in the QCD case-study, the 
 developers may need to intervene (and potentially add new layers of parallelism to the code, e.g. multiple right hand sides) to make sure their code 
-can effetively use the wide AVX512 units on the KNL. 
+can effectively use the wide AVX512 units on the KNL. 
 
 
 ### Memory Management
@@ -89,7 +89,7 @@ As we mention above, the KNL and GPU architectures both have high-bandwidth, on-
 node. With support of unified virtual memory (UVM) on recent GPUs, both kinds of memory spaces can be accessed from all the components 
 of GPU or KNL nodes. One difference is that 
 because host memory is still separated from the GPU via PCI-express or NVLink, the gap in latency and bandwidth compared to the device memory can be 
-signficantly higher. 
+significantly higher. 
 
 In principle, directives like OpenMP's `map` function could be used to portably move data. The reality is that compiler implementations don't support this 
 at present - mostly ignoring this when running on a CPU or KNL system (or failing to work at all on these systems). 
@@ -116,7 +116,7 @@ In general, we have the following recommendations for pursuing performance porta
 1. If a well-supported library or DSL is available to address your performance critical regions, use it.
 
 2. If you have an existing code that is *not* written in C++, evaluate whether OpenMP 4.5 can support your application with minimal code differences.
-OpenACC is another possible path, and might be approriate if you need to interoperate with a limited amount of GPU-specific code (e.g. a small amount of CUDA
+OpenACC is another possible path, and might be appropriate if you need to interoperate with a limited amount of GPU-specific code (e.g. a small amount of CUDA
 that is used in a particularly performance-sensitive piece of code). However, the default level of maturity for OpenACC on the non-GPU platforms is an open question. 
 
 3. If you have an existing code that *is* written in C++, evaluate whether Kokkos, or Raja and OpenMP 4.5 (more incremental) can support your application with minimal code differences, 

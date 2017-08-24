@@ -50,7 +50,7 @@ While the details of the architectures are distinct, and vendor specific program
 specific architecture features; the commonalities are significant enough that a number of portable programming approaches are emerging for writing code that 
 supports both architectures. 
 
-This website is intended to be a living/growing documentation hub and guide for applications teams targetting systems at multiple DOE office of science 
+This website is intended to be a living/growing documentation hub and guide for applications teams targeting systems at multiple DOE office of science 
 facilities. In these pages, we 
 discuss the differences between the systems, the software environment, and the job-submission process. We discuss how to define and measure performance 
 portability and we provide recommendations based on case studies for the most promising performance-portable programming approaches. A 

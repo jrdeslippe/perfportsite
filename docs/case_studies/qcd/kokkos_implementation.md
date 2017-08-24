@@ -155,7 +155,7 @@ public:
     // constant template arguments
     if( plus_minus == 1 ) {
       if (target_cb == 0 ) {
-        // Instantiat appropriate functor and construct
+        // Instantiate appropriate functor and construct
         // All view initializations will be done by copy
         // the values of plus_minus (1) and target_cb (0)
         // are made explicit and compile time in the template
@@ -177,7 +177,7 @@ public:
 };
 ```
 
-In the above, the GPU Threads in the $X$ drection are created, when we call ```Kokkos::parallel_for``` with the ```ThreadExecPolicy```, to which we have given a vector length through the ```Veclen<ST>::veclen``` type trait. The nested ```if-else``` clauses turn run-time
+In the above, the GPU Threads in the $X$ direction are created, when we call ```Kokkos::parallel_for``` with the ```ThreadExecPolicy```, to which we have given a vector length through the ```Veclen<ST>::veclen``` type trait. The nested ```if-else``` clauses turn run-time
 parameters into template parameters. Finally, the member data of the ```DslashFunctor``` are initialized by copy.
 
 Note that since we linearized the site index, we need to compute the neighboring site indices manually. On architectures with poor integer arithmetic performance this might lead to a significant performance penalty. Therefore, we implement a ```SiteTable``` class with
@@ -197,10 +197,10 @@ re(c) += re(a) * re(b) - im(a) * im(b)
 im(c) += re(a) * im(b) + im(a) * re(b)
 ```
 
-where ```re(.), im(.)``` denote the real and imaginary part of its argument respectively. This expresson can nicely be packed into a total of four FMA operations per line. However, in the simplified form above which is usually used in context of operator overloading, the compier would have to evaluate the right hand side first and then sum the result into ```c```. This is much less efficient since in that case, only two FMA as well as two multiplications and additions could be used. One has to keep that in mind when doing complex algebra in C++. In many cases it is better to inline code and avoid otherwise useful operator overloading techniques for complex algebra.
+where ```re(.), im(.)``` denote the real and imaginary part of its argument respectively. This expression can nicely be packed into a total of four FMA operations per line. However, in the simplified form above which is usually used in context of operator overloading, the compiler would have to evaluate the right hand side first and then sum the result into ```c```. This is much less efficient since in that case, only two FMA as well as two multiplications and additions could be used. One has to keep that in mind when doing complex algebra in C++. In many cases it is better to inline code and avoid otherwise useful operator overloading techniques for complex algebra.
 
 ## Ensuring Vectorization
-Vectorization in Kokkos is achieved by a two-level [nested parallelism](../../perfport/frameworks/kokkos.md#nested-parallelism), where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spwans threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type ```TST``` needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively
+Vectorization in Kokkos is achieved by a two-level [nested parallelism](../../perfport/frameworks/kokkos.md#nested-parallelism), where the outer loop spawns threads (pthreads, OpenMP-threads) on the CPU and threads in CUDA-block y-direction on the GPU. The inner loop then applies vectorization pragmas on the CPU or spawns threads in x-direction on the GPU. This is where we have to show some awareness of architectural differences: the spinor work type ```TST``` needs to be a scalar type on the GPU and a vector type on the CPU. Hence we declare the following types on GPU and CPU respectively
 
 ```C++
 template<typename T,N>
@@ -335,10 +335,10 @@ public:
 };
 ```
 
-The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitely write those operations in terms of real and imaginary parts.
+The part abbreviated by the ellipsis only contains further assignment or access operators, no complex math. Because of the issues with complex arithmetic in C++ mentioned above, we explicitly write those operations in terms of real and imaginary parts.
 Using this class got rid of all uncoalesced data access issues even in CUDA 8. This can be inferred by looking at the ```nvprof``` output in which the corresponding sections are not marked as hotspots any more.
 
-Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This incidates that on the GPU the performance is still limited by something else, probably memory access latency.
+Note that despite our improvements of complex load and store instructions, the kernel performance barely changed. This indicates that on the GPU the performance is still limited by something else, probably memory access latency.
 
 # Index Computations
 

@@ -1,6 +1,6 @@
 # Kokkos Implementation
 
-This section is written as some kind of lab report, since we think that it illustrates best what challenges users might face when making complicated framworks such as BoxLib performance portable.
+This section is written as some kind of lab report, since we think that it illustrates best what challenges users might face when making complicated frameworks such as BoxLib performance portable.
 
 ## First Attempt
 
@@ -8,7 +8,7 @@ This section will describe our first, unfinished attempt, to port BoxLib over to
 
 ### Memory Management
 
-In theory, one would like to make the data resident on the *device* all the time to avoid unneccessary data transfer. We thus implemented a ```KArenaND``` class which allows us to use Kokkos views instead of plain arrays for storing the data. This is the abstract, N-dimensional class which provides a part of the interface:
+In theory, one would like to make the data resident on the *device* all the time to avoid unnecessary data transfer. We thus implemented a ```KArenaND``` class which allows us to use Kokkos views instead of plain arrays for storing the data. This is the abstract, N-dimensional class which provides a part of the interface:
 
 ```C++
 //generic ND template
@@ -70,7 +70,7 @@ void* KArenaND<T,3>::alloc (const std::vector<size_t>& _sz_vec)
 ```
 
 !!!warning
-    When packing Views into classes, avoid using pointers and the ```new``` operator to instantiate a new View. **This pointer will be a host-only pointer and will have NULL value when accessed from a device which uses a different address space.** The reference counting is only guaranteed to work properly if the View is stored and passed by value. In that sense, also avoid passing references to views. Note that Kokkos::Views are lighweight objects so there is no performance reason to use pointers/references instead of values in this case.
+    When packing Views into classes, avoid using pointers and the ```new``` operator to instantiate a new View. **This pointer will be a host-only pointer and will have NULL value when accessed from a device which uses a different address space.** The reference counting is only guaranteed to work properly if the View is stored and passed by value. In that sense, also avoid passing references to views. Note that Kokkos::Views are lightweight objects so there is no performance reason to use pointers/references instead of values in this case.
 
 We further implemented operators to access the memory, which basically pass the View access operator to the outside. For example:
 
@@ -86,7 +86,7 @@ T& KArenaND<T,3>::operator()(int a0, int a1, int a2)
 
 Note that we reverse the order of indices here. This is because BoxLib uses the indexing ```(x,y,z)``` whereas for Kokkos views it is more convenient if the order ```(z,y,x)``` is used so that one can use Kokkos default layouts, i.e. ```Layout::Left``` on GPU and ```Layout::Right``` on CPU. If one would use the BoxLib indexing on the view level, this logic would need to be inverted whenever a Kokkos parallel dispatch is used. Instead, we invert it on the access operator level so that we neither need to explicitly specify an iteration policy nor break the BoxLib indexing order in the rest of the code.
 
-There are advantages and disadvantages to burying the Kokkos data containers deep into the framework. The obvious advantage is that once it works, basically the majority of the framwork will already be Kokkos compatible. The disadvantage is that incremental porting is not possible, it is an all-or-nothing approach.
+There are advantages and disadvantages to burying the Kokkos data containers deep into the framework. The obvious advantage is that once it works, basically the majority of the framework will already be Kokkos compatible. The disadvantage is that incremental porting is not possible, it is an all-or-nothing approach.
 
 ### Rewriting Fortran Kernels
 
@@ -148,7 +148,7 @@ A big difficulty with porting the BoxLib GMG to Kokkos is that most of the kerne
  55 files changed, 2455 insertions(+), 10764 deletions(-)
 ```
 
-Clearly, this is a major endeavour and we stopped our explorations for the moment at this point. 
+Clearly, this is a major endeavor and we stopped our explorations for the moment at this point. 
 Furthermore, it is not clear what performance Kokkos can deliver for the tasks at hand. To assess that, we abandoned the full port and continued with a partial port described below.
 
 ## Second Attempt
@@ -294,7 +294,7 @@ public:
 };
 ```
 
-Note that we still have to avoid running over array bounds. That can occur when the grid extent in ```i```-direction is odd. The iteration policy now becoes
+Note that we still have to avoid running over array bounds. That can occur when the grid extent in ```i```-direction is odd. The iteration policy now becomes
 
 ```C++
 // instantiate functor
@@ -310,4 +310,4 @@ Kokkos::Experimental::md_parallel_for(t_policy({0, lo[2], lo[1], lo[0]}, {nc, hi
 
 We experimented with including the full loop over ```i``` into our iteration policy and then skipping the iteration if ```(i + j + k) % 2 != 0```, but that decreased performance on the CPU by more than 50%. In general, it would be good if Kokkos' range policies allow for strided iterations.
 
-The above approach clearly comes with data transfer overhead which we would have avoided if we would have followed through our first attempt. However, in the performance timings we will report later on, we explicitly exclude that overhead and just assess the runtime of the kernels themselves. That way, we can determine if Kokkos is a viable framework for ensuring performance portability of BoxLib across acthitectures.
+The above approach clearly comes with data transfer overhead which we would have avoided if we would have followed through our first attempt. However, in the performance timings we will report later on, we explicitly exclude that overhead and just assess the run time of the kernels themselves. That way, we can determine if Kokkos is a viable framework for ensuring performance portability of BoxLib across architectures.

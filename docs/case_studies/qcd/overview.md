@@ -4,9 +4,9 @@
 the theory of the strong interaction which binds quarks into nucleons and nucleons into nuclei,
 in a straightforward way with quantifiable uncertainties. It is non-perturbative and thus has access
 to energy regimes where common analytical methods fail.
-In orer to transform continuum QCD to Lattice QCD, one first rotates the time axis to imaginary times which 
-transforms the 4-dimensional [Minkowski space](https://en.wikipedia.org/wiki/Minkowski_space) into Eculidian $\mathbb{R}^4$. Then,
-euclidian space-time is discretized by introducing a lattice spacing $a$ as well as finite volume with side extents $L$.
+In order to transform continuum QCD to Lattice QCD, one first rotates the time axis to imaginary times which 
+transforms the 4-dimensional [Minkowski space](https://en.wikipedia.org/wiki/Minkowski_space) into Euclidean $\mathbb{R}^4$. Then,
+euclidean space-time is discretized by introducing a lattice spacing $a$ as well as finite volume with side extents $L$.
 
 ## Wilson Fermions
 The most expensive part of Lattice QCD is the calculation of so-called quark propagators, i.e.
@@ -25,13 +25,13 @@ Note that the Wilson operator couples only neighboring lattice sites and is thus
 
 In modern lattice calculations, the majority of CPU time is spent on solving the Dirac equation. Therefore,
 most optimization efforts focus on optimizing the Wilson operator as well as solvers which use this operator as their kernel.
-It is thus importanto to find out whether the Wilson operator can be implemented in a performance portable way.
+It is thus important to find out whether the Wilson operator can be implemented in a performance portable way.
 
 ## Implementation
 In this section we will briefly discuss architecture-independent implementation details of the Wilson operator. 
 
 ### Multiple Right Hand Sides
-An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side (MRHS) vectors simulatenously. Working on a number of right hand sides which fits SIMD registers, is also a quick and easy way to explore effects of vectorization in an implementation.
+An efficient way to increase the arithmetic intensity in sparse linear systems is to solve for multiple right hand side (MRHS) vectors simultaneously. Working on a number of right hand sides which fits SIMD registers, is also a quick and easy way to explore effects of vectorization in an implementation.
 Further, this case is also relevant to many lattice QCD applications -- in some cases O(10^5^)-O(10^6^) systems may need to be solved with the same gauge configuration as input. For all these reasons, we have also implemented this version of the operator in our small test case. 
 
 ### Arithmetic Intensity
@@ -45,6 +45,6 @@ where $G$ is the size of a gauge link, $S$ the size of a spinor, $R$ the nearest
 
 We have applied one additional common optimization to our code known as the spin-projection trick:
 
-* The terms $( 1 \pm \gamma_\mu)$ in the spin-indices act as a projector in spin, and applying them to an input vector reduces the number of independent spin-degrees of freedom in the result from 4 to 2 (with the remaining two being related to the 2 indpendent ones through trivial operations such as - sign, or multiplication by complex $i$, or similar). Hence, because multipliation in spin by the projectors and in color by the gauge-link matrices commute, one typically first projects an input 4-spinor to a 2-component object known as a *half spinor*. The 3x3 gauge link matrix is then multiplied to the 3-color vector object for each of the two spin components. Finally the remaining 2 spin components are *reconstructed* by applying the necessary trivial transformation. Spin projection depends on direction $\mu$, but not on the lattice site indices. 
+* The terms $( 1 \pm \gamma_\mu)$ in the spin-indices act as a projector in spin, and applying them to an input vector reduces the number of independent spin-degrees of freedom in the result from 4 to 2 (with the remaining two being related to the 2 independent ones through trivial operations such as - sign, or multiplication by complex $i$, or similar). Hence, because multiplication in spin by the projectors and in color by the gauge-link matrices commute, one typically first projects an input 4-spinor to a 2-component object known as a *half spinor*. The 3x3 gauge link matrix is then multiplied to the 3-color vector object for each of the two spin components. Finally the remaining 2 spin components are *reconstructed* by applying the necessary trivial transformation. Spin projection depends on direction $\mu$, but not on the lattice site indices. 
 
 * In order to be able to utilize vector registers on architectures like Intel Xeon Phi Knight's Landing, we attempt to vectorize over the multiple-right sources in a 'multiple-right-hand side' application (MRHS) of the operator

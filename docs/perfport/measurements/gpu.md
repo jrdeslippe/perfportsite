@@ -1,4 +1,4 @@
-Measuring Rooflin Quantities on NVIDIA GPUs
+Measuring Roofline Quantities on NVIDIA GPUs
 
 It is possible to measure roofline quantities for a kernel on a GPU using the NVProf tool which was described [here](/facilities/tools.md). 
 
