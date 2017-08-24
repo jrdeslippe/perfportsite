@@ -6,7 +6,7 @@ codes to enable data location, data transfer, and loop or code block parallelism
  
 Though OpenACC has much in common with OpenMP, the syntax of the directives is different. 
 More importantly, OpenACC can best be described as having 
-a *descriptive* model, in constrast to the more *prescriptive* model presented by OpenMP.
+a *descriptive* model, in contrast to the more *prescriptive* model presented by OpenMP.
 This difference in philosophy can most readily be seen by, e.g.,  comparing the ``acc loop`` directive
 to the OpenMP implementation of the equivalent construct. In OpenMP, the programmer has responsibility 
 to specify how the parallelism in a loop is distributed (e.g., via ``distribute`` and ``schedule`` clauses). 

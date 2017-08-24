@@ -1,6 +1,6 @@
 # Comparison of Systems
 
-Below we compare indeph the Cori, Theta and Titan systems, software environment and job submission process to aid office of science users in utilizing 
+Below we compare in depth the Cori, Theta and Titan systems, software environment and job submission process to aid office of science users in utilizing 
 multiple resources.
 
 

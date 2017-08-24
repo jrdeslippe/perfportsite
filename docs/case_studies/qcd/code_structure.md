@@ -1,6 +1,6 @@
 # Code Structure
 
-Our testcode is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:
+Our test code is written in C++ and designed completely from scratch. We use type definitions, templates, template-specialization, overloading and other C++ features to provide flexibility in changing precision, testing datatypes which help vectorization and also making it easier to hide architecture dependent code. The general idea is to decompose the problem into a loop over lattice site and then for each lattice site and each direction, we:
 
 * stream-in the relevant neighboring spinor (or block of spinors in case of multiple right hand sides) from memory
 * project the 4-spinor to a 2-spinor
@@ -50,12 +50,12 @@ private:
 };
 ```
 
-here, ST and GT refer to spinor-type and gauge-type respectively. Those types could be SIMD or scalar types and they do not neccesarily need to be the same. The data containers can be plain arrays, e.g. for (unportable) plain implementations, or arrays decorated with pragmas (e.g. for OpenMP 4.5 offloading) or more general data container classes such as Kokkos::Views, etc.. The member functions are adopted to the container classes used in the individual implementations. Note that this design allows us to test different performance portable frameworks/methods without having to restructure large parts of the code. The additional template paramter ```nspin``` allows us to easily define 2- and 4-spinor objects. 
+here, ST and GT refer to spinor-type and gauge-type respectively. Those types could be SIMD or scalar types and they do not necessarily need to be the same. The data containers can be plain arrays, e.g. for (non-portable) plain implementations, or arrays decorated with pragmas (e.g. for OpenMP 4.5 offloading) or more general data container classes such as Kokkos::Views, etc.. The member functions are adopted to the container classes used in the individual implementations. Note that this design allows us to test different performance portable frameworks/methods without having to restructure large parts of the code. The additional template parameter ```nspin``` allows us to easily define 2- and 4-spinor objects. 
 
 
 ## Wilson Operator
 
-At this point in time, the dslash testcode is not multi-node ready, so we will focus solely on on-node parallelism for the moment. Our goal is to achieve this by threading over lattice sites and applying SIMD/SIMT parallelism over multiple right hand sides. In theory, one could achieve vectorization for single right hand side vectors also by using an array or structure of array data layout but we will not consider this technique here. We will nevertheless compare our single right hand side performance we achieved with our performance portable implementations with those of optimized libraries which feature such improvements.
+At this point in time, the dslash test code is not multi-node ready, so we will focus solely on on-node parallelism for the moment. Our goal is to achieve this by threading over lattice sites and applying SIMD/SIMT parallelism over multiple right hand sides. In theory, one could achieve vectorization for single right hand side vectors also by using an array or structure of array data layout but we will not consider this technique here. We will nevertheless compare our single right hand side performance we achieved with our performance portable implementations with those of optimized libraries which feature such improvements.
 
 Our dslash class is implemented as follow:
 

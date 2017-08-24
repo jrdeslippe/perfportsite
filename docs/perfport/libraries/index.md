@@ -26,7 +26,7 @@ what is often strictly serial work. This fundamental constraint is sometimes exa
 fact that architecture-specific implementations are evolving, despite the best efforts of both vendors and
 library maintainers. 
 
-Codes with obvious "hot spots" can often make immediate use of libraries to acheive performance portability. 
+Codes with obvious "hot spots" can often make immediate use of libraries to achieve performance portability. 
 This is often easiest for codes written in Fortran and C, whereas bindings to many libraries in C++ can 
 be lacking or somewhat arcane to use. One of the biggest concerns in using libraries for extant codes is 
 the frequent requirement to recast data structures used in the code to the format used by the library. 
@@ -44,7 +44,7 @@ need to change data structures pervasively throughout the code.
 
         * [Cray LibSci](http://docs.cray.com/cgi-bin/craydoc.cgi?mode=View;id=S-2396-610;idx=books_search;this_sort=title;q=;type=books;title=Cray%20Application%20Developer%27s%20Environment%20User%27s%20Guide) (Theta, Cori, Titan) 
 
-    * In addition, other platform-specific implementations are avaialable, like:
+    * In addition, other platform-specific implementations are available, like:
 
         * [MAGMA](http://icl.cs.utk.edu/magma/) (GPU; Titan)
 

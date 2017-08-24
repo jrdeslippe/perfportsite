@@ -13,7 +13,7 @@ code being essentially made up of multiple applications for each architecture.
 
 One subtlety that this approach hides is that it is possible that shared source-code requires more lines than source-code intended for a single architecture 
 or, in some cases, even two sets of separate source-code intended for multiple architectures. We ignore this case for now, assuming that using a portable 
-approach to express an algorithm doesn't signficant change the amount of code required. 
+approach to express an algorithm doesn't significant change the amount of code required. 
 
 ## Measuring Performance
 

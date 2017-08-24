@@ -36,7 +36,7 @@ give the same performance.
 OpenMP does not support the reduction of complex numbers in C/C++.
 There are two ways to achieve the desired result,
 * Reduce the real and imaginary complex numbers separately.
-* Update the results local to each thread parallely and then accumulate the results later after the loop.
+* Update the results local to each thread in parallel and then accumulate the results later after the loop.
 
 The first method is both inelegant and performs worse than the second version.
 In the second method we can also vectorize the step of accumulating the results from threads.

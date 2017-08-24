@@ -71,7 +71,7 @@ The GSRB method for a 7-point discretization of the Helmholtz operator exhibits
 a low arithmetic intensity, requiring several non-contiguous loads from memory
 to evaluate the operator.
 
-The relaxation step and the coarse grid solve (discussed belowed) often feature
+The relaxation step and the coarse grid solve (discussed below) often feature
 similar computational and data access patterns, because both are effectively
 doing the same thing - solving a linear system. The primary difference between
 them is that the relaxation method applies the iterative kernel only a handful
