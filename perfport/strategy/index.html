@@ -16,7 +16,7 @@
     
     
       
-        <title>Measurement Techniques - Performance Portability</title>
+        <title>Strategy - Performance Portability</title>
       
     
     
@@ -79,12 +79,8 @@
                   Performance Portability
                 </span>
               
-                <span class="md-header-nav__parent">
-                  Measurements
-                </span>
-              
             
-            Measurement Techniques
+            Strategy
           
         </span>
       </div>
@@ -262,12 +258,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
     
     <label class="md-nav__link" for="nav-3-3">
       Measurements
@@ -278,6 +272,47 @@
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/" title="Measurement Techniques" class="md-nav__link">
+      Measurement Techniques
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/knl/" title="Collecting Roofline on KNL" class="md-nav__link">
+      Collecting Roofline on KNL
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../measurements/gpu/" title="Collecting Roofline on GPUs" class="md-nav__link">
+      Collecting Roofline on GPUs
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
         
           
           
@@ -294,11 +329,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Measurement Techniques
+        Strategy
       </label>
     
-    <a href="./" title="Measurement Techniques" class="md-nav__link md-nav__link--active">
-      Measurement Techniques
+    <a href="./" title="Strategy" class="md-nav__link md-nav__link--active">
+      Strategy
     </a>
     
       
@@ -312,36 +347,50 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#measuring-portability" title="Measuring Portability" class="md-nav__link">
-    Measuring Portability
+  <a href="#developing-a-performance-portability-strategy" title="Developing a Performance Portability Strategy" class="md-nav__link">
+    Developing a Performance Portability Strategy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#measuring-performance" title="Measuring Performance" class="md-nav__link">
-    Measuring Performance
+  <a href="#threads-and-vectors" title="Threads and Vectors" class="md-nav__link">
+    Threads and Vectors
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="1. Compare against a known, well-recognized (potentially non-portable), implementation." class="md-nav__link">
-    1. Compare against a known, well-recognized (potentially non-portable), implementation.
+  <a href="#strategy-1" title="Strategy 1" class="md-nav__link">
+    Strategy 1
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="2. Use the roofline approach to compare actual to expected performance" class="md-nav__link">
-    2. Use the roofline approach to compare actual to expected performance
+  <a href="#strategy-2" title="Strategy 2" class="md-nav__link">
+    Strategy 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-mixed-strategy" title="A Mixed Strategy" class="md-nav__link">
+    A Mixed Strategy
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-management" title="Memory Management" class="md-nav__link">
+    Memory Management
+  </a>
   
 </li>
       
@@ -351,47 +400,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="knl/" title="Collecting Roofline on KNL" class="md-nav__link">
-      Collecting Roofline on KNL
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="gpu/" title="Collecting Roofline on GPUs" class="md-nav__link">
-      Collecting Roofline on GPUs
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../strategy/" title="Strategy" class="md-nav__link">
-      Strategy
-    </a>
   </li>
 
         
@@ -973,36 +981,50 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#measuring-portability" title="Measuring Portability" class="md-nav__link">
-    Measuring Portability
+  <a href="#developing-a-performance-portability-strategy" title="Developing a Performance Portability Strategy" class="md-nav__link">
+    Developing a Performance Portability Strategy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#measuring-performance" title="Measuring Performance" class="md-nav__link">
-    Measuring Performance
+  <a href="#threads-and-vectors" title="Threads and Vectors" class="md-nav__link">
+    Threads and Vectors
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="1. Compare against a known, well-recognized (potentially non-portable), implementation." class="md-nav__link">
-    1. Compare against a known, well-recognized (potentially non-portable), implementation.
+  <a href="#strategy-1" title="Strategy 1" class="md-nav__link">
+    Strategy 1
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="2. Use the roofline approach to compare actual to expected performance" class="md-nav__link">
-    2. Use the roofline approach to compare actual to expected performance
+  <a href="#strategy-2" title="Strategy 2" class="md-nav__link">
+    Strategy 2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-mixed-strategy" title="A Mixed Strategy" class="md-nav__link">
+    A Mixed Strategy
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-management" title="Memory Management" class="md-nav__link">
+    Memory Management
+  </a>
   
 </li>
       
@@ -1021,170 +1043,85 @@
               
                 
                 
-                <h1 id="measuring-performance-portability">Measuring Performance Portability<a class="headerlink" href="#measuring-performance-portability" title="Permanent link">&para;</a></h1>
-<p>As discussed in the previous section, performance portability can be an elusive topic to quantify 
-and different engineers often provide different definitions or measurement techniques. Below we characterize a few well-defined approaches.</p>
-<h2 id="measuring-portability">Measuring Portability<a class="headerlink" href="#measuring-portability" title="Permanent link">&para;</a></h2>
-<p>Measuring 'portability' itself is somewhat more well defined. One can, in principle, measure the 
-total lines of code used in common across different architectures vs. the amount of code intended 
-for a single architecture via <code>IFDEF</code> pre-processing statements, separate routines and the like. A code with 0% 
-architecture specific code being completely portable and a code with a 100% architecture specific 
-code being essentially made up of multiple applications for each architecture. </p>
-<p>One subtlety that this approach hides is that it is possible that shared source-code requires more lines than source-code intended for a single architecture 
-or, in some cases, even two sets of separate source-code intended for multiple architectures. We ignore this case for now, assuming that using a portable 
-approach to express an algorithm doesn't significant change the amount of code required. </p>
-<h2 id="measuring-performance">Measuring Performance<a class="headerlink" href="#measuring-performance" title="Permanent link">&para;</a></h2>
-<p>'Performance', even on a single architecture, is a bit less simple to define and measure. In 
-practice, scientists generally care about the quality and quantity of scientific output they 
-produce. This typically maps for them to relative performance concepts, such as how much faster 
-can a particular run or set of runs finish today than yesterday or on this machine than that. The 
-drawback of trying to measure performance in this way is that the baseline is arbitrary - i.e. you 
-don't know how well your code is performing on any architecture compared to how it 'should' be 
-performing if it were well optimized.</p>
-<p>One may attempt to define absolute performance as a measure of the actual floating point operations (or integer operations) per second 
-(FLOPS) of an 
-application during execution compared to the theoretical peak performance of the system or fraction of the system in use, as reported on the Top 500 
-list - <a href="https://www.top500.org">Top500.org</a> - or as reported in the system specs.</p>
-<p>However, this is a poor measure of application performance (and a particularly poor measure to use when trying to quantify performance portability) for a 
-couple reasons:</p>
+                <h1 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h1>
+<h2 id="developing-a-performance-portability-strategy">Developing a Performance Portability Strategy<a class="headerlink" href="#developing-a-performance-portability-strategy" title="Permanent link">&para;</a></h2>
+<p>We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different strategies can exist for exploiting these similarities. </p>
+<h2 id="threads-and-vectors">Threads and Vectors<a class="headerlink" href="#threads-and-vectors" title="Permanent link">&para;</a></h2>
+<p>One of the main challenges in providing a performance portability layer between KNL and GPU architectures is that vector parallelism on GPUs is expressed as 
+SIMT (Single Instruction Multiple Threads) whereas a CPU contains both SMT (Simultaneous Multi-Threading) across cores/threads and SIMD (Single Instruction 
+Multiple Data) across the lanes of the VPU (Vector Processing Unit). One of the challenges to be grappled with in using a performance portable approach 
+is that SIMT parallelism lies somewhere in between SMT and SIMD parallelism in terms of expressibility, flexibility, and performance limitations:</p>
 <ul>
 <li>
-<p>The application or algorithm may be fundamentally limited by an aspect of the HPC system other than the compute capability (which is limited to the number 
-of cores/threads, clock-speed and vector/instruction-sets)</p>
+<p><em>SMT</em>: Each SMT thread can perform independent instructions on independent data in independent registers. The work for each thread may be expressed in a 
+scalar way.</p>
 </li>
 <li>
-<p>The application or algorithm may be fundamentally limited by <em>different</em> aspects of the system on different HPC system. </p>
+<p><em>SIMD</em>: Each SIMD "vector lane" performs the same instruction on data from a single register. Vector lanes may be masked out to support branching, and 
+gather/scatter instructions are supported to bring non-contiguous data in memory into a vector register. However, these often come with significant performance 
+costs.</p>
+</li>
+<li>
+<p><em>SIMT</em>: SIMT shares some qualities of SMT in the sense that each thread (running on what is referred to as a "core" on a GPU) has its own registers, and 
+work for each thread can be expressed in a "scalar" way. However, like SIMD and unlike SMT, the threads are not completely 
+independent. On current GPU architectures, (e.g. the K20X found in Titan) typically 32 threads form a warp in which the same instruction is being executed each cycle. Thus, if the work between threads diverges 
+significantly, there is a significant reduction in performance. In addition, optimal performance is typically achieved when the threads in the warp are 
+operating on contiguous data. </p>
 </li>
 </ul>
-<p>As an example, an implementation of an algorithm that is limited by memory bandwidth may be achieving the best performance it theoretically can on systems 
-with different architectures but could be achieving widely varying percentage of peaks FLOPS on the different systems. </p>
-<p>Instead we advocate for one of two approaches for defining performance against expected or optimal performance on the system for an algorithm:</p>
-<h3 id="1-compare-against-a-known-well-recognized-potentially-non-portable-implementation">1. Compare against a known, well-recognized (potentially non-portable), implementation.<a class="headerlink" href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="Permanent link">&para;</a></h3>
-<p>Some applications, algorithms or methods have well-recognized optimal (often hand-tuned) implementations on different architectures. These can be used as a 
-baseline for defining relative performance of portable versions. Our Chroma application case-study shows this approach. <a href="../../case_studies/qcd/overview/">See 
-here</a> </p>
-<p>Many performance tools exist at ALCF, NERSC and OLCF for the purposes of profiling applications or regions of applications and determining performance 
-limiters 
-when comparing different implementation of an algorithm or method. See the comprehensive list <a href="../../facilities/tools/">here</a> with links to detailed 
-instructions and example use-cases at each site. </p>
-<h3 id="2-use-the-roofline-approach-to-compare-actual-to-expected-performance">2. Use the roofline approach to compare actual to expected performance<a class="headerlink" href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="Permanent link">&para;</a></h3>
-<p>As discussed above, the major limitation of defining performance relative to the peak FLOPS capability of the machine is that applications in practice are 
-limited by many different aspects of an HPC system. </p>
-<p>The roofline performance model and extensions to the roofline model attempt to take these different possibilities into account. In the 
-roofline approach, one defines various 
-theoretical performance ceilings for an algorithm or implementation based on its properties. In the simplest model, one may classify an algorithm based on 
-its DRAM arithmetic-intensity - the ratio of the FLOPs performed vs the data moved from main-memory (DRAM) to the processor over the course of 
-execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
-model on KNL for applications as a function of their DRAM arithmetic-intensity:</p>
-<p><center><img src="KNLRoofline.png" width=500></center></p>
-<p>Here the blue line represents the maximum performance that can be achieved on a KNL node for an application running out of the KNL High-Bandwidth Memory 
-(HBM) with a given
-DRAM-AI (the x-axis value). For low
-values of DRAM-AI, the performance is limited by the diagonal ceiling, meaning that memory-bandwidth is the limiting hardware feature. The location of the 
-diagonal lines are typically computed empirically from the available bandwidth reported by, for example, stream triad like kernels.</p>
-<p>For high values of DRAM-AI,
-memory bandwidth no longer limits performance and one can, in principle, achieve the max compute performance on the system. However, for such cases we 
-may draw 
-other ceilings that represent common limitations in algorithms or implementations of algorithms. The dashed-dotted green line labeled "-ILP" is the
-performance ceiling for applications that: 1. do not provide a balance of multiply and add instructions, or simply don't use the Fused Multiply Add (FMA)
-instructions on the processor and 2. don't have enough instruction level parallelism to keep both VPUs on the KNL busy. The dashed purple line labeled 
-"-Vectorization" is performance ceiling of an algorithm or implementation that, in addition to the above two deficiencies, lacks vectorization (a 
-combined factor of 32 reduction in the ceiling).</p>
-<p>For applications that are limited by other system properties, it is possible to extend the roofline model to include related ceilings. For example, we 
-commonly extend the roofline approach to use arithmetic-intensities based on data movement from different levels of cache (e.g. L1, L2 on the KNL), in order to 
-discover the relevant limiting cache level. The figure below shows an example of such an extended roofline plot for an application limited by the L2 cache 
-level.</p>
-<p><center><img src="MultiRoofline.png" width=500></center></p>
-<p>In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed. Many codes use strided or indirect-addressed 
-(scatter/gather) patterns where memory latency may be limiting resource. In such cases, it is possible to quickly craft a few line benchmark to compute the 
-relevant ceiling. We should some example ceiling parameters for different access patterns determined empirically in the following tables:</p>
-<p>For polynomial access pattern: x[i] = (x[i]+c0):</p>
-<table>
-<thead>
-<tr>
-<th>System</th>
-<th>DRAM</th>
-<th>L2</th>
-<th>L1</th>
-<th>GEMM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Titan (Kepler)</td>
-<td>161 GB/s</td>
-<td>559 GB/s</td>
-<td>-</td>
-<td>1226 GF/s</td>
-</tr>
-<tr>
-<td>Summit Dev (4 Pascal)</td>
-<td>1930 GB/s</td>
-<td>6507 GB/s</td>
-<td>-</td>
-<td>17095 GF/s</td>
-</tr>
-<tr>
-<td>Cori (KNL)</td>
-<td>413 GB/s</td>
-<td>1965 GB/s</td>
-<td>6443 GB/s</td>
-<td>2450 GF/s</td>
-</tr>
-</tbody>
-</table>
-<p>For non-contiguous accesses on KNL as an example:</p>
-<table>
-<thead>
-<tr>
-<th>Access Pattern</th>
-<th>KNL Effective Bandwidth (Cache Mode)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dot Product</td>
-<td>219 GB/s</td>
-</tr>
-<tr>
-<td>Stride 2 Dot Product</td>
-<td>96 GB/s</td>
-</tr>
-<tr>
-<td>Stride 100 Dot Product</td>
-<td>31 GB/s</td>
-</tr>
-<tr>
-<td>Stride 10000 Dot Product</td>
-<td>20 GB/s</td>
-</tr>
-</tbody>
-</table>
-<p>Finally, one may additional define an AI value and roofline-ceiling for algorithms with data coming from off-node due to internode 
-communication. The relevant bandwidth here is the injection bandwidth of the node:</p>
-<table>
-<thead>
-<tr>
-<th>System:</th>
-<th>Cori/Theta</th>
-<th>Titan</th>
-<th>Summit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Injection Bandwidth:</td>
-<td>8 GB/s</td>
-<td>6.4 GB/s</td>
-<td>23 GB/s</td>
-</tr>
-</tbody>
-</table>
-<p>The value of the roofline approach is that the relative performance of an application kernel to relevant ceilings (those related to fundamental limitations 
-in an algorithm 
-that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture in order to quantity absolute performance 
-and performance portability that accurately reflects the different limiting hardware characteristics of each system. On the following pages, we discuss how 
-to collect roofline data on both KNL and GPU powered nodes. </p>
+<p>How do you use these different types of parallelism in order to enable portable programming? We identify three particular strategies, each with advantages and disadvantages. It is important when beginning to develop a performance portability plan to consider which of these strategies best maps to your application.</p>
+<h3 id="strategy-1">Strategy 1<a class="headerlink" href="#strategy-1" title="Permanent link">&para;</a></h3>
+<p>The first strategy to performance portability is to equate SIMT threads on a GPU with SMT threads on CPU or a KNL. This has the advantage of allowing 
+the programmer to fully express the SIMT parallelism, but it does lead to a couple of challenges:</p>
+<ol>
+<li>
+<p>SMT threads typically operate on independent regions of data (e.g. the programmer typically breaks an array into the biggest contiguous chunks possible 
+and gives each thread a chunk to work on). On the other hand, with SIMT threads, consecutive threads in a warp are ideally given 
+consecutive elements of an array to work on. This leads to the idea of coalescing - where data given to a single thread is 
+strided by the warp size (typically 32). The concept of coalescing is an artifact of viewing SIMT threads like SMT threads 
+instead of viewing them like vector lanes. </p>
+</li>
+<li>
+<p>Another level of parallelism on the KNL (the vector parallelism) is then left on the table to exploit some other way (e.g. through the compiler, possibly
+with the aid of hints).</p>
+</li>
+</ol>
+<p>This strategy is likely most appropriate if additional vector parallelism can be easily exploited by the compiler on the KNL, if vectorization doesn't 
+affect performance or if one intends to manually intervene to ensure vector parallelism is exploited on the KNL. Frameworks like Kokkos (with the concept of 
+"views") can help handle the coalescing issue in a portable way. </p>
+<h3 id="strategy-2">Strategy 2<a class="headerlink" href="#strategy-2" title="Permanent link">&para;</a></h3>
+<p>The second strategy is to instead equate the SIMT threads with SIMD lanes (or a combination of SMT threads and SIMD lanes) on the KNL architecture. 
+This has the benefit of allowing the programmer to fully express all parallelism available on the GPU and KNL, but also has a significant drawback: </p>
+<ul>
+<li>Because SIMD parallelism on the CPU/KNL is typically more restrictive and less flexible to express (requiring statements like <code>OMP SIMD</code> on relatively 
+straightforward loops), the programmer loses a lot of the flexibility the GPU architecture allows. </li>
+</ul>
+<p>This is generally the strategy taken by applications using OpenMP for performance portability in its current implementation. We see in the case studies that to use OpenMP to 
+offload work to the GPU, one currently needs an <code>OMP SIMD</code> directive (when compiler support exists at all). </p>
+<h3 id="a-mixed-strategy">A Mixed Strategy<a class="headerlink" href="#a-mixed-strategy" title="Permanent link">&para;</a></h3>
+<p>One may, in principle, define layers of parallelism to map groups of SIMT threads on a GPU (e.g., on separate SMs) to different SMTs on a CPU and leave 
+additional 
+parallelism available to map to CPU vector lanes. Some of the performant models have support for this type of mapping. Kokkos for example supports this concept and can then insert <code>OMP SIMD</code> 
+pragmas on top of the innermost parallelizable loops when executing on a KNL or CPU. In practice, CPU performance will still ultimately depend on the 
+compilers ability to generate 
+efficient vector code, meaning the vector/(inner SIMT) code here is limited to relatively simple vectorizable loops compared to what the SIMT model alone 
+can, in 
+theory, support. For example, Kokkos <code>views</code> handle coalescing,
+but vector parallelism on the CPU or KNL is left up to the compiler (with mixed results). As we see in the QCD case-study, the 
+developers may need to intervene (and potentially add new layers of parallelism to the code, e.g. multiple right hand sides) to make sure their code 
+can effectively use the wide AVX512 units on the KNL. </p>
+<h2 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h2>
+<p>As we mention above, the KNL and GPU architectures both have high-bandwidth, on-device memory as well as lower bandwidth access to traditional DDR on the 
+node. With support of unified virtual memory (UVM) on recent GPUs, both kinds of memory spaces can be accessed from all the components 
+of GPU or KNL nodes. One difference is that 
+because host memory is still separated from the GPU via PCI-express or NVLink, the gap in latency and bandwidth compared to the device memory can be 
+significantly higher. </p>
+<p>In principle, directives like OpenMP's <code>map</code> function could be used to portably move data. The reality is that compiler implementations don't support this 
+at present - mostly ignoring this when running on a CPU or KNL system (or failing to work at all on these systems). </p>
+<p>Kokkos allows the user to define separate host and devmem domains, which does support this functionality in a portable way, in principle, but data placement in MCDRAM on the KNL is compiler dependent which makes this a challenge to support.</p>
+<p>In the most common node configuration at NERSC and ALCF, the KNLs are configured in cache mode where the on-chip MCDRAM is treated as a transparent last-level 
+cache instead of as an addressable memory domain. In this case, applications running see only a single memory domain and explicit management of the 
+MCDRAM is not required. At this time, an equivalent option doesn't exist on GPU architectures.</p>
                 
                   
                 
@@ -1203,7 +1140,7 @@ to collect roofline data on both KNL and GPU powered nodes. </p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../definition/" title="Definition" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../measurements/gpu/" title="Collecting Roofline on GPUs" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1212,19 +1149,19 @@ to collect roofline data on both KNL and GPU powered nodes. </p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Definition
+                Collecting Roofline on GPUs
               </span>
             </div>
           </a>
         
         
-          <a href="knl/" title="Collecting Roofline on KNL" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../libraries/" title="Libraries" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Collecting Roofline on KNL
+                Libraries
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

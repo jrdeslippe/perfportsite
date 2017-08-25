@@ -16,7 +16,7 @@
     
     
       
-        <title>Measurement Techniques - Performance Portability</title>
+        <title>Overview - Performance Portability</title>
       
     
     
@@ -79,12 +79,8 @@
                   Performance Portability
                 </span>
               
-                <span class="md-header-nav__parent">
-                  Measurements
-                </span>
-              
             
-            Measurement Techniques
+            Overview
           
         </span>
       </div>
@@ -238,11 +234,68 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../overview/" title="Overview" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Overview
+      </label>
+    
+    <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
       Overview
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview_1" title="Overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-optimization-general-optimization-concepts-on-knl" title="General Optimization General Optimization Concepts on KNL" class="md-nav__link">
+    General Optimization General Optimization Concepts on KNL
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-optimization-concepts-on-gpus" title="General Optimization Concepts on GPUs" class="md-nav__link">
+    General Optimization Concepts on GPUs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenges-for-portability" title="Challenges For Portability" class="md-nav__link">
+    Challenges For Portability
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -262,12 +315,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
     
     <label class="md-nav__link" for="nav-3-3">
       Measurements
@@ -283,74 +334,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Measurement Techniques
-      </label>
-    
-    <a href="./" title="Measurement Techniques" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../measurements/" title="Measurement Techniques" class="md-nav__link">
       Measurement Techniques
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#measuring-portability" title="Measuring Portability" class="md-nav__link">
-    Measuring Portability
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#measuring-performance" title="Measuring Performance" class="md-nav__link">
-    Measuring Performance
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="1. Compare against a known, well-recognized (potentially non-portable), implementation." class="md-nav__link">
-    1. Compare against a known, well-recognized (potentially non-portable), implementation.
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="2. Use the roofline approach to compare actual to expected performance" class="md-nav__link">
-    2. Use the roofline approach to compare actual to expected performance
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -360,7 +348,7 @@
 
 
   <li class="md-nav__item">
-    <a href="knl/" title="Collecting Roofline on KNL" class="md-nav__link">
+    <a href="../measurements/knl/" title="Collecting Roofline on KNL" class="md-nav__link">
       Collecting Roofline on KNL
     </a>
   </li>
@@ -372,7 +360,7 @@
 
 
   <li class="md-nav__item">
-    <a href="gpu/" title="Collecting Roofline on GPUs" class="md-nav__link">
+    <a href="../measurements/gpu/" title="Collecting Roofline on GPUs" class="md-nav__link">
       Collecting Roofline on GPUs
     </a>
   </li>
@@ -973,36 +961,30 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#measuring-portability" title="Measuring Portability" class="md-nav__link">
-    Measuring Portability
+  <a href="#overview_1" title="Overview" class="md-nav__link">
+    Overview
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#measuring-performance" title="Measuring Performance" class="md-nav__link">
-    Measuring Performance
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="1. Compare against a known, well-recognized (potentially non-portable), implementation." class="md-nav__link">
-    1. Compare against a known, well-recognized (potentially non-portable), implementation.
+  <a href="#general-optimization-general-optimization-concepts-on-knl" title="General Optimization General Optimization Concepts on KNL" class="md-nav__link">
+    General Optimization General Optimization Concepts on KNL
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="2. Use the roofline approach to compare actual to expected performance" class="md-nav__link">
-    2. Use the roofline approach to compare actual to expected performance
+      
+        <li class="md-nav__item">
+  <a href="#general-optimization-concepts-on-gpus" title="General Optimization Concepts on GPUs" class="md-nav__link">
+    General Optimization Concepts on GPUs
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#challenges-for-portability" title="Challenges For Portability" class="md-nav__link">
+    Challenges For Portability
+  </a>
   
 </li>
       
@@ -1021,170 +1003,99 @@
               
                 
                 
-                <h1 id="measuring-performance-portability">Measuring Performance Portability<a class="headerlink" href="#measuring-performance-portability" title="Permanent link">&para;</a></h1>
-<p>As discussed in the previous section, performance portability can be an elusive topic to quantify 
-and different engineers often provide different definitions or measurement techniques. Below we characterize a few well-defined approaches.</p>
-<h2 id="measuring-portability">Measuring Portability<a class="headerlink" href="#measuring-portability" title="Permanent link">&para;</a></h2>
-<p>Measuring 'portability' itself is somewhat more well defined. One can, in principle, measure the 
-total lines of code used in common across different architectures vs. the amount of code intended 
-for a single architecture via <code>IFDEF</code> pre-processing statements, separate routines and the like. A code with 0% 
-architecture specific code being completely portable and a code with a 100% architecture specific 
-code being essentially made up of multiple applications for each architecture. </p>
-<p>One subtlety that this approach hides is that it is possible that shared source-code requires more lines than source-code intended for a single architecture 
-or, in some cases, even two sets of separate source-code intended for multiple architectures. We ignore this case for now, assuming that using a portable 
-approach to express an algorithm doesn't significant change the amount of code required. </p>
-<h2 id="measuring-performance">Measuring Performance<a class="headerlink" href="#measuring-performance" title="Permanent link">&para;</a></h2>
-<p>'Performance', even on a single architecture, is a bit less simple to define and measure. In 
-practice, scientists generally care about the quality and quantity of scientific output they 
-produce. This typically maps for them to relative performance concepts, such as how much faster 
-can a particular run or set of runs finish today than yesterday or on this machine than that. The 
-drawback of trying to measure performance in this way is that the baseline is arbitrary - i.e. you 
-don't know how well your code is performing on any architecture compared to how it 'should' be 
-performing if it were well optimized.</p>
-<p>One may attempt to define absolute performance as a measure of the actual floating point operations (or integer operations) per second 
-(FLOPS) of an 
-application during execution compared to the theoretical peak performance of the system or fraction of the system in use, as reported on the Top 500 
-list - <a href="https://www.top500.org">Top500.org</a> - or as reported in the system specs.</p>
-<p>However, this is a poor measure of application performance (and a particularly poor measure to use when trying to quantify performance portability) for a 
-couple reasons:</p>
-<ul>
-<li>
-<p>The application or algorithm may be fundamentally limited by an aspect of the HPC system other than the compute capability (which is limited to the number 
-of cores/threads, clock-speed and vector/instruction-sets)</p>
-</li>
-<li>
-<p>The application or algorithm may be fundamentally limited by <em>different</em> aspects of the system on different HPC system. </p>
-</li>
-</ul>
-<p>As an example, an implementation of an algorithm that is limited by memory bandwidth may be achieving the best performance it theoretically can on systems 
-with different architectures but could be achieving widely varying percentage of peaks FLOPS on the different systems. </p>
-<p>Instead we advocate for one of two approaches for defining performance against expected or optimal performance on the system for an algorithm:</p>
-<h3 id="1-compare-against-a-known-well-recognized-potentially-non-portable-implementation">1. Compare against a known, well-recognized (potentially non-portable), implementation.<a class="headerlink" href="#1-compare-against-a-known-well-recognized-potentially-non-portable-implementation" title="Permanent link">&para;</a></h3>
-<p>Some applications, algorithms or methods have well-recognized optimal (often hand-tuned) implementations on different architectures. These can be used as a 
-baseline for defining relative performance of portable versions. Our Chroma application case-study shows this approach. <a href="../../case_studies/qcd/overview/">See 
-here</a> </p>
-<p>Many performance tools exist at ALCF, NERSC and OLCF for the purposes of profiling applications or regions of applications and determining performance 
-limiters 
-when comparing different implementation of an algorithm or method. See the comprehensive list <a href="../../facilities/tools/">here</a> with links to detailed 
-instructions and example use-cases at each site. </p>
-<h3 id="2-use-the-roofline-approach-to-compare-actual-to-expected-performance">2. Use the roofline approach to compare actual to expected performance<a class="headerlink" href="#2-use-the-roofline-approach-to-compare-actual-to-expected-performance" title="Permanent link">&para;</a></h3>
-<p>As discussed above, the major limitation of defining performance relative to the peak FLOPS capability of the machine is that applications in practice are 
-limited by many different aspects of an HPC system. </p>
-<p>The roofline performance model and extensions to the roofline model attempt to take these different possibilities into account. In the 
-roofline approach, one defines various 
-theoretical performance ceilings for an algorithm or implementation based on its properties. In the simplest model, one may classify an algorithm based on 
-its DRAM arithmetic-intensity - the ratio of the FLOPs performed vs the data moved from main-memory (DRAM) to the processor over the course of 
-execution, which can be measured for a given application as described on the subpages. Below, we show the performance ceilings provided by the roofline 
-model on KNL for applications as a function of their DRAM arithmetic-intensity:</p>
-<p><center><img src="KNLRoofline.png" width=500></center></p>
-<p>Here the blue line represents the maximum performance that can be achieved on a KNL node for an application running out of the KNL High-Bandwidth Memory 
-(HBM) with a given
-DRAM-AI (the x-axis value). For low
-values of DRAM-AI, the performance is limited by the diagonal ceiling, meaning that memory-bandwidth is the limiting hardware feature. The location of the 
-diagonal lines are typically computed empirically from the available bandwidth reported by, for example, stream triad like kernels.</p>
-<p>For high values of DRAM-AI,
-memory bandwidth no longer limits performance and one can, in principle, achieve the max compute performance on the system. However, for such cases we 
-may draw 
-other ceilings that represent common limitations in algorithms or implementations of algorithms. The dashed-dotted green line labeled "-ILP" is the
-performance ceiling for applications that: 1. do not provide a balance of multiply and add instructions, or simply don't use the Fused Multiply Add (FMA)
-instructions on the processor and 2. don't have enough instruction level parallelism to keep both VPUs on the KNL busy. The dashed purple line labeled 
-"-Vectorization" is performance ceiling of an algorithm or implementation that, in addition to the above two deficiencies, lacks vectorization (a 
-combined factor of 32 reduction in the ceiling).</p>
-<p>For applications that are limited by other system properties, it is possible to extend the roofline model to include related ceilings. For example, we 
-commonly extend the roofline approach to use arithmetic-intensities based on data movement from different levels of cache (e.g. L1, L2 on the KNL), in order to 
-discover the relevant limiting cache level. The figure below shows an example of such an extended roofline plot for an application limited by the L2 cache 
-level.</p>
-<p><center><img src="MultiRoofline.png" width=500></center></p>
-<p>In addition, for applications with non-stream like memory access patterns, lower memory-ceilings may be computed. Many codes use strided or indirect-addressed 
-(scatter/gather) patterns where memory latency may be limiting resource. In such cases, it is possible to quickly craft a few line benchmark to compute the 
-relevant ceiling. We should some example ceiling parameters for different access patterns determined empirically in the following tables:</p>
-<p>For polynomial access pattern: x[i] = (x[i]+c0):</p>
+                <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
+<h2 id="overview_1">Overview<a class="headerlink" href="#overview_1" title="Permanent link">&para;</a></h2>
+<p>As shown on the detailed <a href="http://performanceportability.org/facilities/comparison/">facility comparison page</a>, the Cori, Theta and Titan systems have a lot 
+in common including interconnect (Cray Gemini or Cray Aries) and software environment. The most striking difference between the systems from a portability 
+point 
+of view is the node-level architecture. 
+Cori and Theta both containing Intel Knights Landing (KNL) powered nodes while Titan sports a heterogeneous architecture with an AMD 16-Core CPU 
+coupled with an NVIDIA K20X GPU (where the majority of the compute capacity lies) on each node. We compare just the important node memory hierarchy and 
+parallelism features in the following table:</p>
 <table>
 <thead>
 <tr>
-<th>System</th>
-<th>DRAM</th>
-<th>L2</th>
-<th>L1</th>
-<th>GEMM</th>
+<th>Node</th>
+<th>DDR Memory</th>
+<th>Device Memory</th>
+<th>Cores/SMs (DP)</th>
+<th>Vector-Width/Warp-Size (DP)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>Titan (Kepler)</td>
-<td>161 GB/s</td>
-<td>559 GB/s</td>
-<td>-</td>
-<td>1226 GF/s</td>
-</tr>
-<tr>
-<td>Summit Dev (4 Pascal)</td>
-<td>1930 GB/s</td>
-<td>6507 GB/s</td>
-<td>-</td>
-<td>17095 GF/s</td>
-</tr>
 <tr>
 <td>Cori (KNL)</td>
-<td>413 GB/s</td>
-<td>1965 GB/s</td>
-<td>6443 GB/s</td>
-<td>2450 GF/s</td>
+<td>96 GB</td>
+<td>16 GB</td>
+<td>68</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Theta (KNL)</td>
+<td>192 GB</td>
+<td>16 GB</td>
+<td>64</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Titan (K20X)</td>
+<td>32GB (Opteron)</td>
+<td>6 GB</td>
+<td>CPU - 8 Bulldozer modules; GPU -  14 SMs</td>
+<td>32</td>
 </tr>
 </tbody>
 </table>
-<p>For non-contiguous accesses on KNL as an example:</p>
-<table>
-<thead>
-<tr>
-<th>Access Pattern</th>
-<th>KNL Effective Bandwidth (Cache Mode)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dot Product</td>
-<td>219 GB/s</td>
-</tr>
-<tr>
-<td>Stride 2 Dot Product</td>
-<td>96 GB/s</td>
-</tr>
-<tr>
-<td>Stride 100 Dot Product</td>
-<td>31 GB/s</td>
-</tr>
-<tr>
-<td>Stride 10000 Dot Product</td>
-<td>20 GB/s</td>
-</tr>
-</tbody>
-</table>
-<p>Finally, one may additional define an AI value and roofline-ceiling for algorithms with data coming from off-node due to internode 
-communication. The relevant bandwidth here is the injection bandwidth of the node:</p>
-<table>
-<thead>
-<tr>
-<th>System:</th>
-<th>Cori/Theta</th>
-<th>Titan</th>
-<th>Summit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Injection Bandwidth:</td>
-<td>8 GB/s</td>
-<td>6.4 GB/s</td>
-<td>23 GB/s</td>
-</tr>
-</tbody>
-</table>
-<p>The value of the roofline approach is that the relative performance of an application kernel to relevant ceilings (those related to fundamental limitations 
-in an algorithm 
-that cannot be overcome via optimization) allow us to define an absolute performance ratio for each architecture in order to quantity absolute performance 
-and performance portability that accurately reflects the different limiting hardware characteristics of each system. On the following pages, we discuss how 
-to collect roofline data on both KNL and GPU powered nodes. </p>
+<p>where DP stands for Double Precision and SM stands for Streaming Multiprocessor. Before we dive in to performance portability challenges, lets first look deeper at the 
+KNL and Kepler and architectures to discuss general progamming concepts and optimization strategy for each. </p>
+<h2 id="general-optimization-general-optimization-concepts-on-knl">General Optimization General Optimization Concepts on KNL<a class="headerlink" href="#general-optimization-general-optimization-concepts-on-knl" title="Permanent link">&para;</a></h2>
+<p>A KNL processor (Intel Xeon-Phi processor of the Knight's Landing generation) has between 64 and 72 indepenent processing cores grouped in pairs (called tiles) on a 2D mesh
+across the processor die as pictured below. Each of these cores has an independent 64 KB L1 cache and shares a 1MB L2 cache with its neighboring core on the same tile. Each core 
+supports up to 4 hyperthreads, that allow the core to context switch in order to continue computing if a thread is stalled. Each core contains two vector-processing-units (VPU) that 
+can execute AVX512 vector instructions from 512 bit registers (8 double precision SIMD (single instruction multiple data) lanes). Each VPU is capable of 
+executing fused-multiply-add (FMA) 
+instructions each cycle; so 
+that the 
+total possible FLOPs/cycle on a core is 32. </p>
+<p><center><img src="knl.png" width=500></center></p>
+<p>For applications with high arithmetic intensity (FLOPs computed per bytes transferred from memory), a performance increase factor of 64-72 can be gained by 
+code 
+that has optimal 
+scaling across the cores of the processor and an additional, factor of 32
+in performance can therefore be gained by vectorizable code (using both VPUs) that has multiply-add capability. Generating vectorizable/SIMD code can be 
+challenging. In many applications at NERSC and ALCF, we rely on the compiler to generate vector code. Though, there are ways to aid the compiler with 
+directives (e.g. <code>OMP SIMD</code>) and to write vector code explicitly via AVX512 intrinsics or assembly.</p>
+<p>For applications with lower arithmetic intensities, the KNL has a number of features that can be exploited. Firstly, the L1 and L2 caches are available and 
+it is good programming practice to block or tile ones algorithm in order to increase data reuse out of these cache levels. In addition, the KNL has 16GB of 
+high-bandwidth memory (MCDRAM) located right on the package. The MCDRAM has an available bandwidth of around 450GB, 4-5x that of the traditional DDR on the 
+node (96GB available on Cori nodes and 192GB available on Theta nodes). The MCDRAM can be configured as allocatable memory (that users can explicitly 
+allocate data to) or as a transparent last level cache. </p>
+<p>When, utilizing the MCDRAM as a cache, an application developer may want to add an additional level of blocking/tiling to their algorithm, but should 
+consider that the MCDRAM as a cache has a number limitations - most importantly there is no hardware prefetching or associativity (mean each address in DDR 
+has exactly one address in the MCDRAM cache it can reside and collisions are more likely). </p>
+<p>When instead managing the MCDRAM has an allocatable memory domain, applications can either choose to use it for all their allocations by default, or can 
+choose to allocate specific arrays in the MCDRAM. The latter generally requires non-portable compiler directives (e.g. <code>!$DIR FASTMEM</code> near the allocate 
+statements) or special malloc calls (e.g. <code>hbwmalloc</code>). </p>
+<h2 id="general-optimization-concepts-on-gpus">General Optimization Concepts on GPUs<a class="headerlink" href="#general-optimization-concepts-on-gpus" title="Permanent link">&para;</a></h2>
+<h2 id="challenges-for-portability">Challenges For Portability<a class="headerlink" href="#challenges-for-portability" title="Permanent link">&para;</a></h2>
+<p>At least three major challenges need to be overcome by viable performance portability approaches for KNL and GPU systems:</p>
+<ol>
+<li>
+<p>How to express parallelism in a portable way across both the KNL processor cores and vector-lanes and across the 896 SIMT threads that the K20x 
+CUDA cores support. </p>
+</li>
+<li>
+<p>How to maintain a data layout and access pattern for both a KNL system with multiple levels of caches (L1, shared L2) to block against and a GPU system with
+significantly smaller caches shared by more threads where aplication
+cache blocking is generally discouraged. </p>
+</li>
+<li>
+<p>How to express data movement and data locality across the memory hierarchy containing both host and device memory in portable way. </p>
+</li>
+</ol>
+<p>In the following pages we discuss how to measure a successful performance portable implementation, what are the available approaches and some case-studies 
+from 
+the Office of Science workload. First however, we turn our attention to defining what performance-portability means. </p>
                 
                   
                 
@@ -1203,7 +1114,7 @@ to collect roofline data on both KNL and GPU powered nodes. </p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../definition/" title="Definition" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../facilities/comparison/" title="Comparison" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1212,19 +1123,19 @@ to collect roofline data on both KNL and GPU powered nodes. </p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Definition
+                Comparison
               </span>
             </div>
           </a>
         
         
-          <a href="knl/" title="Collecting Roofline on KNL" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../definition/" title="Definition" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Collecting Roofline on KNL
+                Definition
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
