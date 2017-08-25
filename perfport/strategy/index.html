@@ -347,6 +347,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#code-structure-and-practices" title="Code Structure and Practices" class="md-nav__link">
+    Code Structure and Practices
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#developing-a-performance-portability-strategy" title="Developing a Performance Portability Strategy" class="md-nav__link">
     Developing a Performance Portability Strategy
   </a>
@@ -681,18 +688,6 @@
   </li>
 
         
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../case_studies/amr/performance_comparison/" title="Performance" class="md-nav__link">
-      Performance
-    </a>
-  </li>
-
-        
       </ul>
     </nav>
   </li>
@@ -786,18 +781,6 @@
         
       </ul>
     </nav>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../case_studies/gw/summary/" title="Summary" class="md-nav__link">
-      Summary
-    </a>
   </li>
 
         
@@ -981,6 +964,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#code-structure-and-practices" title="Code Structure and Practices" class="md-nav__link">
+    Code Structure and Practices
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#developing-a-performance-portability-strategy" title="Developing a Performance Portability Strategy" class="md-nav__link">
     Developing a Performance Portability Strategy
   </a>
@@ -1044,6 +1034,15 @@
                 
                 
                 <h1 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h1>
+<h2 id="code-structure-and-practices">Code Structure and Practices<a class="headerlink" href="#code-structure-and-practices" title="Permanent link">&para;</a></h2>
+<p>Before diving into a performance portability strategy, there are many things an application can do to make their code more 
+portabile and ultimately more productive by applying recommended software engineering practices. These include:</p>
+<ul>
+<li>Developing in a well-defined version-controlled environment</li>
+<li>Documenting code so other developers can quickly join and contribute to a project</li>
+<li>Maintaining a rigours test-suite and automated regression test framework on multiple platforms</li>
+<li>Developing code in a modular way that abstracts performance-critical regions</li>
+</ul>
 <h2 id="developing-a-performance-portability-strategy">Developing a Performance Portability Strategy<a class="headerlink" href="#developing-a-performance-portability-strategy" title="Permanent link">&para;</a></h2>
 <p>We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different strategies can exist for exploiting these similarities. </p>
 <h2 id="threads-and-vectors">Threads and Vectors<a class="headerlink" href="#threads-and-vectors" title="Permanent link">&para;</a></h2>
