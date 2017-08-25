@@ -1052,6 +1052,8 @@ has exactly one address in the MCDRAM cache it can reside and collisions are mor
 <p>When instead managing the MCDRAM has an allocatable memory domain, applications can either choose to use it for all their allocations by default, or can 
 choose to allocate specific arrays in the MCDRAM. The latter generally requires non-portable compiler directives (e.g. <code>!$DIR FASTMEM</code> near the allocate 
 statements) or special malloc calls (e.g. <code>hbwmalloc</code>). </p>
+<p>For many codes, getting optimal performance on KNL requires all of the above: good thread/rank scaling on the many-cores, efficient vectorizable code and effective use of the 
+low-level caches as well as the MCDRAM.</p>
 <h2 id="general-optimization-concepts-on-gpus">General Optimization Concepts on GPUs<a class="headerlink" href="#general-optimization-concepts-on-gpus" title="Permanent link">&para;</a></h2>
 <h2 id="challenges-for-portability">Challenges For Portability<a class="headerlink" href="#challenges-for-portability" title="Permanent link">&para;</a></h2>
 <p>At least three major challenges need to be overcome by viable performance portability approaches for KNL and GPU systems:</p>
