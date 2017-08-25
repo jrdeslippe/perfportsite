@@ -270,8 +270,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#general-optimization-general-optimization-concepts-on-knl" title="General Optimization General Optimization Concepts on KNL" class="md-nav__link">
-    General Optimization General Optimization Concepts on KNL
+  <a href="#general-optimization-concepts-on-knl" title="General Optimization Concepts on KNL" class="md-nav__link">
+    General Optimization Concepts on KNL
   </a>
   
 </li>
@@ -968,8 +968,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#general-optimization-general-optimization-concepts-on-knl" title="General Optimization General Optimization Concepts on KNL" class="md-nav__link">
-    General Optimization General Optimization Concepts on KNL
+  <a href="#general-optimization-concepts-on-knl" title="General Optimization Concepts on KNL" class="md-nav__link">
+    General Optimization Concepts on KNL
   </a>
   
 </li>
@@ -1048,7 +1048,7 @@ parallelism features in the following table:</p>
 </table>
 <p>where DP stands for Double Precision and SM stands for Streaming Multiprocessor. Before we dive in to performance portability challenges, lets first look deeper at the 
 KNL and Kepler and architectures to discuss general progamming concepts and optimization strategy for each. </p>
-<h2 id="general-optimization-general-optimization-concepts-on-knl">General Optimization General Optimization Concepts on KNL<a class="headerlink" href="#general-optimization-general-optimization-concepts-on-knl" title="Permanent link">&para;</a></h2>
+<h2 id="general-optimization-concepts-on-knl">General Optimization Concepts on KNL<a class="headerlink" href="#general-optimization-concepts-on-knl" title="Permanent link">&para;</a></h2>
 <p>A KNL processor (Intel Xeon-Phi processor of the Knight's Landing generation) has between 64 and 72 indepenent processing cores grouped in pairs (called tiles) on a 2D mesh
 across the processor die as pictured below. Each of these cores has an independent 64 KB L1 cache and shares a 1MB L2 cache with its neighboring core on the same tile. Each core 
 supports up to 4 hyperthreads, that allow the core to context switch in order to continue computing if a thread is stalled. Each core contains two vector-processing-units (VPU) that 
