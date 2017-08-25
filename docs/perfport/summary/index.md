@@ -8,9 +8,10 @@ workload and from the outcome of recent DOE performance portability workshops.
 |Approach|Benefits|Challenges|
 |:------------:|:-------------------:|:------------:|
 |Libraries  | Highly portable, not dependent on compiler implementations. | Many GPU libraries (e.g. CUFFT) are C only (requiring explicit interfaces to use in FORTRAN) and don't have common interfaces. May lock-in data layout. In many cases libraries don't exist for problem. |
-|OpenMP 4.5 | Standardized. Support for C, C++, FORTRAN and others. Simple to get started. | Limited expressibility (particularly on GPUs). Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems. |
+|OpenMP 4.5 | Standardized. Support for C, C++, FORTRAN and others. Simple to get started. | Limited expressibility (particularly on GPUs). Lacks "views". Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems. |
 |OpenACC    | Standardized. Support for C, C++, FORTRAN. | Limited support in compilers, especially free compilers (e.g. GNU).  |
 |Kokkos     | Allows significant expressibility (particularly on GPUs.) | Only supports C++. Vector parallelism often left-out on CPUs. |
+|Raja       | Allows incremental enhancements to codes. Many back-ends. | Only supports C++. Lacks data "views" for more advanced portability requirements. | 
 |DSLs       | Highest expressibility for appropriate problems | Limited to only a small number of communities. Needs to be maintained and supported for new architectures. |
 
 ## Recommendations
@@ -25,7 +26,7 @@ improvement makes this a good time to evaluate these approaches in your applicat
 In general, we have the following recommendations for pursuing performance portable code:
 
 0. Actively profile your application using our suggested tools to make sure you have identified a minimal set of performance critical regions. We recommend 
-that you read over the (strategy-page)[http://performanceportability.org/perfport/strategy/] page and consider your hotspots map to different strategies 
+that you read over the [strategy page](http://performanceportability.org/perfport/strategy/) page and consider your hotspots map to different strategies 
 layed out. Additionally, before diving into a particular performance portability approach, we recommend making sure your code is using code software-engineer 
 practices and that performance-critical regions are abstracted from the bulk of the application.
 

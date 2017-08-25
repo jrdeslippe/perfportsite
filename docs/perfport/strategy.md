@@ -1,5 +1,15 @@
 # Strategy
 
+## Code Structure and Practices
+
+Before diving into a performance portability strategy, there are many things an application can do to make their code more 
+portabile and ultimately more productive by applying recommended software engineering practices. These include:
+
+* Developing in a well-defined version-controlled environment
+* Documenting code so other developers can quickly join and contribute to a project
+* Maintaining a rigours test-suite and automated regression test framework on multiple platforms
+* Developing code in a modular way that abstracts performance-critical regions
+
 ## Developing a Performance Portability Strategy 
 
 We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different strategies can exist for exploiting these similarities. 

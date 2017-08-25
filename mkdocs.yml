@@ -36,7 +36,7 @@ pages:
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
 - Performance Portability:
-    - Overview: perfport/overview.md
+    - Overview: perfport/overview/index.md
     - Definition: perfport/definition.md
     - Measurements: 
         - Measurement Techniques: perfport/measurements/index.md
@@ -61,14 +61,14 @@ pages:
           - Implementations:
             - Kokkos: case_studies/amr/kokkos_implementation.md
             - OpenMP 4.x: case_studies/amr/openmp_implementation.md
-          - Performance: case_studies/amr/performance_comparison.md
+#          - Performance: case_studies/amr/performance_comparison.md
         - BGW: 
           - Overview: case_studies/gw/index.md
           - Code structure: case_studies/gw/code_structure.md
           - Implementations:
             - Kokkos: case_studies/gw/kokkos_implementation.md
             - OpenMP 4.x: case_studies/gw/openmp_implementation.md
-          - Summary: case_studies/gw/summary.md
+#          - Summary: case_studies/gw/summary.md
         - QCD:
           - Overview: case_studies/qcd/overview.md
           - Code Structure: case_studies/qcd/code_structure.md
