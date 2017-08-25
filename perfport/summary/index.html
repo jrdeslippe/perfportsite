@@ -972,7 +972,7 @@ workload and from the outcome of recent DOE performance portability workshops.</
 <tr>
 <td align="center">OpenMP 4.5</td>
 <td align="center">Standardized. Support for C, C++, FORTRAN and others. Simple to get started.</td>
-<td align="center">Limited expressibility (particularly on GPUs). Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems.</td>
+<td align="center">Limited expressibility (particularly on GPUs). Lacks "views". Reliant on quality of compiler implementation - which are generally immature on both GPU and CPU systems.</td>
 </tr>
 <tr>
 <td align="center">OpenACC</td>
@@ -983,6 +983,11 @@ workload and from the outcome of recent DOE performance portability workshops.</
 <td align="center">Kokkos</td>
 <td align="center">Allows significant expressibility (particularly on GPUs.)</td>
 <td align="center">Only supports C++. Vector parallelism often left-out on CPUs.</td>
+</tr>
+<tr>
+<td align="center">Raja</td>
+<td align="center">Allows incremental enhancements to codes. Many back-ends.</td>
+<td align="center">Only supports C++. Lacks data "views" for more advanced portability requirements.</td>
 </tr>
 <tr>
 <td align="center">DSLs</td>
