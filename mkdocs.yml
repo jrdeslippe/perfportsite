@@ -36,11 +36,13 @@ pages:
     - Tools: facilities/tools.md
     - Comparison: facilities/comparison.md
 - Performance Portability:
-    - Overview and Definition: perfport/definition.md
+    - Overview: perfport/overview.md
+    - Definition: perfport/definition.md
     - Measurements: 
         - Measurement Techniques: perfport/measurements/index.md
         - Collecting Roofline on KNL: perfport/measurements/knl.md
         - Collecting Roofline on GPUs: perfport/measurements/gpu.md
+    - Strategy: perfport/strategy.md
     - Approaches:
         - Libraries: perfport/libraries/index.md
         - Directives:
