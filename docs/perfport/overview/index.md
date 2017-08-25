@@ -54,6 +54,9 @@ When instead managing the MCDRAM has an allocatable memory domain, applications 
 choose to allocate specific arrays in the MCDRAM. The latter generally requires non-portable compiler directives (e.g. `!$DIR FASTMEM` near the allocate 
 statements) or special malloc calls (e.g. `hbwmalloc`). 
 
+For many codes, getting optimal performance on KNL requires all of the above: good thread/rank scaling on the many-cores, efficient vectorizable code and effective use of the 
+low-level caches as well as the MCDRAM.
+
 ## General Optimization Concepts on GPUs
 
 ## Challenges For Portability
