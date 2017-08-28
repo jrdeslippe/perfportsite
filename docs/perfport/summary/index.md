@@ -27,7 +27,7 @@ In general, we have the following recommendations for pursuing performance porta
 
 0. Actively profile your application using our suggested tools to make sure you have identified a minimal set of performance critical regions. We recommend 
 that you read over the [strategy page](http://performanceportability.org/perfport/strategy/) page and consider your hotspots map to different strategies 
-layed out. Additionally, before diving into a particular performance portability approach, we recommend making sure your code is using code software-engineer 
+layed out. Additionally, before diving into a particular performance portability approach, we recommend making sure your code is using recommended software-engineer 
 practices and that performance-critical regions are abstracted from the bulk of the application.
 
 1. If a well-supported library or DSL is available to address your performance critical regions, use it.
