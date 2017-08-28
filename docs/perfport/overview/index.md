@@ -6,7 +6,7 @@ As shown on the detailed [facility comparison page](http://performanceportabilit
 in common including interconnect (Cray Gemini or Cray Aries) and software environment. The most striking difference between the systems from a portability 
 point 
 of view is the node-level architecture. 
-Cori and Theta both containing Intel Knights Landing (KNL) powered nodes while Titan sports a heterogeneous architecture with an AMD 16-Core CPU 
+Cori and Theta both contain Intel Knights Landing (KNL) powered nodes while Titan sports a heterogeneous architecture with an AMD 16-Core CPU 
 coupled with an NVIDIA K20X GPU (where the majority of the compute capacity lies) on each node. We compare just the important node memory hierarchy and 
 parallelism features in the following table:
 
@@ -35,10 +35,10 @@ total possible FLOPs/cycle on a core is 32.
 For applications with high arithmetic intensity (FLOPs computed per bytes transferred from memory), a performance increase factor of 64-72 can be gained by 
 code 
 that has optimal 
-scaling across the cores of the processor and an additional, factor of 32
-in performance can therefore be gained by vectorizable code (using both VPUs) that has multiply-add capability. Generating vectorizable/SIMD code can be 
-challenging. In many applications at NERSC and ALCF, we rely on the compiler to generate vector code. Though, there are ways to aid the compiler with 
-directives (e.g. `OMP SIMD`) and to write vector code explicitly via AVX512 intrinsics or assembly.
+scaling across the cores of the processor, and an additional factor of 32
+in performance can be gained by vectorizable code (using both VPUs) that has multiply-add capability. Generating vectorizable/SIMD code can be 
+challenging. In many applications at NERSC and ALCF, we rely on the compiler to generate vector code - though, there are ways to aid the compiler with 
+directives (e.g. `OMP SIMD`) or with vector code explicitly written in AVX512 intrinsics or assembly.
 
 For applications with lower arithmetic intensities, the KNL has a number of features that can be exploited. Firstly, the L1 and L2 caches are available and 
 it is good programming practice to block or tile ones algorithm in order to increase data reuse out of these cache levels. In addition, the KNL has 16GB of 
@@ -47,7 +47,7 @@ node (96GB available on Cori nodes and 192GB available on Theta nodes). The MCDR
 allocate data to) or as a transparent last level cache. 
 
 When, utilizing the MCDRAM as a cache, an application developer may want to add an additional level of blocking/tiling to their algorithm, but should 
-consider that the MCDRAM as a cache has a number limitations - most importantly there is no hardware prefetching or associativity (mean each address in DDR 
+consider that the MCDRAM cache has a number of limitations - most importantly there is no hardware prefetching or associativity (meaning each address in DDR 
 has exactly one address in the MCDRAM cache it can reside and collisions are more likely). 
 
 When instead managing the MCDRAM has an allocatable memory domain, applications can either choose to use it for all their allocations by default, or can 
