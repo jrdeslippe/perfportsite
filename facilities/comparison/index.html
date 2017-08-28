@@ -314,12 +314,18 @@
     Cori
   </a>
   
-</li>
+    <nav class="md-nav">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#job-script_2" title="Job Script" class="md-nav__link">
     Job Script
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1098,12 +1104,18 @@
     Cori
   </a>
   
-</li>
+    <nav class="md-nav">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#job-script_2" title="Job Script" class="md-nav__link">
     Job Script
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1534,7 +1546,7 @@ automatically based on specified runtime configurations. An example script is
 shown below, in which a code uses 512 nodes of Xeon Phi with MCDRAM configured
 in "flat" mode, with 4 MPI processes per node and 34 OpenMP threads per MPI
 process, using 2 hyper-threads per physical core of Xeon Phi:</p>
-<h3 id="job-script_2">Job Script<a class="headerlink" href="#job-script_2" title="Permanent link">&para;</a></h3>
+<h4 id="job-script_2">Job Script<a class="headerlink" href="#job-script_2" title="Permanent link">&para;</a></h4>
 <div class="codehilite"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH -N 512</span>
 <span class="c1">#SBATCH -C knl,quad,flat</span>
