@@ -123,7 +123,7 @@ shown below, in which a code uses 512 nodes of Xeon Phi with MCDRAM configured
 in "flat" mode, with 4 MPI processes per node and 34 OpenMP threads per MPI
 process, using 2 hyper-threads per physical core of Xeon Phi:
 
-###Job Script
+####Job Script
 
 ```bash
 {!facilities/cori_script.sh!}
