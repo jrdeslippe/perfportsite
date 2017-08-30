@@ -7,7 +7,7 @@ technologies. These technologies include GPUs, Many-Core Processors, ARM, FPGAs,
 Memory (HBM) often incorporated on the processor die as well as Non-Volatile memory (NVRAM) and Solid-State Disk (SSD) technology for accelerated IO. 
 
 The DOE Office of Science operates three world-leading HPC facilities located at the Argonne Leadership Computing Facility (ALCF), the National Energy Research 
-Scientific Computing Center (NERSC) at Lawrence Berkeley Lab, and the Oak Ridge Leadership Computing Center (OLCF). These facilities field three of the most 
+Scientific Computing Center (NERSC) at Lawrence Berkeley National Lab, and the Oak Ridge Leadership Computing Center (OLCF). These facilities field three of the most 
 powerful supercomputers in world. These machines are used by scientists throughout the DOE Office of Science and the world for solving a 
 number of important problems in domains including materials science and chemistry to nuclear, particle, and astrophysics. 
 
@@ -50,7 +50,7 @@ While the details of the architectures are distinct, and vendor specific program
 specific architecture features; the commonalities are significant enough that a number of portable programming approaches are emerging for writing code that 
 supports both architectures. 
 
-This website is intended to be a living/growing documentation hub and guide for applications teams targeting systems at multiple DOE office of science 
+This website is intended to be a living/growing documentation hub and guide for applications teams targeting systems at multiple DOE Office of Science 
 facilities. In these pages, we 
 discuss the differences between the systems, the software environment, and the job-submission process. We discuss how to define and measure performance 
 portability and we provide recommendations based on case studies for the most promising performance-portable programming approaches. A 
