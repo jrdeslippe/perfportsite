@@ -615,35 +615,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#first-attempt" title="First Attempt" class="md-nav__link">
-    First Attempt
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#memory-management" title="Memory Management" class="md-nav__link">
     Memory Management
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#rewriting-fortran-kernels" title="Rewriting Fortran Kernels" class="md-nav__link">
-    Rewriting Fortran Kernels
+      
+        <li class="md-nav__item">
+  <a href="#kernel-implementation" title="Kernel Implementation" class="md-nav__link">
+    Kernel Implementation
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#second-attempt" title="Second Attempt" class="md-nav__link">
-    Second Attempt
+  <a href="#summary" title="Summary" class="md-nav__link">
+    Summary
   </a>
   
 </li>
@@ -671,6 +658,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../performance_comparison/" title="Performance" class="md-nav__link">
+      Performance
+    </a>
   </li>
 
         
@@ -950,35 +949,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#first-attempt" title="First Attempt" class="md-nav__link">
-    First Attempt
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#memory-management" title="Memory Management" class="md-nav__link">
     Memory Management
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#rewriting-fortran-kernels" title="Rewriting Fortran Kernels" class="md-nav__link">
-    Rewriting Fortran Kernels
+      
+        <li class="md-nav__item">
+  <a href="#kernel-implementation" title="Kernel Implementation" class="md-nav__link">
+    Kernel Implementation
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#second-attempt" title="Second Attempt" class="md-nav__link">
-    Second Attempt
+  <a href="#summary" title="Summary" class="md-nav__link">
+    Summary
   </a>
   
 </li>
@@ -1000,209 +986,154 @@
                 
                 <h1 id="kokkos-implementation">Kokkos Implementation<a class="headerlink" href="#kokkos-implementation" title="Permanent link">&para;</a></h1>
 <p>This section is written as some kind of lab report, since we think that it illustrates best what challenges users might face when making complicated frameworks such as BoxLib performance portable.</p>
-<h2 id="first-attempt">First Attempt<a class="headerlink" href="#first-attempt" title="Permanent link">&para;</a></h2>
-<p>This section will describe our first, unfinished attempt, to port BoxLib over to Kokkos. The approach was designed to be the cleanest but also the most difficult one. We learned some lessons in the process which we want to share with the reader of this case study.</p>
-<h3 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h3>
-<p>In theory, one would like to make the data resident on the <em>device</em> all the time to avoid unnecessary data transfer. We thus implemented a <code>KArenaND</code> class which allows us to use Kokkos views instead of plain arrays for storing the data. This is the abstract, N-dimensional class which provides a part of the interface:</p>
-<div class="codehilite"><pre><span></span><span class="c1">//generic ND template</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">int</span> <span class="n">D</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">KArenaND</span> <span class="p">{</span>
+<h2 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h2>
+<p>Kokkos provides the <code>Kokkos::View</code> class for managing data and providing accessors to array elements, slicing etc.. The advantage is that the user does not need to know how the data is stored under the hood, i.e. if it is aligned, padded, strided, etc.. However, this approach also requires the user to only use the provided accessor functions to access the data or runtime errors might occur. One method to circumvent this problem are <em>unmanaged views</em>: here, the user allocates an array the regular way and defines a view on top of that. This approach is goo for incremental porting as it does not break existing functionality, but comes with certain disadvantages we will discuss below. Another difficulty is that <code>Kokkos::Views</code>, managed or unmanaged, do not support offset or negative indexing but those type of indexing is used frequently in BoxLib. We worked around this by implementing a small, lightweight <code>ViewFab</code> class:</p>
+<div class="codehilite"><pre><span></span><span class="c1">// some useful typedefs and aliases</span>
+<span class="c1">// this is always unmanaged</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">hostview</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutLeft</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">HostSpace</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">MemoryUnmanaged</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#ifdef KOKKOS_ENABLE_CUDA</span>
+<span class="c1">// device view is a managed CUDA-view</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">devview</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutLeft</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">CudaSpace</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="c1">//device view is a managed host-view</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">devview</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">LayoutLeft</span><span class="p">,</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">HostSpace</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// a small class for wrapping kokkos views nicely</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">ViewFab</span> <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-  <span class="c1">//</span>
-  <span class="c1">// Allocates a dynamic memory arena of size sz.</span>
-  <span class="c1">// Returns a pointer to this memory.</span>
-  <span class="c1">//</span>
-  <span class="k">virtual</span> <span class="kt">void</span><span class="o">*</span> <span class="n">alloc</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">_sz</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">protected</span><span class="o">:</span>
-  <span class="k">virtual</span> <span class="kt">void</span> <span class="n">free</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
 
-<p>We then (partially) specialize this class in order generate a <code>KArena3D</code>-variant, as this is what we mostly use in our code. This class is defined as</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">KArenaND</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="mi">3</span><span class="o">&gt;</span> <span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="c1">//</span>
-  <span class="c1">// Allocates a dynamic memory arena of size sz.</span>
-  <span class="c1">// Returns a pointer to this memory.</span>
-  <span class="c1">//</span>
-  <span class="kt">void</span><span class="o">*</span> <span class="n">alloc</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">sz_vec</span><span class="p">);</span>
+<span class="cp">#if BL_SPACEDIM == 3</span>
+  <span class="n">hostview</span><span class="o">&lt;</span><span class="n">T</span><span class="o">****&gt;</span> <span class="n">h_data</span><span class="p">;</span>
+  <span class="n">devview</span><span class="o">&lt;</span><span class="n">T</span><span class="o">****&gt;</span> <span class="n">d_data</span><span class="p">;</span>
+  <span class="c1">// access operator</span>
+  <span class="n">KOKKOS_FORCEINLINE_FUNCTION</span>
+  <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">d_data</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">j</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">n</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="cp">#else</span>
+<span class="cp">#error &quot;ViewFab only supports 3D!&quot;;</span>
+<span class="cp">#endif</span>
+  <span class="kt">int</span> <span class="n">smallend</span><span class="p">[</span><span class="n">BL_SPACEDIM</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
 
-  <span class="c1">// pass access operator through to simplify things</span>
-  <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">a0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a2</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">a0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a2</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-  <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">IntVect</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">IntVect</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-
-  <span class="c1">// and return the view</span>
-  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="o">***&gt;&amp;</span> <span class="n">viewData</span><span class="p">(){</span> <span class="k">return</span> <span class="n">view</span><span class="p">;</span> <span class="p">}</span>
-<span class="k">private</span><span class="o">:</span>
-  <span class="kt">void</span> <span class="n">free</span><span class="p">();</span>
-  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="o">***&gt;</span> <span class="n">view</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
-
-<p>The corresponding allocator looks like then:</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="kt">void</span><span class="o">*</span> <span class="n">KArenaND</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="mi">3</span><span class="o">&gt;::</span><span class="n">alloc</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">_sz_vec</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">_sz_vec</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">!=</span><span class="mi">3</span><span class="p">){</span>
-    <span class="n">BoxLib</span><span class="o">::</span><span class="n">Abort</span><span class="p">(</span><span class="s">&quot;Error, the vector size passed to KArenaND has to be equal to its dimension!&quot;</span><span class="p">);</span>
+  <span class="kt">void</span> <span class="nf">syncH2D</span><span class="p">(){</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">deep_copy</span><span class="p">(</span><span class="n">d_data</span><span class="p">,</span><span class="n">h_data</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="c1">// important: reverse dimensions for optimal access</span>
-  <span class="n">view</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">T</span><span class="o">***&gt;</span><span class="p">(</span><span class="s">&quot;KArena_view3D&quot;</span><span class="p">,</span><span class="n">_sz_vec</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">_sz_vec</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">_sz_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="kt">void</span> <span class="nf">syncD2H</span><span class="p">(){</span>
+    <span class="n">Kokkos</span><span class="o">::</span><span class="n">deep_copy</span><span class="p">(</span><span class="n">h_data</span><span class="p">,</span><span class="n">d_data</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  <span class="c1">// provide interface compatibility with the rest of boxlib, but never use that pointer.</span>
-  <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">ptr_on_device</span><span class="p">());</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>This class could trivially be implemented for any dimension but we restricted ourselves to the interesting three dimensional case. We also wrapped up- and download functions in order to facilitate host-device-synchronization. In order to provide backwards compatibility, it is important that both layouts, i.e. for device and host, match BoxLibs column-order layout. 
+We then embedded this class into BoxLibs main data container <code>BaseFab</code>:</p>
+<div class="codehilite"><pre><span></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">BaseFab</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+
+  <span class="p">...</span>
+
+  <span class="n">ViewFab</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">view_fab</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>All what is left to do is to define the view inside the <code>BaseFab</code> allocator function:</p>
+<div class="codehilite"><pre><span></span><span class="n">aseFab</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">define</span> <span class="p">()</span>
+<span class="p">{</span>
+
+  <span class="c1">// This is the standard BoxLib allocator</span>
+  <span class="n">BL_ASSERT</span><span class="p">(</span><span class="n">nvar</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">BL_ASSERT</span><span class="p">(</span><span class="n">dptr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">BL_ASSERT</span><span class="p">(</span><span class="n">numpts</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">BL_ASSERT</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="n">nvar</span> <span class="o">&gt;</span> <span class="n">numpts</span><span class="p">);</span>
+
+  <span class="n">truesize</span>  <span class="o">=</span> <span class="n">nvar</span><span class="o">*</span><span class="n">numpts</span><span class="p">;</span>
+  <span class="n">dptr</span>      <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">BoxLib</span><span class="o">::</span><span class="n">The_Arena</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">alloc</span><span class="p">(</span><span class="n">truesize</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)));</span>
+  <span class="n">ptr_owner</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+  <span class="c1">//</span>
+  <span class="c1">// Now call T::T() on the raw memory so we have valid Ts.</span>
+  <span class="c1">//</span>
+  <span class="n">T</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">dptr</span><span class="p">;</span>
+  <span class="c1">//</span>
+  <span class="c1">// Note this must be long not int for very large (e.g.,1024^3) boxes.</span>
+  <span class="c1">//</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">truesize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">ptr</span><span class="o">++</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">new</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="n">T</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// This is the View construction</span>
+  <span class="p">{</span>
+    <span class="c1">//copy offset</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">BL_SPACEDIM</span><span class="p">;</span> <span class="o">++</span><span class="n">d</span><span class="p">){</span>
+      <span class="n">view_fab</span><span class="p">.</span><span class="n">smallend</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">=</span><span class="n">smallEnd</span><span class="p">()[</span><span class="n">d</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">view_fab</span><span class="p">.</span><span class="n">smallend</span><span class="p">[</span><span class="n">BL_SPACEDIM</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// create host view</span>
+<span class="cp">#if BL_SPACEDIM == 3</span>
+    <span class="n">view_fab</span><span class="p">.</span><span class="n">h_data</span> <span class="o">=</span> <span class="n">hostview</span><span class="o">&lt;</span><span class="n">T</span><span class="o">****&gt;</span><span class="p">(</span><span class="k">const_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">dataPtr</span><span class="p">()),</span> 
+                                      <span class="n">length</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> 
+                                      <span class="n">length</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> 
+                                      <span class="n">length</span><span class="p">()[</span><span class="mi">2</span><span class="p">],</span> 
+                                      <span class="n">nComp</span><span class="p">());</span>
+    <span class="n">view_fab</span><span class="p">.</span><span class="n">d_data</span> <span class="o">=</span> <span class="n">devview</span><span class="o">&lt;</span><span class="n">T</span><span class="o">****&gt;</span><span class="p">(</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">ViewAllocateWithoutInitializing</span><span class="p">(</span><span class="s">&quot;BoxLib&quot;</span><span class="p">),</span> 
+                                     <span class="n">length</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> 
+                                     <span class="n">length</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> 
+                                     <span class="n">length</span><span class="p">()[</span><span class="mi">2</span><span class="p">],</span> 
+                                     <span class="n">nComp</span><span class="p">());</span>
+<span class="cp">#else</span>
+<span class="cp">#error &quot;ViewFab construction only supports 3D!&quot;;</span>
+<span class="cp">#endif</span>
+  <span class="p">}</span>
+
+  <span class="n">BoxLib</span><span class="o">::</span><span class="n">update_fab_stats</span><span class="p">(</span><span class="n">numpts</span><span class="p">,</span> <span class="n">truesize</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">));</span>
 <span class="p">}</span>
 </pre></div>
 
+<p>Note that we do not need to initialize the device data to zero because we will do that on the host and upload the data before we are going to use it on the device. 
+This construct allows us to use Kokkos parallel dispatchers which work on the embedded <code>ViewFab</code> as well as the conventional BoxLib kernels working with raw data pointers <code>ptr</code>. We only need to make sure to synchronize data between host and device before using them on either one. </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When packing Views into classes, avoid using pointers and the <code>new</code> operator to instantiate a new View. <strong>This pointer will be a host-only pointer and will have NULL value when accessed from a device which uses a different address space.</strong> The reference counting is only guaranteed to work properly if the View is stored and passed by value. In that sense, also avoid passing references to views. Note that Kokkos::Views are lightweight objects so there is no performance reason to use pointers/references instead of values in this case.</p>
+<p>Our current implementation relies on either having the same data layout on host and device or on <code>Kokkos::deep_copy</code> being aware of possibile differences between data layouts. For example, the unmanaged view is unpadded but in theory a managed view could be padded. Since the device view is a managed view, a data transfer routine for synchronizing device and host memory needs to be aware of that. The current state of Kokkos is that <code>Kokkos::deep_copy</code> is not aware of these things but also managed views are never padded. As long as this does not change, our approach is safe. However, it implicitly assumes knowledge about how Kokkos stores the data which is not optimal. In any case, we found that this is the only way to enable incremental code porting with Kokkos. </p>
 </div>
-<p>We further implemented operators to access the memory, which basically pass the View access operator to the outside. For example:</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="n">T</span><span class="o">&amp;</span> <span class="n">KArenaND</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="mi">3</span><span class="o">&gt;::</span><span class="k">operator</span><span class="p">()(</span><span class="kt">int</span> <span class="n">a0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a2</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// indices reversed compared to BoxLib</span>
-  <span class="c1">// in roder to ensure interface compatibility</span>
-  <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span><span class="n">a1</span><span class="p">,</span><span class="n">a0</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
+<h2 id="kernel-implementation">Kernel Implementation<a class="headerlink" href="#kernel-implementation" title="Permanent link">&para;</a></h2>
+<p>By implementing the memory management into the base container class, we make sure that all obejcts we are going to deal with have a view associated with it. The next step is to rewrite all kernels involved in the multigrid cycle. Although some of the kernels might not benefit from GPU acceleration, we nervetheless want to execute them on the device in order to avoid costly data copies. The example below shows out Kokkos implementation for the restriction kernel (average). </p>
+<div class="codehilite"><pre><span></span><span class="k">template</span> <span class="o">&lt;</span><span class="kt">int</span> <span class="n">dim</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">mdpolicy</span> <span class="o">=</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">MDRangePolicy</span><span class="o">&lt;</span>
+                              <span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">Rank</span><span class="o">&lt;</span><span class="n">dim</span><span class="p">,</span> <span class="n">outer_iter_policy</span><span class="p">,</span> <span class="n">inner_iter_policy</span><span class="o">&gt;</span><span class="p">,</span> 
+                              <span class="n">Kokkos</span><span class="o">::</span><span class="n">IndexType</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span><span class="p">;</span>
 
-<p>Note that we reverse the order of indices here. This is because BoxLib uses the indexing <code>(x,y,z)</code> whereas for Kokkos views it is more convenient if the order <code>(z,y,x)</code> is used so that one can use Kokkos default layouts, i.e. <code>Layout::Left</code> on GPU and <code>Layout::Right</code> on CPU. If one would use the BoxLib indexing on the view level, this logic would need to be inverted whenever a Kokkos parallel dispatch is used. Instead, we invert it on the access operator level so that we neither need to explicitly specify an iteration policy nor break the BoxLib indexing order in the rest of the code.</p>
-<p>There are advantages and disadvantages to burying the Kokkos data containers deep into the framework. The obvious advantage is that once it works, basically the majority of the framework will already be Kokkos compatible. The disadvantage is that incremental porting is not possible, it is an all-or-nothing approach.</p>
-<h3 id="rewriting-fortran-kernels">Rewriting Fortran Kernels<a class="headerlink" href="#rewriting-fortran-kernels" title="Permanent link">&para;</a></h3>
-<p>A big difficulty with porting the BoxLib GMG to Kokkos is that most of the kernels are written in Fortran. For Kokkos, we need those kernels in C++ so we have started rewriting those kernels accordingly. As it turns out, the Kokkos GMG tutorial touches many of these Fortran kernels, and so we stopped after altering almost 10K lines of code in about 50 files. Below you find the comparison between the BoxLib master branch from which we started to the current state of the Kokkos port branch.</p>
-<div class="codehilite"><pre><span></span>~/BoxLib&gt; git diff --stat cpp_kernels_kokkos-views 
-
- Src/C_BaseLib/FArrayBox.H                            |    2 -
- Src/C_BaseLib/FabArray.H                             |    8 +-
- Src/C_BaseLib/IArrayBox.H                            |    1 -
- Src/C_BaseLib/KArena.H                               |  265 ---------
- Src/C_BaseLib/KBaseFab.H                             | 3615 -----------------------------------------------------------------------------------------------------------------
- Src/C_BaseLib/Looping.H                              |  770 +-----------------------
- Src/C_BaseLib/Make.package                           |    6 +-
- Src/C_BaseLib/MultiFabUtil.cpp                       |  284 +++++----
- Src/C_BaseLib/MultiFabUtil_3d.cpp                    |  247 --------
- Src/C_BaseLib/MultiFabUtil_F.H                       |    8 -
- Src/C_BoundaryLib/Mask.H                             |    1 -
- Src/C_BoundaryLib/Mask.cpp                           |    2 +-
- Src/LinearSolvers/C_CellMG/ABecLaplacian.H           |    9 +-
- Src/LinearSolvers/C_CellMG/ABecLaplacian.cpp         | 1119 ++++++++++++++++-------------------
- Src/LinearSolvers/C_CellMG/ABec_3D.F                 |    4 +-
- Src/LinearSolvers/C_CellMG/CGSolver.H                |    6 +-
- Src/LinearSolvers/C_CellMG/CGSolver.cpp              |   13 +-
- Src/LinearSolvers/C_CellMG/LO_3D_cpp.cpp             |  235 --------
- Src/LinearSolvers/C_CellMG/LO_F.H                    |    5 -
- Src/LinearSolvers/C_CellMG/Laplacian.H               |    3 +-
- Src/LinearSolvers/C_CellMG/Laplacian.cpp             |  343 ++++++-----
- Src/LinearSolvers/C_CellMG/LinOp.H                   |   12 +-
- Src/LinearSolvers/C_CellMG/LinOp.cpp                 |   85 +--
- Src/LinearSolvers/C_CellMG/MG_3D_cpp.cpp             |  464 ---------------
- Src/LinearSolvers/C_CellMG/MG_3D_fortran.F           |   96 ---
- Src/LinearSolvers/C_CellMG/MG_3D_old.cpp             |  222 -------
- Src/LinearSolvers/C_CellMG/MG_F.H                    |   81 ---
- Src/LinearSolvers/C_CellMG/Make.package              |    6 +-
- Src/LinearSolvers/C_CellMG/MultiGrid.H               |    4 +-
- Src/LinearSolvers/C_CellMG/MultiGrid.cpp             | 1463 +++++++++++++++++++++++-----------------------
- Src/LinearSolvers/C_CellMG/old/MG_3D_cpp.cpp-average |   39 --
- Src/LinearSolvers/C_CellMG4/ABec2.H                  |    5 +-
- Src/LinearSolvers/C_CellMG4/ABec4.H                  |    3 +-
- Src/LinearSolvers/C_CellMG4/ABec4.cpp                |    7 +-
- Tools/C_mk/Make.rules                                |    4 +-
- Tools/Postprocessing/F_Src/GNUmakefile               |    2 +-
- Tutorials/MultiGrid_C/COEF_3D.F90                    |   14 +-
- Tutorials/MultiGrid_C/COEF_F.H                       |   10 +-
- Tutorials/MultiGrid_C/GNUmakefile                    |   28 +-
- Tutorials/MultiGrid_C/KokkosCore_config.h            |   11 -
- Tutorials/MultiGrid_C/KokkosCore_config.tmp          |   11 -
- Tutorials/MultiGrid_C/MG_helpers_cpp.cpp             |  162 ------
- Tutorials/MultiGrid_C/Make.package                   |    2 +-
- Tutorials/MultiGrid_C/RHS_3D.F90                     |  143 ++---
- Tutorials/MultiGrid_C/RHS_F.H                        |    3 +-
- Tutorials/MultiGrid_C/fcompare                       |  Bin 3475616 -&gt; 0 bytes
- Tutorials/MultiGrid_C/inputs                         |    6 +-
- Tutorials/MultiGrid_C/main.cpp                       | 1530 ++++++++++++++++++++++++------------------------
- Tutorials/MultiGrid_C/out-F                          |  522 -----------------
- Tutorials/MultiGrid_C/out-cpp                        |  522 -----------------
- 55 files changed, 2455 insertions(+), 10764 deletions(-)
-</pre></div>
-
-<p>Clearly, this is a major endeavor and we stopped our explorations for the moment at this point. 
-Furthermore, it is not clear what performance Kokkos can deliver for the tasks at hand. To assess that, we abandoned the full port and continued with a partial port described below.</p>
-<h2 id="second-attempt">Second Attempt<a class="headerlink" href="#second-attempt" title="Permanent link">&para;</a></h2>
-<p>Since porting the full application is a major effort but we still want to assess Kokkos' potential for BoxLib, we followed a different strategy in this attempt: we will port all performance relevant GMG kernels to Kokkos, copying data into a suitable view before calling the kernel, then using Kokkos' parallel dispatcher to launch the kernels, and then fill the results back into BoxLib's own <code>BaseFab</code> datatype. 
-It is important to note that BoxLib uses offsets in the array-indexing and those can be different for different fields (e.g. some fields have ghost zones and some do not).</p>
-<p>We thus decided to encapsulate this complexity into a new class. Below we show the declaration of the one specialized for <code>FArraBox</code> datatypes, i.e. <code>BaseFab</code> instances with types <code>Real</code>.</p>
-<div class="codehilite"><pre><span></span><span class="k">template</span><span class="o">&lt;&gt;</span>
-<span class="k">class</span> <span class="nc">ViewFab</span><span class="o">&lt;</span><span class="n">Real</span><span class="o">&gt;</span> <span class="p">{</span>
+<span class="c1">// Average Functor</span>
+<span class="k">struct</span> <span class="n">C_AVERAGE_FUNCTOR</span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
+  <span class="n">C_AVERAGE_FUNCTOR</span><span class="p">(</span><span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">c_</span><span class="p">,</span> <span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f_</span><span class="p">)</span> 
+  <span class="o">:</span> <span class="n">cv</span><span class="p">(</span><span class="n">c_</span><span class="p">.</span><span class="n">view_fab</span><span class="p">),</span> <span class="n">fv</span><span class="p">(</span><span class="n">f_</span><span class="p">.</span><span class="n">view_fab</span><span class="p">)</span> <span class="p">{}</span>
 
-  <span class="c1">// swap indices here to get kokkos&#39;-canonical layout</span>
-  <span class="n">KOKKOS_INLINE_FUNCTION</span>
-  <span class="n">Real</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">){</span>
-    <span class="k">return</span> <span class="n">data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">j</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-  <span class="p">}</span>
-
-  <span class="n">KOKKOS_INLINE_FUNCTION</span>
-  <span class="n">Real</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="n">data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">j</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="o">-</span><span class="n">smallend</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-  <span class="p">}</span>
-
-  <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">rhs_</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name_</span><span class="p">);</span>
-
-  <span class="n">ViewFab</span><span class="p">(){}</span>
-
-  <span class="n">ViewFab</span><span class="p">(</span><span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">rhs_</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name_</span><span class="p">){</span>
-      <span class="n">init</span><span class="p">(</span><span class="n">rhs_</span><span class="p">,</span><span class="n">name_</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="n">ViewFab</span><span class="o">&lt;</span><span class="n">Real</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">ViewFab</span><span class="o">&lt;</span><span class="n">Real</span><span class="o">&gt;&amp;</span> <span class="n">rhs_</span><span class="p">);</span>
-
-  <span class="c1">// write the view data into a FArrayBox</span>
-  <span class="kt">void</span> <span class="nf">fill</span><span class="p">(</span><span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">lhs_</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">numvars</span><span class="p">;</span>
-  <span class="n">IntVect</span> <span class="n">smallend</span><span class="p">,</span> <span class="n">bigend</span><span class="p">,</span> <span class="n">length</span><span class="p">;</span>
-  <span class="n">Kokkos</span><span class="o">::</span><span class="n">View</span><span class="o">&lt;</span><span class="n">Real</span><span class="o">****&gt;</span> <span class="n">data</span><span class="p">;</span>
-<span class="p">};</span>
-</pre></div>
-
-<p>The important aspect is that the access operator hides the offset indexing and thus keeps the kernels clean.
-Note that this class is similar to what we try to use in our first attempt, but this time we do not bury it deep into the Framework but rather only use it for making the individual kernels performance portable. The access operators need to be decorated with <code>KOKKOS_INLINE_FUNCTION</code> macros because they will be called from the device. In order to copy relevant <em>metadata</em> to the device, we use the functor approach. That means we pack all relevant parameters into a functor object and then provide an access operator to it. For example, the average (restriction) functor is</p>
-<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">C_AVERAGE_FUNCTOR</span><span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">C_AVERAGE_FUNCTOR</span><span class="p">(</span><span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">c_</span><span class="p">,</span> <span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f_</span><span class="p">)</span> <span class="o">:</span> <span class="n">cv</span><span class="p">(</span><span class="n">c_</span><span class="p">,</span><span class="s">&quot;cv&quot;</span><span class="p">),</span> <span class="n">fv</span><span class="p">(</span><span class="n">f_</span><span class="p">,</span><span class="s">&quot;fv&quot;</span><span class="p">){</span>
-    <span class="n">cv</span><span class="p">.</span><span class="n">syncH2D</span><span class="p">();</span>
-    <span class="n">fv</span><span class="p">.</span><span class="n">syncH2D</span><span class="p">();</span>
-  <span class="p">}</span>
-
-  <span class="n">KOKKOS_INLINE_FUNCTION</span>
-  <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+  <span class="n">KOKKOS_FORCEINLINE_FUNCTION</span>
+  <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
     <span class="n">cv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">=</span>  <span class="p">(</span><span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="o">*</span><span class="mf">0.125</span><span class="p">;</span>
     <span class="n">cv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+=</span> <span class="p">(</span><span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">fv</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="o">*</span><span class="mf">0.125</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="kt">void</span> <span class="n">fill</span><span class="p">(</span><span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">cfab</span><span class="p">){</span>
-    <span class="n">cv</span><span class="p">.</span><span class="n">syncD2H</span><span class="p">();</span>
-    <span class="n">cv</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">cfab</span><span class="p">);</span>
-  <span class="p">}</span>
 <span class="k">private</span><span class="o">:</span>
   <span class="n">ViewFab</span><span class="o">&lt;</span><span class="n">Real</span><span class="o">&gt;</span> <span class="n">cv</span><span class="p">,</span> <span class="n">fv</span><span class="p">;</span>
 <span class="p">};</span>
-</pre></div>
 
-<p>It contains the two viewfabs needed and makes sure that data is uploaded to and downloaded from the device when needed. The average-kernel then simply becomes:</p>
-<div class="codehilite"><pre><span></span><span class="kt">void</span> <span class="nf">C_AVERAGE</span><span class="p">(</span>
-<span class="k">const</span> <span class="n">Box</span><span class="o">&amp;</span> <span class="n">bx</span><span class="p">,</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">nc</span><span class="p">,</span>
-<span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">,</span>
-<span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">){</span>
-
+<span class="c1">//Average Kernel</span>
+<span class="kt">void</span> <span class="nf">C_AVERAGE</span><span class="p">(</span>
+  <span class="k">const</span> <span class="n">Box</span><span class="o">&amp;</span> <span class="n">bx</span><span class="p">,</span>
+  <span class="k">const</span> <span class="kt">int</span> <span class="n">nc</span><span class="p">,</span>
+  <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">,</span>
+  <span class="k">const</span> <span class="n">FArrayBox</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">)</span>
+<span class="p">{</span>
   <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">lo</span> <span class="o">=</span> <span class="n">bx</span><span class="p">.</span><span class="n">loVect</span><span class="p">();</span>
   <span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">hi</span> <span class="o">=</span> <span class="n">bx</span><span class="p">.</span><span class="n">hiVect</span><span class="p">();</span>
   <span class="k">const</span> <span class="kt">int</span><span class="o">*</span> <span class="n">cb</span> <span class="o">=</span> <span class="n">bx</span><span class="p">.</span><span class="n">cbVect</span><span class="p">();</span>
@@ -1210,77 +1141,42 @@ Note that this class is similar to what we try to use in our first attempt, but 
   <span class="c1">// create functor</span>
   <span class="n">C_AVERAGE_FUNCTOR</span> <span class="n">cavfunc</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">f</span><span class="p">);</span>
 
-  <span class="c1">// define policy</span>
-  <span class="k">typedef</span> <span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">MDRangePolicy</span><span class="o">&lt;</span><span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">Rank</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">t_policy</span><span class="p">;</span>
-
-  <span class="c1">// execute</span>
-  <span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">md_parallel_for</span><span class="p">(</span><span class="n">t_policy</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]},{</span><span class="n">nc</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">},{</span><span class="n">nc</span><span class="p">,</span> <span class="n">cb</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">0</span><span class="p">]}),</span><span class="n">cavfunc</span><span class="p">);</span>
-
-  <span class="c1">// write back</span>
-  <span class="n">cavfunc</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+  <span class="c1">// execute functor</span>
+  <span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">md_parallel_for</span><span class="p">(</span><span class="n">mdpolicy</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">({</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">},</span> 
+                                                    <span class="p">{</span><span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">nc</span><span class="p">},</span> 
+                                                    <span class="p">{</span><span class="n">cb</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">nc</span><span class="p">}),</span> <span class="n">cavfunc</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-<p>In order to employ loop-collapsing and additional cache blocking, we use the experimental multi-dimensional iteration policy feature. We added a cache-block-sizes vector <code>cb</code> which can be specified in the input file passed to the application. Most kernels can be ported like the one in the above example. The GSRB kernel though has non-unit stride access in the <code>i</code> loop, because of the red-black iteration pattern. For this case, we pass half of the actual range to the iteration policy and expand the index inside the loop. The access operator of the corresponding functor becomes</p>
-<div class="codehilite"><pre><span></span><span class="k">struct</span> <span class="n">C_GSRB_FUNCTOR</span><span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="p">...</span>
-
-  <span class="n">KOKKOS_INLINE_FUNCTION</span>
-  <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">ii</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
-
-    <span class="kt">int</span> <span class="n">ioff</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo0</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="n">rb</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="n">lo0</span><span class="p">)</span> <span class="o">+</span> <span class="n">lo0</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">;</span>
-
-    <span class="c1">//be careful to not run over</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">hi0</span><span class="p">){</span>
-
-      <span class="c1">// boundary condition terms</span>
-      <span class="n">Real</span> <span class="n">cf0</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m0v</span><span class="p">(</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f0v</span><span class="p">(</span><span class="n">blo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-      <span class="n">Real</span> <span class="n">cf1</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m1v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f1v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-      <span class="n">Real</span> <span class="n">cf2</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">==</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m2v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f2v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">blo</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-      <span class="n">Real</span> <span class="n">cf3</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m3v</span><span class="p">(</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f3v</span><span class="p">(</span><span class="n">bhi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-      <span class="n">Real</span> <span class="n">cf4</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m4v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f4v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-      <span class="n">Real</span> <span class="n">cf5</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="n">k</span><span class="o">==</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">m5v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">f5v</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">bhi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">:</span> <span class="mf">0.</span> <span class="p">);</span>
-
-      <span class="c1">// assign overrelaxation constants</span>
-      <span class="kt">double</span> <span class="n">gamma</span> <span class="o">=</span>  <span class="n">alpha</span> <span class="o">*</span> <span class="n">av</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
-                    <span class="o">+</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
-                    <span class="o">+</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
-
-      <span class="kt">double</span> <span class="n">g_m_d</span> <span class="o">=</span>  <span class="n">gamma</span>
-                    <span class="o">-</span> <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">cf0</span> <span class="o">+</span> <span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">cf3</span><span class="p">)</span>
-                    <span class="o">-</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">cf1</span> <span class="o">+</span> <span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">cf4</span><span class="p">)</span>
-                    <span class="o">-</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">cf2</span> <span class="o">+</span> <span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">cf5</span><span class="p">);</span>
-
-      <span class="kt">double</span> <span class="n">rho</span> <span class="o">=</span>  <span class="n">dhx</span> <span class="o">*</span> <span class="p">(</span><span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bXv</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
-                  <span class="o">+</span> <span class="n">dhy</span> <span class="o">*</span> <span class="p">(</span><span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bYv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
-                  <span class="o">+</span> <span class="n">dhz</span> <span class="o">*</span> <span class="p">(</span><span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">bZv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">));</span>
-
-      <span class="kt">double</span> <span class="n">res</span> <span class="o">=</span> <span class="n">rhsv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">rho</span><span class="p">;</span>
-      <span class="n">phiv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="o">+=</span> <span class="n">omega</span><span class="o">/</span><span class="n">g_m_d</span> <span class="o">*</span> <span class="n">res</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="p">...</span>
-<span class="p">};</span>
-</pre></div>
-
-<p>Note that we still have to avoid running over array bounds. That can occur when the grid extent in <code>i</code>-direction is odd. The iteration policy now becomes</p>
-<div class="codehilite"><pre><span></span><span class="c1">// instantiate functor</span>
-<span class="n">C_GSRB_FUNCTOR</span> <span class="nf">cgsrbfunc</span><span class="p">(</span><span class="n">bx</span><span class="p">,</span> <span class="n">bbx</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">bX</span><span class="p">,</span> <span class="n">bY</span><span class="p">,</span> <span class="n">bZ</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">f3</span><span class="p">,</span> <span class="n">m3</span><span class="p">,</span> <span class="n">f4</span><span class="p">,</span> <span class="n">m4</span><span class="p">,</span> <span class="n">f5</span><span class="p">,</span> <span class="n">m5</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
-
-<span class="c1">// compute bounds used in i-iteration</span>
-<span class="kt">int</span> <span class="n">length0</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">floor</span><span class="p">(</span> <span class="p">(</span><span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="p">);</span>
+<p>We ported about 40 kernels in similar but straightforward fashion. The most effort here went into porting these kernels from Fortran to C++ since Kokkos does not work natively with Fortran. Once the C++-versions of the kernels were implemented and tested, applying Kokkos dispatchers to those is uncomplicated and relatively quick. 
+In case of the GSRB kernel we had to work around the limitation that the innermost loop does not have stride-1 access because of the checkerboarding and Kokkos does not support that kind of access yet. We circumvented that issue by making the loop canonical, i.e. dividing the tripcount by two and expanding the innermost index accordingly inside the kernel: the code below shows how the dispatcher was implemented:</p>
+<div class="codehilite"><pre><span></span><span class="kt">int</span> <span class="n">length0</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">floor</span><span class="p">(</span> <span class="p">(</span><span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="p">);</span>
 <span class="kt">int</span> <span class="n">up0</span> <span class="o">=</span> <span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">length0</span><span class="p">;</span>
-
-<span class="c1">// dispatch kernel</span>
-<span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">md_parallel_for</span><span class="p">(</span><span class="n">t_policy</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span> <span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span> <span class="p">{</span><span class="n">nc</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">up0</span><span class="o">+</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="n">nc</span><span class="p">,</span> <span class="n">cb</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">length0</span><span class="p">}),</span> <span class="n">cgsrbfunc</span><span class="p">);</span>
+<span class="n">Kokkos</span><span class="o">::</span><span class="n">Experimental</span><span class="o">::</span><span class="n">md_parallel_for</span><span class="p">(</span><span class="n">mdpolicy</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">({</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">},</span> 
+                                                  <span class="p">{</span><span class="n">up0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">nc</span><span class="p">},</span> 
+                                                  <span class="p">{</span><span class="n">cb</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cb</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">nc</span><span class="p">}),</span> 
+                                                  <span class="n">cgsrbfunc</span><span class="p">);</span>
 </pre></div>
 
-<p>We experimented with including the full loop over <code>i</code> into our iteration policy and then skipping the iteration if <code>(i + j + k) % 2 != 0</code>, but that decreased performance on the CPU by more than 50%. In general, it would be good if Kokkos' range policies allow for strided iterations.</p>
-<p>The above approach clearly comes with data transfer overhead which we would have avoided if we would have followed through our first attempt. However, in the performance timings we will report later on, we explicitly exclude that overhead and just assess the run time of the kernels themselves. That way, we can determine if Kokkos is a viable framework for ensuring performance portability of BoxLib across architectures.</p>
+<p>and below is the index expansion inside the loop body:</p>
+<div class="codehilite"><pre><span></span><span class="n">KOKKOS_FORCEINLINE_FUNCTION</span>
+<span class="kt">void</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">ii</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+  <span class="kt">int</span> <span class="n">ioff</span> <span class="o">=</span> <span class="p">(</span><span class="n">lo0</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="n">rb</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ii</span><span class="o">-</span><span class="n">lo0</span><span class="p">)</span> <span class="o">+</span> <span class="n">lo0</span> <span class="o">+</span> <span class="n">ioff</span><span class="p">;</span>
+
+  <span class="c1">// if the i-dimension is odd, we could still run over, so better check</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">hi0</span><span class="p">){</span>
+
+    <span class="c1">// kernel body</span>
+
+    <span class="p">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The <code>MDRangePolicy</code> policy is very useful as it is able to collapse loops, apply cache blocking and improve vectorization at the same time. We control the cacheblock sizes for each dimension <code>cb[i]</code> with corresponding lines in the input file.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>Porting the BoxLib GMG to Kokkos was not trivial because of the plethora of Fortran kernels. One should be aware of this if one aims at making a legacy Fortran code performance portable. Also, incremental porting with Kokkos is doable but one has to utilize unmanaged views or raw data pointers of managed views. Both is, according to the user manual, not recommended because the user makes underlying assumptions on the internal data layout. However, within a short amount of time, we were able to port the BoxLib GMG solver and all involved routines to Kokkos and achieved <a href="../performance_comparison/">satisfying performance</a>. In the future, one could investigate further optimizations on the kernel-level, e.g. improve cache blocking/register use, device occupancy etc..</p>
                 
                   
                 
