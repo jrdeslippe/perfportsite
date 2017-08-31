@@ -22,13 +22,14 @@ markdown_extensions:
   - markdown_include.include:
       base_path: docs
 theme: 'material'
+theme_dir: 'theme'
 #theme_dir: 'theme/material/'
 #site_favicon: favicon.ico
 extra:
   palette:
     primary: 'green'
     accent: 'yellow'
-  #logo: 'images/oos.png'
+#    logo: 'images/oos.png'
 pages:
 - Introduction: index.md
 - Office of Science Facilities:
