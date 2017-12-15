@@ -104,7 +104,7 @@ many loops, moving to the device only the data which has changed since the
 previous time the loop was executed. This can be done with the `update`
 construct. For example, the restriction kernel in the multigrid solver becomes:
 
-```C++
+```Fortran
  subroutine FORT_AVERAGE (
 $     c, DIMS(c),
 $     f, DIMS(f),
