@@ -10,6 +10,8 @@ portabile and ultimately more productive by applying recommended software engine
 * Maintaining a rigorours test-suite and automated regression test framework on multiple platforms
 * Developing code in a modular way that abstracts performance-critical regions
 
+The [Better Scientific Software (BSSw)](https://bssw.io/) site is a valuable resource---a hub for sharing information and educating about best practices.
+
 ## Developing a Performance Portability Strategy 
 
 We noted in the introduction that the KNL and NVIDIA GPU architectures had a lot in common, including wide "vectors" or "warps," as well as multiple tiers of memory, including on-package memory. However, before diving into to any particular performance-portability programming model, it is important to develop a high-level strategy for how a given problem best maps to these similar architecture features. In exploring various approaches to performance portability, we have found that different strategies can exist for exploiting these similarities. 
