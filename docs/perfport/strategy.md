@@ -7,7 +7,7 @@ portabile and ultimately more productive by applying recommended software engine
 
 * Developing in a well-defined version-controlled environment
 * Documenting code so other developers can quickly join and contribute to a project
-* Maintaining a rigorours test-suite and automated regression test framework on multiple platforms
+* Maintaining a rigorous test-suite and automated regression test framework on multiple platforms
 * Developing code in a modular way that abstracts performance-critical regions
 
 The [Better Scientific Software (BSSw)](https://bssw.io/) site is a valuable resource---a hub for sharing information and educating about best practices.
