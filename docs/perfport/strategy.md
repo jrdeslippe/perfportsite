@@ -10,7 +10,7 @@ portabile and ultimately more productive by applying recommended software engine
 * Maintaining a rigorous test-suite and automated regression test framework on multiple platforms
 * Developing code in a modular way that abstracts performance-critical regions
 
-The [Better Scientific Software (BSSw)](https://bssw.io/) site is a valuable resource---a hub for sharing information and educating about best practices.
+The [Better Scientific Software (BSSw)](https://bssw.io/) site is a valuable resource&mdash;a hub for sharing information and educating about best practices.
 
 ## Developing a Performance Portability Strategy 
 
