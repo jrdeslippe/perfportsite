@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.9.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-0a3554af36.css">
       
         <link rel="stylesheet" href="../../../assets/stylesheets/application-02c2a4388f.palette.css">
       
@@ -91,17 +91,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -1006,9 +1006,14 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                <h1 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h1>
+<!--[if lte IE 9]>
+    <br>
+    <div class="well well-sm">
+      <font size=6><br><br>You are using an unsupported version of Internet Explorer (version 9 or lower)<br>
+        This website will not function as expected. We recommend using a recent version of Chrome, Firefox or IE 10+.<br><br></font>
+    </div>
+<![endif]-->
+<h1 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h1>
 <h2 id="kokkos">Kokkos<a class="headerlink" href="#kokkos" title="Permanent link">&para;</a></h2>
 <p>In order to assess the performance on KNL and GPU architectures, we compare against the highly optimized libraries <a href="https://github.com/JeffersonLab/qphix">QPhiX</a> and <a href="https://github.com/lattice/quda">QUDA</a> respectively. Those two codes should set the upper bar of what can be achieved on the corresponding architectures for the given problem. Note that these libraries can additionally employ some algorithmic improvements which we did not use in our simple test case. However, it is possible to switch most of these optimizations off to allow for better comparisons with our portable code. Two optimization features of the libraries which we have not turned off were i) in the case of QPhiX, cache blocking remains enabled and ii) QUDA performs a wide-ranging autotuning as regards block sizes, and shared memory use to identify its optimal launch parameters. Both these features are integral to these libraries and could not be turned off. The vectorization in both frameworks is performed over lattice sites and not over multiple right hand sides as in our test case. However, QUDA supports a multiple-right hand side implementation which we can compare against, but must bear in mind that it does not rely on vectorization over right hand sides like our implementation. However, it still benefits from gauge field reuse. Due to it not vectorizing over the right hand sides, but over lattice sites, it may have have a different available space of kernel launch parameters and an entirely different performance profile from our implementation in the MRHS case.</p>
 <p>On the CPU, we additionally compare our code to a plain C++ as well as to a legacy SSE-optimized Wilson dslash operator, both available through the <a href="https://jeffersonlab.github.io/chroma/">Chroma framework</a>. Those two codes should act as some kind of lower bar for our performance comparisons. Because of different vectorization behavior in our kokkos dslash. we split our results summary into two parts, i.e. one for the single and one for the multiple right-hand-sites case.</p>
@@ -1049,10 +1054,7 @@ In our subsequent GPU tests, we kept this same volume, but increased the number 
 </tbody>
 </table>
 <p>However, it is likely that the poor behavior in the case of KNL SRHS is not due to Kokkos, but to compiler being unable to find sufficient (if any) vectorization opportunity, which also will cause issues for memory traffic, i.e. if data is not read/written using aligned vector loads/stores. The underlying cause for the low performance of MRHS compared to QUDA on GPUs is still being investigated, for example, it is still up in the air as to whether latencies could be reduced by reducing indexing arithmetic (e.g. with Kokkos subviews) or memory latencies could be reduced, e.g. by loading the gauge field into shared memory. It is likely that on the KNL, starting from the multi-right hand side Dslash we could probably move to a better, vectorized SRHS operator, for example by adopting the virtual node layout of Grid. It is also likely that such an operator would have a reasonable (OK) performance on the GPUs based on the measurements made with the MRHS operator on GPUs. However, it is not immediately clear whether it would outperform the most naive implementation for SRHS which achieves 98% of QUDA performance on Volta. This leaves us with a more difficult performance portability question: Even if the code itself is performance portable (similar absolute GFLOPS performance on both CPU and GPU), in terms of extracting maximum available performance from a given architecture, is the algorithm itself performance portable?</p>
-                
-                  
-                
-              
+
               
                 
               
@@ -1118,7 +1120,7 @@ In our subsequent GPU tests, we kept this same volume, but increased the number 
       
     </div>
     
-      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-3700c4cc12.js"></script>
       
       
       <script>app.initialize({url:{base:"../../.."}})</script>

@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.9.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-0a3554af36.css">
       
         <link rel="stylesheet" href="../../../assets/stylesheets/application-02c2a4388f.palette.css">
       
@@ -91,17 +91,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -1034,9 +1034,14 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                <h1 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h1>
+<!--[if lte IE 9]>
+    <br>
+    <div class="well well-sm">
+      <font size=6><br><br>You are using an unsupported version of Internet Explorer (version 9 or lower)<br>
+        This website will not function as expected. We recommend using a recent version of Chrome, Firefox or IE 10+.<br><br></font>
+    </div>
+<![endif]-->
+<h1 id="openmp">OpenMP<a class="headerlink" href="#openmp" title="Permanent link">&para;</a></h1>
 <p>OpenMP is a specification for a set of compiler directives, library routines,
 and environment variables that can be used to specify high-level parallelism in
 Fortran and C/C++ programs. The OpenMP API uses the fork-join model of parallel
@@ -1278,47 +1283,20 @@ executing the loop.</p>
 <li>Evolving standards</li>
 </ul>
 <h2 id="compiler-support">Compiler Support<a class="headerlink" href="#compiler-support" title="Permanent link">&para;</a></h2>
-<p>The following table summarizes the OpenMP compiler support.</p>
-<table>
-<thead>
-<tr>
-<th>Compiler</th>
-<th>Language Support</th>
-<th>Architecture Support</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>GNU</td>
-<td>C/C++ (&gt;6.1), Fortran (&gt;7.2)</td>
-<td>Range of CPUs, nvidia GPUs</td>
-<td>performance problems on CPU (<a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859">bug #80859</a>), compilation problems with <code>enter data</code> and <code>exit data</code> constructs (<a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896">bug #81896</a>)</td>
-</tr>
-<tr>
-<td>Intel</td>
-<td>C/C++, Fortran (&gt;17.0)</td>
-<td>x86-64 CPUs</td>
-<td>generated code in target region can be wrong, working on a testcase to demonstrate that problem</td>
-</tr>
-<tr>
-<td>Cray</td>
-<td>C/C++, Fortran (&gt;8.5)</td>
-<td>x86-64 CPUs, nvidia GPUs</td>
-<td>failure at link time when host-offloading is used (bug #189760)</td>
-</tr>
-<tr>
-<td>IBM</td>
-<td>C/C++ (&gt;13.1.5), Fortran (&gt;15.1.5)</td>
-<td>Power CPUs, nvidia GPUs</td>
-<td>multiple-definitions link error when <code>target</code> region is contained in header file which is included by multiple compilation units (bug #147007)</td>
-</tr>
-</tbody>
-</table>
-                
-                  
-                
-              
+<p>The OpenMP project maintains a table of compiler support for different features: <a href="https://www.openmp.org/resources/openmp-compilers-tools/">OpenMP Compiler Support</a>. </p>
+<!---
+
+The following table summarizes the OpenMP compiler support.
+
+| Compiler | Language Support | Architecture Support | Notes |
+|----------|------------------|----------------------|-------|
+|    GNU   | C/C++ (>6.1), Fortran (>7.2) | Range of CPUs, nvidia GPUs   | performance problems on CPU ([bug #80859](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80859)), compilation problems with ```enter data``` and ```exit data``` constructs ([bug #81896](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81896)) |
+| Intel    | C/C++, Fortran (>17.0)   | x86-64 CPUs | generated code in target region can be wrong, working on a testcase to demonstrate that problem |
+| Cray     | C/C++, Fortran (>8.5)    | x86-64 CPUs, nvidia GPUs    | failure at link time when host-offloading is used (bug #189760) |
+| IBM    | C/C++ (>13.1.5), Fortran (>15.1.5) | Power CPUs, nvidia GPUs | multiple-definitions link error when ```target``` region is contained in header file which is included by multiple compilation units (bug #147007) |
+
+--->
+
               
                 
               
@@ -1384,7 +1362,7 @@ executing the loop.</p>
       
     </div>
     
-      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-3700c4cc12.js"></script>
       
       
       <script>app.initialize({url:{base:"../../.."}})</script>

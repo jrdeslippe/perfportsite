@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.9.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-0a3554af36.css">
       
         <link rel="stylesheet" href="../../../assets/stylesheets/application-02c2a4388f.palette.css">
       
@@ -91,17 +91,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -994,9 +994,14 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                <h1 id="geometric-multigrid">Geometric Multigrid<a class="headerlink" href="#geometric-multigrid" title="Permanent link">&para;</a></h1>
+<!--[if lte IE 9]>
+    <br>
+    <div class="well well-sm">
+      <font size=6><br><br>You are using an unsupported version of Internet Explorer (version 9 or lower)<br>
+        This website will not function as expected. We recommend using a recent version of Chrome, Firefox or IE 10+.<br><br></font>
+    </div>
+<![endif]-->
+<h1 id="geometric-multigrid">Geometric Multigrid<a class="headerlink" href="#geometric-multigrid" title="Permanent link">&para;</a></h1>
 <p>Many problems encountered in BoxLib applications require solutions to linear
 system, e.g., <a href="https://en.wikipedia.org/wiki/Elliptic_partial_differential_equation">elliptic partial differential equations</a> such as the <a href="https://en.wikipedia.org/wiki/Poisson%27s_equation">Poisson
 equation</a> for self-gravity, and the <a href="https://en.wikipedia.org/wiki/Diffusion_equation">diffusion equation</a>. BoxLib therefore
@@ -1137,10 +1142,7 @@ for this step is rarely influential on the overall performance of the multigrid
 algorithm, because the problem size at the coarsest grid is so small. In
 BoxLib, the default coarse grid solver algorithm is <a href="https://en.wikipedia.org/wiki/Biconjugate_gradient_stabilized_method">BiCGSTAB</a>, a variation on
 the conjugate-gradient iterative method.</p>
-                
-                  
-                
-              
+
               
                 
               
@@ -1206,7 +1208,7 @@ the conjugate-gradient iterative method.</p>
       
     </div>
     
-      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-3700c4cc12.js"></script>
       
       
       <script>app.initialize({url:{base:"../../.."}})</script>

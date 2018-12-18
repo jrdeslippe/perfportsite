@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.9.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="../../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/application-0a3554af36.css">
       
         <link rel="stylesheet" href="../../../assets/stylesheets/application-02c2a4388f.palette.css">
       
@@ -91,17 +91,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -982,9 +982,14 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                <h1 id="kokkos-implementation">Kokkos Implementation<a class="headerlink" href="#kokkos-implementation" title="Permanent link">&para;</a></h1>
+<!--[if lte IE 9]>
+    <br>
+    <div class="well well-sm">
+      <font size=6><br><br>You are using an unsupported version of Internet Explorer (version 9 or lower)<br>
+        This website will not function as expected. We recommend using a recent version of Chrome, Firefox or IE 10+.<br><br></font>
+    </div>
+<![endif]-->
+<h1 id="kokkos-implementation">Kokkos Implementation<a class="headerlink" href="#kokkos-implementation" title="Permanent link">&para;</a></h1>
 <p>This section is written as some kind of lab report, since we think that it illustrates best what challenges users might face when making complicated frameworks such as BoxLib performance portable.</p>
 <h2 id="memory-management">Memory Management<a class="headerlink" href="#memory-management" title="Permanent link">&para;</a></h2>
 <p>Kokkos provides the <code>Kokkos::View</code> class for managing data and providing accessors to array elements, slicing etc.. The advantage is that the user does not need to know how the data is stored under the hood, i.e. if it is aligned, padded, strided, etc.. However, this approach also requires the user to only use the provided accessor functions to access the data or runtime errors might occur. One method to circumvent this problem are <em>unmanaged views</em>: here, the user allocates an array the regular way and defines a view on top of that. This approach is goo for incremental porting as it does not break existing functionality, but comes with certain disadvantages we will discuss below. Another difficulty is that <code>Kokkos::Views</code>, managed or unmanaged, do not support offset or negative indexing but those type of indexing is used frequently in BoxLib. We worked around this by implementing a small, lightweight <code>ViewFab</code> class:</p>
@@ -1177,10 +1182,7 @@ In case of the GSRB kernel we had to work around the limitation that the innermo
 <p>The <code>MDRangePolicy</code> policy is very useful as it is able to collapse loops, apply cache blocking and improve vectorization at the same time. We control the cacheblock sizes for each dimension <code>cb[i]</code> with corresponding lines in the input file.</p>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <p>Porting the BoxLib GMG to Kokkos was not trivial because of the plethora of Fortran kernels. One should be aware of this if one aims at making a legacy Fortran code performance portable. Also, incremental porting with Kokkos is doable but one has to utilize unmanaged views or raw data pointers of managed views. Both is, according to the user manual, not recommended because the user makes underlying assumptions on the internal data layout. However, within a short amount of time, we were able to port the BoxLib GMG solver and all involved routines to Kokkos and achieved <a href="../performance_comparison/">satisfying performance</a>. In the future, one could investigate further optimizations on the kernel-level, e.g. improve cache blocking/register use, device occupancy etc..</p>
-                
-                  
-                
-              
+
               
                 
               
@@ -1246,7 +1248,7 @@ In case of the GSRB kernel we had to work around the limitation that the innermo
       
     </div>
     
-      <script src="../../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../../assets/javascripts/application-3700c4cc12.js"></script>
       
       
       <script>app.initialize({url:{base:"../../.."}})</script>

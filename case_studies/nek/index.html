@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.9.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="../../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application-0a3554af36.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-02c2a4388f.palette.css">
       
@@ -91,17 +91,17 @@
         
           <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
-<div class="md-search" data-md-component="search">
+<div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
           <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
             Type to start searching
           </div>
@@ -1006,9 +1006,14 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                
-                <h1 id="analysis-of-nekbone-performance-and-portability">Analysis of Nekbone Performance and Portability<a class="headerlink" href="#analysis-of-nekbone-performance-and-portability" title="Permanent link">&para;</a></h1>
+<!--[if lte IE 9]>
+    <br>
+    <div class="well well-sm">
+      <font size=6><br><br>You are using an unsupported version of Internet Explorer (version 9 or lower)<br>
+        This website will not function as expected. We recommend using a recent version of Chrome, Firefox or IE 10+.<br><br></font>
+    </div>
+<![endif]-->
+<h1 id="analysis-of-nekbone-performance-and-portability">Analysis of Nekbone Performance and Portability<a class="headerlink" href="#analysis-of-nekbone-performance-and-portability" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>Nekbone is a mini-app derived from the <a href="https://nek5000.mcs.anl.gov/">Nek5000</a> CFD code which is a high order, incompressible Navier- Stokes CFD solver based on the spectral element method. It exposes the principal computational kernels of Nek5000 to reveal the essential elements of the algorithmic-architectural coupling that are pertinent to Nek5000.</p>
 <p>Nekbone solves a standard Poisson equation in a 3D box domain with a block spatial domain decomposition among MPI ranks. The volume within a rank is then partitioned into high-order quadrilateral spectral elements. The solution phase consists of conjugate gradient iterations that invoke the main computational kernel which performs operations in an element-by-element fashion. The code is written in Fortran and C, where C routines are used for the nearest neighbor communication and the rest of the routines are in Fortran. It uses hybrid parallelism implemented with MPI and OpenMP.</p>
@@ -1024,10 +1029,7 @@
 <h2 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h2>
 <p>The figure below compares the performance of Nekbone on the Intel Xeon Phi "Knights Landing" with the performance on the NVIDIA Tesla P100 GPU. On both platforms the same set of cases were run, where the number of spectral elements was increased from 1 to 2048. On the Knights Landing processor OpenMP was utilized to enable thread parallelism, while on the P100 OpenACC was utilized to enable execution on the GPU. On both architectures a minimum problem size was required to saturate the performance on the node, with the GPU requiring a significantly larger problem 32-64x larger than the CPU. On the CPU several implementation of the floating point intensive small matrix multiply kernels were tested, the "naive" matrix multiply yielded the worst performance. Notable improvements were seen when the inner matrix multiply loop was handle unrolled, noted as the "unrolled" case in the figure. Finally the best CPU performance was seen utilizing customized AVX512 assembly routines from the XSMM library. On the GPU a "naive" matrix multiply routine was implemented, which outperforms the naive CPU code at high degrees of freedom, but lags the optimized CPU implementations. Further work on optimized GPU implementations is ongoing and is expected to yield improved GPU performance.</p>
 <p><img alt="Nekbone Performance" src="./nekbone-knl-p100.png" /></p>
-                
-                  
-                
-              
+
               
                 
               
@@ -1093,7 +1095,7 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application-c35428f87f.js"></script>
+      <script src="../../assets/javascripts/application-3700c4cc12.js"></script>
       
       
       <script>app.initialize({url:{base:"../.."}})</script>
