@@ -272,6 +272,10 @@ executing the loop.
 
 ## Compiler Support
 
+The OpenMP project maintains a table of compiler support for different features: [OpenMP Compiler Support](http://performanceportability.org/perfport/directives/openmp/). 
+
+<!---
+
 The following table summarizes the OpenMP compiler support.
 
 | Compiler | Language Support | Architecture Support | Notes |
@@ -280,3 +284,5 @@ The following table summarizes the OpenMP compiler support.
 | Intel    | C/C++, Fortran (>17.0)   | x86-64 CPUs | generated code in target region can be wrong, working on a testcase to demonstrate that problem |
 | Cray     | C/C++, Fortran (>8.5)    | x86-64 CPUs, nvidia GPUs    | failure at link time when host-offloading is used (bug #189760) |
 | IBM    | C/C++ (>13.1.5), Fortran (>15.1.5) | Power CPUs, nvidia GPUs | multiple-definitions link error when ```target``` region is contained in header file which is included by multiple compilation units (bug #147007) |
+
+--->
