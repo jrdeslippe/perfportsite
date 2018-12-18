@@ -272,7 +272,7 @@ executing the loop.
 
 ## Compiler Support
 
-The OpenMP project maintains a table of compiler support for different features: [OpenMP Compiler Support](http://performanceportability.org/perfport/directives/openmp/). 
+The OpenMP project maintains a table of compiler support for different features: [OpenMP Compiler Support]( https://www.openmp.org/resources/openmp-compilers-tools/). 
 
 <!---
 
